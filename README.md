@@ -30,3 +30,4 @@ Development reset tokens are logged by the API only when `NODE_ENV=development`.
 ## Phase 1 scope
 
 Registration, login, logout, secure session restoration, password recovery foundation, role-aware dashboards, profile screens, provider business tenancy, and authorization foundations are implemented. Quotations, invoices, jobs, payments, subscriptions, M-Pesa, and marketplace discovery remain future phases.
+# service-market
