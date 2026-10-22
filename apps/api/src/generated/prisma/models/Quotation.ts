@@ -369,6 +369,8 @@ export type QuotationWhereInput = {
   request?: Prisma.XOR<Prisma.ServiceRequestNullableScalarRelationFilter, Prisma.ServiceRequestWhereInput> | null
   items?: Prisma.QuotationItemListRelationFilter
   shareLinks?: Prisma.QuotationShareListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
 }
 
 export type QuotationOrderByWithRelationInput = {
@@ -399,6 +401,8 @@ export type QuotationOrderByWithRelationInput = {
   request?: Prisma.ServiceRequestOrderByWithRelationInput
   items?: Prisma.QuotationItemOrderByRelationAggregateInput
   shareLinks?: Prisma.QuotationShareOrderByRelationAggregateInput
+  jobs?: Prisma.JobOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
 }
 
 export type QuotationWhereUniqueInput = Prisma.AtLeast<{
@@ -433,6 +437,8 @@ export type QuotationWhereUniqueInput = Prisma.AtLeast<{
   request?: Prisma.XOR<Prisma.ServiceRequestNullableScalarRelationFilter, Prisma.ServiceRequestWhereInput> | null
   items?: Prisma.QuotationItemListRelationFilter
   shareLinks?: Prisma.QuotationShareListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
 }, "id" | "businessId_quotationNumber_revision">
 
 export type QuotationOrderByWithAggregationInput = {
@@ -518,6 +524,8 @@ export type QuotationCreateInput = {
   request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
   items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateInput = {
@@ -545,6 +553,8 @@ export type QuotationUncheckedCreateInput = {
   updatedAt?: Date | string
   items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUpdateInput = {
@@ -572,6 +582,8 @@ export type QuotationUpdateInput = {
   request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
   items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateInput = {
@@ -599,6 +611,8 @@ export type QuotationUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationCreateManyInput = {
@@ -783,6 +797,11 @@ export type QuotationScalarRelationFilter = {
   isNot?: Prisma.QuotationWhereInput
 }
 
+export type QuotationNullableScalarRelationFilter = {
+  is?: Prisma.QuotationWhereInput | null
+  isNot?: Prisma.QuotationWhereInput | null
+}
+
 export type QuotationCreateNestedManyWithoutBusinessInput = {
   create?: Prisma.XOR<Prisma.QuotationCreateWithoutBusinessInput, Prisma.QuotationUncheckedCreateWithoutBusinessInput> | Prisma.QuotationCreateWithoutBusinessInput[] | Prisma.QuotationUncheckedCreateWithoutBusinessInput[]
   connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutBusinessInput | Prisma.QuotationCreateOrConnectWithoutBusinessInput[]
@@ -957,6 +976,36 @@ export type QuotationUpdateOneRequiredWithoutShareLinksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.QuotationUpdateToOneWithWhereWithoutShareLinksInput, Prisma.QuotationUpdateWithoutShareLinksInput>, Prisma.QuotationUncheckedUpdateWithoutShareLinksInput>
 }
 
+export type QuotationCreateNestedOneWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutJobsInput, Prisma.QuotationUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutJobsInput
+  connect?: Prisma.QuotationWhereUniqueInput
+}
+
+export type QuotationUpdateOneRequiredWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutJobsInput, Prisma.QuotationUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutJobsInput
+  upsert?: Prisma.QuotationUpsertWithoutJobsInput
+  connect?: Prisma.QuotationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuotationUpdateToOneWithWhereWithoutJobsInput, Prisma.QuotationUpdateWithoutJobsInput>, Prisma.QuotationUncheckedUpdateWithoutJobsInput>
+}
+
+export type QuotationCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.QuotationWhereUniqueInput
+}
+
+export type QuotationUpdateOneWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.QuotationUpsertWithoutInvoicesInput
+  disconnect?: Prisma.QuotationWhereInput | boolean
+  delete?: Prisma.QuotationWhereInput | boolean
+  connect?: Prisma.QuotationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuotationUpdateToOneWithWhereWithoutInvoicesInput, Prisma.QuotationUpdateWithoutInvoicesInput>, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
+}
+
 export type QuotationCreateWithoutBusinessInput = {
   id?: string
   quotationNumber: string
@@ -981,6 +1030,8 @@ export type QuotationCreateWithoutBusinessInput = {
   request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
   items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateWithoutBusinessInput = {
@@ -1007,6 +1058,8 @@ export type QuotationUncheckedCreateWithoutBusinessInput = {
   updatedAt?: Date | string
   items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationCreateOrConnectWithoutBusinessInput = {
@@ -1087,6 +1140,8 @@ export type QuotationCreateWithoutRequestInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutQuotationsInput
   items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateWithoutRequestInput = {
@@ -1113,6 +1168,8 @@ export type QuotationUncheckedCreateWithoutRequestInput = {
   updatedAt?: Date | string
   items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationCreateOrConnectWithoutRequestInput = {
@@ -1165,6 +1222,8 @@ export type QuotationCreateWithoutCustomerInput = {
   request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
   items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateWithoutCustomerInput = {
@@ -1191,6 +1250,8 @@ export type QuotationUncheckedCreateWithoutCustomerInput = {
   updatedAt?: Date | string
   items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
   shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationCreateOrConnectWithoutCustomerInput = {
@@ -1243,6 +1304,8 @@ export type QuotationCreateWithoutItemsInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutQuotationsInput
   request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
   shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateWithoutItemsInput = {
@@ -1269,6 +1332,8 @@ export type QuotationUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationCreateOrConnectWithoutItemsInput = {
@@ -1311,6 +1376,8 @@ export type QuotationUpdateWithoutItemsInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutQuotationsNestedInput
   request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
   shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutItemsInput = {
@@ -1337,6 +1404,8 @@ export type QuotationUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationCreateWithoutShareLinksInput = {
@@ -1363,6 +1432,8 @@ export type QuotationCreateWithoutShareLinksInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutQuotationsInput
   request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
   items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateWithoutShareLinksInput = {
@@ -1389,6 +1460,8 @@ export type QuotationUncheckedCreateWithoutShareLinksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationCreateOrConnectWithoutShareLinksInput = {
@@ -1431,6 +1504,8 @@ export type QuotationUpdateWithoutShareLinksInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutQuotationsNestedInput
   request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
   items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutShareLinksInput = {
@@ -1457,6 +1532,264 @@ export type QuotationUncheckedUpdateWithoutShareLinksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationCreateWithoutJobsInput = {
+  id?: string
+  quotationNumber: string
+  revision?: number
+  title: string
+  description?: string | null
+  location?: string | null
+  currency?: string
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: string | null
+  paymentTerms?: string | null
+  status?: $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutQuotationsInput
+  customer: Prisma.CustomerRecordCreateNestedOneWithoutQuotationsInput
+  request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
+  items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
+  shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+}
+
+export type QuotationUncheckedCreateWithoutJobsInput = {
+  id?: string
+  businessId: string
+  customerId: string
+  serviceRequestId?: string | null
+  quotationNumber: string
+  revision?: number
+  title: string
+  description?: string | null
+  location?: string | null
+  currency?: string
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: string | null
+  paymentTerms?: string | null
+  status?: $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
+  shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
+}
+
+export type QuotationCreateOrConnectWithoutJobsInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutJobsInput, Prisma.QuotationUncheckedCreateWithoutJobsInput>
+}
+
+export type QuotationUpsertWithoutJobsInput = {
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutJobsInput, Prisma.QuotationUncheckedUpdateWithoutJobsInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutJobsInput, Prisma.QuotationUncheckedCreateWithoutJobsInput>
+  where?: Prisma.QuotationWhereInput
+}
+
+export type QuotationUpdateToOneWithWhereWithoutJobsInput = {
+  where?: Prisma.QuotationWhereInput
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutJobsInput, Prisma.QuotationUncheckedUpdateWithoutJobsInput>
+}
+
+export type QuotationUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quotationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutQuotationsNestedInput
+  customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutQuotationsNestedInput
+  request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
+  items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
+  shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
+  shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationCreateWithoutInvoicesInput = {
+  id?: string
+  quotationNumber: string
+  revision?: number
+  title: string
+  description?: string | null
+  location?: string | null
+  currency?: string
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: string | null
+  paymentTerms?: string | null
+  status?: $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutQuotationsInput
+  customer: Prisma.CustomerRecordCreateNestedOneWithoutQuotationsInput
+  request?: Prisma.ServiceRequestCreateNestedOneWithoutQuotationsInput
+  items?: Prisma.QuotationItemCreateNestedManyWithoutQuotationInput
+  shareLinks?: Prisma.QuotationShareCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobCreateNestedManyWithoutQuotationInput
+}
+
+export type QuotationUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  businessId: string
+  customerId: string
+  serviceRequestId?: string | null
+  quotationNumber: string
+  revision?: number
+  title: string
+  description?: string | null
+  location?: string | null
+  currency?: string
+  issueDate?: Date | string | null
+  expiryDate?: Date | string | null
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: string | null
+  paymentTerms?: string | null
+  status?: $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.QuotationItemUncheckedCreateNestedManyWithoutQuotationInput
+  shareLinks?: Prisma.QuotationShareUncheckedCreateNestedManyWithoutQuotationInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutQuotationInput
+}
+
+export type QuotationCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+}
+
+export type QuotationUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoicesInput, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.QuotationWhereInput
+}
+
+export type QuotationUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.QuotationWhereInput
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoicesInput, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type QuotationUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quotationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutQuotationsNestedInput
+  customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutQuotationsNestedInput
+  request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
+  items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
+  shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grandTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
+  issuedSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
+  shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationCreateManyBusinessInput = {
@@ -1507,6 +1840,8 @@ export type QuotationUpdateWithoutBusinessInput = {
   request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
   items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutBusinessInput = {
@@ -1533,6 +1868,8 @@ export type QuotationUncheckedUpdateWithoutBusinessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateManyWithoutBusinessInput = {
@@ -1607,6 +1944,8 @@ export type QuotationUpdateWithoutRequestInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutQuotationsNestedInput
   items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutRequestInput = {
@@ -1633,6 +1972,8 @@ export type QuotationUncheckedUpdateWithoutRequestInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateManyWithoutRequestInput = {
@@ -1707,6 +2048,8 @@ export type QuotationUpdateWithoutCustomerInput = {
   request?: Prisma.ServiceRequestUpdateOneWithoutQuotationsNestedInput
   items?: Prisma.QuotationItemUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutCustomerInput = {
@@ -1733,6 +2076,8 @@ export type QuotationUncheckedUpdateWithoutCustomerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.QuotationItemUncheckedUpdateManyWithoutQuotationNestedInput
   shareLinks?: Prisma.QuotationShareUncheckedUpdateManyWithoutQuotationNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutQuotationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateManyWithoutCustomerInput = {
@@ -1767,11 +2112,15 @@ export type QuotationUncheckedUpdateManyWithoutCustomerInput = {
 export type QuotationCountOutputType = {
   items: number
   shareLinks: number
+  jobs: number
+  invoices: number
 }
 
 export type QuotationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | QuotationCountOutputTypeCountItemsArgs
   shareLinks?: boolean | QuotationCountOutputTypeCountShareLinksArgs
+  jobs?: boolean | QuotationCountOutputTypeCountJobsArgs
+  invoices?: boolean | QuotationCountOutputTypeCountInvoicesArgs
 }
 
 /**
@@ -1796,6 +2145,20 @@ export type QuotationCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types
  */
 export type QuotationCountOutputTypeCountShareLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.QuotationShareWhereInput
+}
+
+/**
+ * QuotationCountOutputType without action
+ */
+export type QuotationCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
+/**
+ * QuotationCountOutputType without action
+ */
+export type QuotationCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
 }
 
 
@@ -1827,6 +2190,8 @@ export type QuotationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   request?: boolean | Prisma.Quotation$requestArgs<ExtArgs>
   items?: boolean | Prisma.Quotation$itemsArgs<ExtArgs>
   shareLinks?: boolean | Prisma.Quotation$shareLinksArgs<ExtArgs>
+  jobs?: boolean | Prisma.Quotation$jobsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Quotation$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.QuotationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quotation"]>
 
@@ -1918,6 +2283,8 @@ export type QuotationInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   request?: boolean | Prisma.Quotation$requestArgs<ExtArgs>
   items?: boolean | Prisma.Quotation$itemsArgs<ExtArgs>
   shareLinks?: boolean | Prisma.Quotation$shareLinksArgs<ExtArgs>
+  jobs?: boolean | Prisma.Quotation$jobsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Quotation$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.QuotationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QuotationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1939,6 +2306,8 @@ export type $QuotationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     request: Prisma.$ServiceRequestPayload<ExtArgs> | null
     items: Prisma.$QuotationItemPayload<ExtArgs>[]
     shareLinks: Prisma.$QuotationSharePayload<ExtArgs>[]
+    jobs: Prisma.$JobPayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2362,6 +2731,8 @@ export interface Prisma__QuotationClient<T, Null = never, ExtArgs extends runtim
   request<T extends Prisma.Quotation$requestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$requestArgs<ExtArgs>>): Prisma.Prisma__ServiceRequestClient<runtime.Types.Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Quotation$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shareLinks<T extends Prisma.Quotation$shareLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$shareLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationSharePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobs<T extends Prisma.Quotation$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.Quotation$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2878,6 +3249,54 @@ export type Quotation$shareLinksArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.QuotationShareScalarFieldEnum | Prisma.QuotationShareScalarFieldEnum[]
+}
+
+/**
+ * Quotation.jobs
+ */
+export type Quotation$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * Quotation.invoices
+ */
+export type Quotation$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
 }
 
 /**

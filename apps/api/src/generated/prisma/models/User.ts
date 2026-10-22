@@ -220,6 +220,12 @@ export type UserWhereInput = {
   resetTokens?: Prisma.PasswordResetTokenListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   serviceRequests?: Prisma.ServiceRequestListRelationFilter
+  jobActivities?: Prisma.JobActivityListRelationFilter
+  assignedJobs?: Prisma.JobListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  planAudits?: Prisma.SubscriptionPlanAuditListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,6 +244,12 @@ export type UserOrderByWithRelationInput = {
   resetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   serviceRequests?: Prisma.ServiceRequestOrderByRelationAggregateInput
+  jobActivities?: Prisma.JobActivityOrderByRelationAggregateInput
+  assignedJobs?: Prisma.JobOrderByRelationAggregateInput
+  stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
+  expenses?: Prisma.ExpenseOrderByRelationAggregateInput
+  planAudits?: Prisma.SubscriptionPlanAuditOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -259,6 +271,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   resetTokens?: Prisma.PasswordResetTokenListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   serviceRequests?: Prisma.ServiceRequestListRelationFilter
+  jobActivities?: Prisma.JobActivityListRelationFilter
+  assignedJobs?: Prisma.JobListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  planAudits?: Prisma.SubscriptionPlanAuditListRelationFilter
 }, "id" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -307,6 +325,12 @@ export type UserCreateInput = {
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -325,6 +349,12 @@ export type UserUncheckedCreateInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -343,6 +373,12 @@ export type UserUpdateInput = {
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -361,6 +397,12 @@ export type UserUncheckedUpdateInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -438,6 +480,11 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -544,6 +591,92 @@ export type UserUpdateOneRequiredWithoutServiceRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutServiceRequestsInput, Prisma.UserUpdateWithoutServiceRequestsInput>, Prisma.UserUncheckedUpdateWithoutServiceRequestsInput>
 }
 
+export type UserCreateNestedOneWithoutAssignedJobsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedJobsInput, Prisma.UserUncheckedCreateWithoutAssignedJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAssignedJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedJobsInput, Prisma.UserUncheckedCreateWithoutAssignedJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedJobsInput
+  upsert?: Prisma.UserUpsertWithoutAssignedJobsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedJobsInput, Prisma.UserUpdateWithoutAssignedJobsInput>, Prisma.UserUncheckedUpdateWithoutAssignedJobsInput>
+}
+
+export type UserCreateNestedOneWithoutJobActivitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJobActivitiesInput, Prisma.UserUncheckedCreateWithoutJobActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJobActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutJobActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJobActivitiesInput, Prisma.UserUncheckedCreateWithoutJobActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJobActivitiesInput
+  upsert?: Prisma.UserUpsertWithoutJobActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutJobActivitiesInput, Prisma.UserUpdateWithoutJobActivitiesInput>, Prisma.UserUncheckedUpdateWithoutJobActivitiesInput>
+}
+
+export type UserCreateNestedOneWithoutStockMovementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockMovementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStockMovementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockMovementsInput
+  upsert?: Prisma.UserUpsertWithoutStockMovementsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStockMovementsInput, Prisma.UserUpdateWithoutStockMovementsInput>, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+}
+
+export type UserCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput, Prisma.UserUpdateWithoutPaymentsInput>, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type UserCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExpensesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.UserUpsertWithoutExpensesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExpensesInput, Prisma.UserUpdateWithoutExpensesInput>, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+}
+
+export type UserCreateNestedOneWithoutPlanAuditsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlanAuditsInput, Prisma.UserUncheckedCreateWithoutPlanAuditsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlanAuditsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPlanAuditsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlanAuditsInput, Prisma.UserUncheckedCreateWithoutPlanAuditsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlanAuditsInput
+  upsert?: Prisma.UserUpsertWithoutPlanAuditsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlanAuditsInput, Prisma.UserUpdateWithoutPlanAuditsInput>, Prisma.UserUncheckedUpdateWithoutPlanAuditsInput>
+}
+
 export type UserCreateWithoutCustomerProfileInput = {
   id?: string
   fullName: string
@@ -559,6 +692,12 @@ export type UserCreateWithoutCustomerProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCustomerProfileInput = {
@@ -576,6 +715,12 @@ export type UserUncheckedCreateWithoutCustomerProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCustomerProfileInput = {
@@ -609,6 +754,12 @@ export type UserUpdateWithoutCustomerProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomerProfileInput = {
@@ -626,6 +777,12 @@ export type UserUncheckedUpdateWithoutCustomerProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -643,6 +800,12 @@ export type UserCreateWithoutMembershipsInput = {
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -660,6 +823,12 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -693,6 +862,12 @@ export type UserUpdateWithoutMembershipsInput = {
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -710,6 +885,12 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProviderProfileInput = {
@@ -727,6 +908,12 @@ export type UserCreateWithoutProviderProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProviderProfileInput = {
@@ -744,6 +931,12 @@ export type UserUncheckedCreateWithoutProviderProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProviderProfileInput = {
@@ -777,6 +970,12 @@ export type UserUpdateWithoutProviderProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProviderProfileInput = {
@@ -794,6 +993,12 @@ export type UserUncheckedUpdateWithoutProviderProfileInput = {
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutResetTokensInput = {
@@ -811,6 +1016,12 @@ export type UserCreateWithoutResetTokensInput = {
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutResetTokensInput = {
@@ -828,6 +1039,12 @@ export type UserUncheckedCreateWithoutResetTokensInput = {
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutResetTokensInput = {
@@ -861,6 +1078,12 @@ export type UserUpdateWithoutResetTokensInput = {
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResetTokensInput = {
@@ -878,6 +1101,12 @@ export type UserUncheckedUpdateWithoutResetTokensInput = {
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -895,6 +1124,12 @@ export type UserCreateWithoutSessionsInput = {
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -912,6 +1147,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -945,6 +1186,12 @@ export type UserUpdateWithoutSessionsInput = {
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -962,6 +1209,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutServiceRequestsInput = {
@@ -979,6 +1232,12 @@ export type UserCreateWithoutServiceRequestsInput = {
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutServiceRequestsInput = {
@@ -996,6 +1255,12 @@ export type UserUncheckedCreateWithoutServiceRequestsInput = {
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutServiceRequestsInput = {
@@ -1029,6 +1294,12 @@ export type UserUpdateWithoutServiceRequestsInput = {
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutServiceRequestsInput = {
@@ -1046,6 +1317,660 @@ export type UserUncheckedUpdateWithoutServiceRequestsInput = {
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAssignedJobsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAssignedJobsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAssignedJobsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedJobsInput, Prisma.UserUncheckedCreateWithoutAssignedJobsInput>
+}
+
+export type UserUpsertWithoutAssignedJobsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedJobsInput, Prisma.UserUncheckedUpdateWithoutAssignedJobsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedJobsInput, Prisma.UserUncheckedCreateWithoutAssignedJobsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignedJobsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedJobsInput, Prisma.UserUncheckedUpdateWithoutAssignedJobsInput>
+}
+
+export type UserUpdateWithoutAssignedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutJobActivitiesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutJobActivitiesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutJobActivitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutJobActivitiesInput, Prisma.UserUncheckedCreateWithoutJobActivitiesInput>
+}
+
+export type UserUpsertWithoutJobActivitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutJobActivitiesInput, Prisma.UserUncheckedUpdateWithoutJobActivitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutJobActivitiesInput, Prisma.UserUncheckedCreateWithoutJobActivitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutJobActivitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutJobActivitiesInput, Prisma.UserUncheckedUpdateWithoutJobActivitiesInput>
+}
+
+export type UserUpdateWithoutJobActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutJobActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStockMovementsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStockMovementsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStockMovementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+}
+
+export type UserUpsertWithoutStockMovementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStockMovementsInput, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStockMovementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStockMovementsInput, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+}
+
+export type UserUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPaymentsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+}
+
+export type UserUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type UserUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutExpensesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutExpensesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutExpensesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+}
+
+export type UserUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutExpensesInput, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutExpensesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutExpensesInput, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+}
+
+export type UserUpdateWithoutExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPlanAuditsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserUncheckedCreateWithoutPlanAuditsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserCreateOrConnectWithoutPlanAuditsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlanAuditsInput, Prisma.UserUncheckedCreateWithoutPlanAuditsInput>
+}
+
+export type UserUpsertWithoutPlanAuditsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlanAuditsInput, Prisma.UserUncheckedUpdateWithoutPlanAuditsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlanAuditsInput, Prisma.UserUncheckedCreateWithoutPlanAuditsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlanAuditsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlanAuditsInput, Prisma.UserUncheckedUpdateWithoutPlanAuditsInput>
+}
+
+export type UserUpdateWithoutPlanAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlanAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
 }
 
 
@@ -1058,6 +1983,12 @@ export type UserCountOutputType = {
   resetTokens: number
   sessions: number
   serviceRequests: number
+  jobActivities: number
+  assignedJobs: number
+  stockMovements: number
+  payments: number
+  expenses: number
+  planAudits: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1065,6 +1996,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   resetTokens?: boolean | UserCountOutputTypeCountResetTokensArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   serviceRequests?: boolean | UserCountOutputTypeCountServiceRequestsArgs
+  jobActivities?: boolean | UserCountOutputTypeCountJobActivitiesArgs
+  assignedJobs?: boolean | UserCountOutputTypeCountAssignedJobsArgs
+  stockMovements?: boolean | UserCountOutputTypeCountStockMovementsArgs
+  payments?: boolean | UserCountOutputTypeCountPaymentsArgs
+  expenses?: boolean | UserCountOutputTypeCountExpensesArgs
+  planAudits?: boolean | UserCountOutputTypeCountPlanAuditsArgs
 }
 
 /**
@@ -1105,6 +2042,48 @@ export type UserCountOutputTypeCountServiceRequestsArgs<ExtArgs extends runtime.
   where?: Prisma.ServiceRequestWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountJobActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobActivityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockMovementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExpenseWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPlanAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionPlanAuditWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1122,6 +2101,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   resetTokens?: boolean | Prisma.User$resetTokensArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   serviceRequests?: boolean | Prisma.User$serviceRequestsArgs<ExtArgs>
+  jobActivities?: boolean | Prisma.User$jobActivitiesArgs<ExtArgs>
+  assignedJobs?: boolean | Prisma.User$assignedJobsArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
+  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
+  expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  planAudits?: boolean | Prisma.User$planAuditsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1169,6 +2154,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   resetTokens?: boolean | Prisma.User$resetTokensArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   serviceRequests?: boolean | Prisma.User$serviceRequestsArgs<ExtArgs>
+  jobActivities?: boolean | Prisma.User$jobActivitiesArgs<ExtArgs>
+  assignedJobs?: boolean | Prisma.User$assignedJobsArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
+  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
+  expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  planAudits?: boolean | Prisma.User$planAuditsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1183,6 +2174,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     resetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     serviceRequests: Prisma.$ServiceRequestPayload<ExtArgs>[]
+    jobActivities: Prisma.$JobActivityPayload<ExtArgs>[]
+    assignedJobs: Prisma.$JobPayload<ExtArgs>[]
+    stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
+    expenses: Prisma.$ExpensePayload<ExtArgs>[]
+    planAudits: Prisma.$SubscriptionPlanAuditPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1594,6 +2591,12 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   resetTokens<T extends Prisma.User$resetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   serviceRequests<T extends Prisma.User$serviceRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$serviceRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobActivities<T extends Prisma.User$jobActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$jobActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedJobs<T extends Prisma.User$assignedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockMovements<T extends Prisma.User$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.User$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planAudits<T extends Prisma.User$planAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$planAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPlanAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2156,6 +3159,150 @@ export type User$serviceRequestsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.ServiceRequestScalarFieldEnum | Prisma.ServiceRequestScalarFieldEnum[]
+}
+
+/**
+ * User.jobActivities
+ */
+export type User$jobActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobActivity
+   */
+  select?: Prisma.JobActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobActivity
+   */
+  omit?: Prisma.JobActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobActivityInclude<ExtArgs> | null
+  where?: Prisma.JobActivityWhereInput
+  orderBy?: Prisma.JobActivityOrderByWithRelationInput | Prisma.JobActivityOrderByWithRelationInput[]
+  cursor?: Prisma.JobActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobActivityScalarFieldEnum | Prisma.JobActivityScalarFieldEnum[]
+}
+
+/**
+ * User.assignedJobs
+ */
+export type User$assignedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * User.stockMovements
+ */
+export type User$stockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockMovement
+   */
+  select?: Prisma.StockMovementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockMovement
+   */
+  omit?: Prisma.StockMovementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockMovementInclude<ExtArgs> | null
+  where?: Prisma.StockMovementWhereInput
+  orderBy?: Prisma.StockMovementOrderByWithRelationInput | Prisma.StockMovementOrderByWithRelationInput[]
+  cursor?: Prisma.StockMovementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
+}
+
+/**
+ * User.payments
+ */
+export type User$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * User.expenses
+ */
+export type User$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Expense
+   */
+  select?: Prisma.ExpenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Expense
+   */
+  omit?: Prisma.ExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExpenseInclude<ExtArgs> | null
+  where?: Prisma.ExpenseWhereInput
+  orderBy?: Prisma.ExpenseOrderByWithRelationInput | Prisma.ExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.ExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExpenseScalarFieldEnum | Prisma.ExpenseScalarFieldEnum[]
+}
+
+/**
+ * User.planAudits
+ */
+export type User$planAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionPlanAudit
+   */
+  select?: Prisma.SubscriptionPlanAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionPlanAudit
+   */
+  omit?: Prisma.SubscriptionPlanAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionPlanAuditInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionPlanAuditWhereInput
+  orderBy?: Prisma.SubscriptionPlanAuditOrderByWithRelationInput | Prisma.SubscriptionPlanAuditOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionPlanAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionPlanAuditScalarFieldEnum | Prisma.SubscriptionPlanAuditScalarFieldEnum[]
 }
 
 /**

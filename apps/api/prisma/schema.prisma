@@ -54,12 +54,14 @@ enum JobStatus {
   COMPLETED
   CANCELLED
 }
+
 enum JobPriority {
   LOW
   NORMAL
   HIGH
   URGENT
 }
+
 enum StockMovementType {
   OPENING
   PURCHASE
@@ -68,6 +70,7 @@ enum StockMovementType {
   RETURN
   REVERSAL
 }
+
 enum InvoiceStatus {
   DRAFT
   ISSUED
@@ -76,12 +79,14 @@ enum InvoiceStatus {
   OVERDUE
   CANCELLED
 }
+
 enum PaymentMethod {
   CASH
   BANK_TRANSFER
   MPESA
   OTHER
 }
+
 enum ExpenseCategory {
   MATERIALS
   TRANSPORT
@@ -93,30 +98,46 @@ enum ExpenseCategory {
   OTHER
 }
 
+enum SubscriptionStatus {
+  FREE
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+enum PaymentProvider {
+  MPESA
+}
+enum PaymentTransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  UNKNOWN
+}
+
 model User {
-  id              String           @id @default(uuid())
+  id              String               @id @default(uuid())
   fullName        String
-  phone           String           @unique
-  email           String?          @unique
+  phone           String               @unique
+  email           String?              @unique
   passwordHash    String
-  role            UserRole         @default(CUSTOMER)
-  isActive        Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  role            UserRole             @default(CUSTOMER)
+  isActive        Boolean              @default(true)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
   customerProfile CustomerProfile?
   providerProfile ProviderProfile?
   memberships     BusinessMember[]
   resetTokens     PasswordResetToken[]
   sessions        Session[]
   serviceRequests ServiceRequest[]
-  jobs            Job[]
   jobActivities   JobActivity[]
-  assignedJobs    Job[] @relation("AssignedJobs")
-  materials       Material[]
+  assignedJobs    Job[]                @relation("AssignedJobs")
   stockMovements  StockMovement[]
-  invoices        Invoice[]
   payments        Payment[]
   expenses        Expense[]
+  planAudits      SubscriptionPlanAudit[]
 }
 
 model CustomerProfile {
@@ -130,68 +151,73 @@ model CustomerProfile {
 }
 
 model Business {
-  id                    String           @id @default(uuid())
-  name                  String
-  phone                 String
-  email                 String?
-  address               String?
-  registrationNumber    String?
-  kraPin                String?
-  currency              String           @default("KES")
-  slogan                String?
-  logoReference         String?
-  paymentInstructions   String?
-  mpesaNumber           String?
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
-  members               BusinessMember[]
-  providerProfiles      ProviderProfile[]
-  serviceListings       ServiceListing[]
-  customers             CustomerRecord[]
-  quotations            Quotation[]
-  jobs                  Job[]
-  materials             Material[]
-  stockMovements        StockMovement[]
-  invoices              Invoice[]
-  payments              Payment[]
-  expenses              Expense[]
+  id                  String            @id @default(uuid())
+  name                String
+  phone               String
+  email               String?
+  address             String?
+  registrationNumber  String?
+  kraPin              String?
+  currency            String            @default("KES")
+  slogan              String?
+  logoReference       String?
+  paymentInstructions String?
+  mpesaNumber         String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  members             BusinessMember[]
+  providerProfiles    ProviderProfile[]
+  serviceListings     ServiceListing[]
+  customers           CustomerRecord[]
+  quotations          Quotation[]
+  jobs                Job[]
+  materials           Material[]
+  stockMovements      StockMovement[]
+  invoices            Invoice[]
+  payments            Payment[]
+  expenses            Expense[]
+  subscriptions       Subscription[]
+  paymentTransactions PaymentTransaction[]
 }
 
 model BusinessMember {
-  id        String           @id @default(uuid())
+  id         String           @id @default(uuid())
   businessId String
-  userId    String
-  role      MembershipRole   @default(MEMBER)
-  status    MembershipStatus @default(ACTIVE)
-  createdAt DateTime         @default(now())
-  business  Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  role       MembershipRole   @default(MEMBER)
+  status     MembershipStatus @default(ACTIVE)
+  createdAt  DateTime         @default(now())
+  business   Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([businessId, userId])
   @@index([userId, status])
 }
 
 model ProviderProfile {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  businessId      String
-  tradeCategory   String
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  businessId         String
+  tradeCategory      String
   serviceDescription String?
-  location        String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  location           String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business           Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
   @@index([businessId])
 }
 
 model PasswordResetToken {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   userId    String
-  tokenHash String   @unique
+  tokenHash String    @unique
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId, expiresAt])
 }
 
@@ -201,317 +227,412 @@ model Session {
   expiresAt DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([expiresAt])
 }
 
 model ServiceCategory {
-  id          String @id @default(uuid())
-  slug        String @unique
+  id          String           @id @default(uuid())
+  slug        String           @unique
   name        String
   description String?
-  isActive    Boolean @default(true)
+  isActive    Boolean          @default(true)
   listings    ServiceListing[]
   requests    ServiceRequest[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model ServiceListing {
-  id          String @id @default(uuid())
-  businessId  String
-  categoryId  String
-  title       String
-  description String
+  id            String          @id @default(uuid())
+  businessId    String
+  categoryId    String
+  title         String
+  description   String
   startingPrice Decimal?
-  status      ListingStatus @default(DRAFT)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  category    ServiceCategory @relation(fields: [categoryId], references: [id])
+  status        ListingStatus   @default(DRAFT)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  business      Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category      ServiceCategory @relation(fields: [categoryId], references: [id])
+
   @@index([businessId, status])
   @@index([categoryId, status])
 }
 
 model ServiceRequest {
-  id          String @id @default(uuid())
-  customerId  String
-  categoryId  String
-  title       String
-  description String
-  location    String
-  budgetMin   Decimal?
-  budgetMax   Decimal?
+  id            String          @id @default(uuid())
+  customerId    String
+  categoryId    String
+  title         String
+  description   String
+  location      String
+  budgetMin     Decimal?
+  budgetMax     Decimal?
   preferredDate DateTime?
-  status      RequestStatus @default(OPEN)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  customer    User @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  category    ServiceCategory @relation(fields: [categoryId], references: [id])
-  quotations  Quotation[]
-  jobs        Job[]
-  invoices    Invoice[]
+  status        RequestStatus   @default(OPEN)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  customer      User            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  category      ServiceCategory @relation(fields: [categoryId], references: [id])
+  quotations    Quotation[]
+
   @@index([customerId, status])
   @@index([categoryId, status])
 }
 
 model CustomerRecord {
-  id          String @id @default(uuid())
-  businessId  String
-  name        String
-  phone       String
-  email       String?
-  billingAddress String?
+  id              String      @id @default(uuid())
+  businessId      String
+  name            String
+  phone           String
+  email           String?
+  billingAddress  String?
   projectLocation String?
-  notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  quotations  Quotation[]
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  business        Business    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  quotations      Quotation[]
+  jobs            Job[]
+  invoices        Invoice[]
+
   @@index([businessId, name])
   @@index([businessId, phone])
 }
 
 model Quotation {
-  id          String @id @default(uuid())
-  businessId  String
-  customerId  String
+  id               String           @id @default(uuid())
+  businessId       String
+  customerId       String
   serviceRequestId String?
-  quotationNumber String
-  revision    Int @default(1)
-  title       String
-  description String?
-  location    String?
-  currency    String @default("KES")
-  issueDate   DateTime?
-  expiryDate  DateTime?
-  subtotal    Decimal @default(0)
-  discount    Decimal @default(0)
-  tax         Decimal @default(0)
-  grandTotal  Decimal @default(0)
-  terms       String?
-  paymentTerms String?
-  status      QuotationStatus @default(DRAFT)
-  issuedSnapshot Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  customer    CustomerRecord @relation(fields: [customerId], references: [id])
-  request     ServiceRequest? @relation(fields: [serviceRequestId], references: [id])
-  items       QuotationItem[]
-  shareLinks  QuotationShare[]
-  jobs        Job[]
-  invoices    Invoice[]
+  quotationNumber  String
+  revision         Int              @default(1)
+  title            String
+  description      String?
+  location         String?
+  currency         String           @default("KES")
+  issueDate        DateTime?
+  expiryDate       DateTime?
+  subtotal         Decimal          @default(0)
+  discount         Decimal          @default(0)
+  tax              Decimal          @default(0)
+  grandTotal       Decimal          @default(0)
+  terms            String?
+  paymentTerms     String?
+  status           QuotationStatus  @default(DRAFT)
+  issuedSnapshot   Json?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  business         Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer         CustomerRecord   @relation(fields: [customerId], references: [id])
+  request          ServiceRequest?  @relation(fields: [serviceRequestId], references: [id])
+  items            QuotationItem[]
+  shareLinks       QuotationShare[]
+  jobs             Job[]
+  invoices         Invoice[]
+
   @@unique([businessId, quotationNumber, revision])
   @@index([businessId, status, createdAt])
   @@index([customerId, status])
 }
 
 model QuotationItem {
-  id          String @id @default(uuid())
+  id          String    @id @default(uuid())
   quotationId String
   description String
   quantity    Decimal
   unit        String
   unitPrice   Decimal
   lineTotal   Decimal
-  sortOrder   Int @default(0)
+  sortOrder   Int       @default(0)
   quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
 }
 
 model QuotationShare {
-  id          String @id @default(uuid())
+  id          String    @id @default(uuid())
   quotationId String
-  tokenHash   String @unique
+  tokenHash   String    @unique
   expiresAt   DateTime
   revokedAt   DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+
   @@index([quotationId, expiresAt])
 }
 
 model Job {
-  id String @id @default(uuid())
-  businessId String
-  customerId String
-  quotationId String
-  jobNumber String
-  title String
-  description String?
-  location String?
-  scheduledStart DateTime?
+  id                 String             @id @default(uuid())
+  businessId         String
+  customerId         String
+  quotationId        String
+  jobNumber          String
+  title              String
+  description        String?
+  location           String?
+  scheduledStart     DateTime?
   expectedCompletion DateTime?
-  actualStart DateTime?
-  completedAt DateTime?
-  assignedUserId String?
-  priority JobPriority @default(NORMAL)
-  status JobStatus @default(SCHEDULED)
-  internalNotes String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  customer CustomerRecord @relation(fields: [customerId], references: [id])
-  quotation Quotation @relation(fields: [quotationId], references: [id])
-  assignedUser User? @relation("AssignedJobs", fields: [assignedUserId], references: [id])
-  activities JobActivity[]
-  materialsUsed JobMaterialUsage[]
-  stockMovements StockMovement[]
-  invoices Invoice[]
-  expenses Expense[]
+  actualStart        DateTime?
+  completedAt        DateTime?
+  assignedUserId     String?
+  priority           JobPriority        @default(NORMAL)
+  status             JobStatus          @default(SCHEDULED)
+  internalNotes      String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  business           Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer           CustomerRecord     @relation(fields: [customerId], references: [id])
+  quotation          Quotation          @relation(fields: [quotationId], references: [id])
+  assignedUser       User?              @relation("AssignedJobs", fields: [assignedUserId], references: [id])
+  activities         JobActivity[]
+  materialsUsed      JobMaterialUsage[]
+  stockMovements     StockMovement[]
+  invoices           Invoice[]
+  expenses           Expense[]
+
   @@unique([businessId, jobNumber])
   @@unique([quotationId])
   @@index([businessId, status, createdAt])
 }
 
 model JobActivity {
-  id String @id @default(uuid())
-  jobId String
-  userId String
-  type String
-  message String
+  id        String   @id @default(uuid())
+  jobId     String
+  userId    String
+  type      String
+  message   String
   createdAt DateTime @default(now())
-  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id])
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
   @@index([jobId, createdAt])
 }
 
 model Material {
-  id String @id @default(uuid())
-  businessId String
-  sku String?
-  name String
-  description String?
-  category String?
-  unit String
-  costPerUnit Decimal @default(0)
-  sellingPrice Decimal?
-  stockQuantity Decimal @default(0)
-  reorderLevel Decimal @default(0)
-  supplier String?
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  movements StockMovement[]
-  jobUsages JobMaterialUsage[]
+  id            String             @id @default(uuid())
+  businessId    String
+  sku           String?
+  name          String
+  description   String?
+  category      String?
+  unit          String
+  costPerUnit   Decimal            @default(0)
+  sellingPrice  Decimal?
+  stockQuantity Decimal            @default(0)
+  reorderLevel  Decimal            @default(0)
+  supplier      String?
+  isActive      Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  business      Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  movements     StockMovement[]
+  jobUsages     JobMaterialUsage[]
+
   @@unique([businessId, sku])
   @@index([businessId, name])
 }
 
 model StockMovement {
-  id String @id @default(uuid())
-  businessId String
-  materialId String
-  jobId String?
-  type StockMovementType
-  quantity Decimal
+  id          String            @id @default(uuid())
+  businessId  String
+  materialId  String
+  jobId       String?
+  type        StockMovementType
+  quantity    Decimal
   costPerUnit Decimal?
-  reason String?
-  reference String?
+  reason      String?
+  reference   String?
   createdById String
-  createdAt DateTime @default(now())
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  material Material @relation(fields: [materialId], references: [id])
-  job Job? @relation(fields: [jobId], references: [id])
-  createdBy User @relation(fields: [createdById], references: [id])
-  usage JobMaterialUsage?
+  createdAt   DateTime          @default(now())
+  business    Business          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  material    Material          @relation(fields: [materialId], references: [id])
+  job         Job?              @relation(fields: [jobId], references: [id])
+  createdBy   User              @relation(fields: [createdById], references: [id])
+  usage       JobMaterialUsage?
+
   @@index([businessId, createdAt])
   @@index([materialId, createdAt])
 }
 
 model JobMaterialUsage {
-  id String @id @default(uuid())
-  jobId String
-  materialId String
-  movementId String @unique
-  quantity Decimal
+  id          String        @id @default(uuid())
+  jobId       String
+  materialId  String
+  movementId  String        @unique
+  quantity    Decimal
   costPerUnit Decimal
-  createdAt DateTime @default(now())
-  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  material Material @relation(fields: [materialId], references: [id])
-  movement StockMovement @relation(fields: [movementId], references: [id])
+  createdAt   DateTime      @default(now())
+  job         Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  material    Material      @relation(fields: [materialId], references: [id])
+  movement    StockMovement @relation(fields: [movementId], references: [id])
 }
 
 model Invoice {
-  id String @id @default(uuid())
-  businessId String
-  customerId String
-  jobId String?
-  quotationId String?
-  invoiceNumber String
-  issueDate DateTime?
-  dueDate DateTime?
-  currency String @default("KES")
-  subtotal Decimal @default(0)
-  discount Decimal @default(0)
-  tax Decimal @default(0)
-  grandTotal Decimal @default(0)
-  amountPaid Decimal @default(0)
-  status InvoiceStatus @default(DRAFT)
-  paymentTerms String?
-  notes String?
+  id             String         @id @default(uuid())
+  businessId     String
+  customerId     String
+  jobId          String?
+  quotationId    String?
+  invoiceNumber  String
+  issueDate      DateTime?
+  dueDate        DateTime?
+  currency       String         @default("KES")
+  subtotal       Decimal        @default(0)
+  discount       Decimal        @default(0)
+  tax            Decimal        @default(0)
+  grandTotal     Decimal        @default(0)
+  amountPaid     Decimal        @default(0)
+  status         InvoiceStatus  @default(DRAFT)
+  paymentTerms   String?
+  notes          String?
   issuedSnapshot Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  customer CustomerRecord @relation(fields: [customerId], references: [id])
-  job Job? @relation(fields: [jobId], references: [id])
-  quotation Quotation? @relation(fields: [quotationId], references: [id])
-  items InvoiceItem[]
-  payments Payment[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  business       Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer       CustomerRecord @relation(fields: [customerId], references: [id])
+  job            Job?           @relation(fields: [jobId], references: [id])
+  quotation      Quotation?     @relation(fields: [quotationId], references: [id])
+  items          InvoiceItem[]
+  payments       Payment[]
+
   @@unique([businessId, invoiceNumber])
   @@index([businessId, status, dueDate])
 }
 
 model InvoiceItem {
-  id String @id @default(uuid())
-  invoiceId String
+  id          String  @id @default(uuid())
+  invoiceId   String
   description String
-  quantity Decimal
-  unit String
-  unitPrice Decimal
-  lineTotal Decimal
-  sortOrder Int @default(0)
-  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  quantity    Decimal
+  unit        String
+  unitPrice   Decimal
+  lineTotal   Decimal
+  sortOrder   Int     @default(0)
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
-  id String @id @default(uuid())
-  businessId String
-  invoiceId String
-  amount Decimal
-  paymentDate DateTime
-  method PaymentMethod
-  reference String?
-  notes String?
+  id           String        @id @default(uuid())
+  businessId   String
+  invoiceId    String
+  amount       Decimal
+  paymentDate  DateTime
+  method       PaymentMethod
+  reference    String?
+  notes        String?
   recordedById String
-  createdAt DateTime @default(now())
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  invoice Invoice @relation(fields: [invoiceId], references: [id])
-  recordedBy User @relation(fields: [recordedById], references: [id])
+  createdAt    DateTime      @default(now())
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  invoice      Invoice       @relation(fields: [invoiceId], references: [id])
+  recordedBy   User          @relation(fields: [recordedById], references: [id])
+
   @@index([businessId, paymentDate])
   @@index([invoiceId, createdAt])
 }
 
 model Expense {
-  id String @id @default(uuid())
-  businessId String
-  jobId String?
-  category ExpenseCategory
-  description String
-  amount Decimal
-  currency String @default("KES")
-  expenseDate DateTime
-  method PaymentMethod?
-  supplier String?
-  reference String?
-  notes String?
+  id           String          @id @default(uuid())
+  businessId   String
+  jobId        String?
+  category     ExpenseCategory
+  description  String
+  amount       Decimal
+  currency     String          @default("KES")
+  expenseDate  DateTime
+  method       PaymentMethod?
+  supplier     String?
+  reference    String?
+  notes        String?
   recordedById String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  job Job? @relation(fields: [jobId], references: [id])
-  recordedBy User @relation(fields: [recordedById], references: [id])
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  business     Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  job          Job?            @relation(fields: [jobId], references: [id])
+  recordedBy   User            @relation(fields: [recordedById], references: [id])
+
   @@index([businessId, expenseDate])
   @@index([businessId, category])
+}
+
+model Subscription {
+  id              String @id @default(uuid())
+  businessId      String
+  planCode        String @default("PRO_MONTHLY")
+  status          SubscriptionStatus @default(FREE)
+  price           Decimal @default(299)
+  currency        String @default("KES")
+  startsAt        DateTime?
+  expiresAt       DateTime?
+  autoRenew       Boolean @default(false)
+  cancelledAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  transactions    PaymentTransaction[]
+  @@index([businessId, status, expiresAt])
+}
+
+model SubscriptionPlan {
+  id          String @id @default(uuid())
+  code        String @unique
+  name        String
+  price       Decimal
+  currency    String @default("KES")
+  durationMonths Int @default(1)
+  isActive    Boolean @default(true)
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  audits      SubscriptionPlanAudit[]
+}
+
+model SubscriptionPlanAudit {
+  id        String @id @default(uuid())
+  planId    String
+  userId    String
+  oldPrice  Decimal
+  newPrice  Decimal
+  currency  String
+  createdAt DateTime @default(now())
+  plan      SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User @relation(fields: [userId], references: [id])
+  @@index([planId, createdAt])
+}
+
+model PaymentTransaction {
+  id                String @id @default(uuid())
+  businessId        String
+  subscriptionId    String
+  provider          PaymentProvider
+  status            PaymentTransactionStatus @default(PENDING)
+  amount            Decimal
+  currency          String @default("KES")
+  phoneNumber       String
+  idempotencyKey    String @unique
+  checkoutRequestId String? @unique
+  merchantRequestId String?
+  mpesaReceipt      String? @unique
+  failureReason     String?
+  requestedAt       DateTime @default(now())
+  callbackAt        DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  business          Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  subscription      Subscription @relation(fields: [subscriptionId], references: [id])
+  events            PaymentEvent[]
+  @@index([businessId, createdAt])
+  @@index([status, checkoutRequestId])
+}
+
+model PaymentEvent {
+  id           String @id @default(uuid())
+  transactionId String
+  eventType    String
+  resultCode   Int?
+  payload      Json?
+  receivedAt   DateTime @default(now())
+  transaction  PaymentTransaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  @@index([transactionId, receivedAt])
 }

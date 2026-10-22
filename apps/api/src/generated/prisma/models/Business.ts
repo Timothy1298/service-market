@@ -259,6 +259,14 @@ export type BusinessWhereInput = {
   serviceListings?: Prisma.ServiceListingListRelationFilter
   customers?: Prisma.CustomerRecordListRelationFilter
   quotations?: Prisma.QuotationListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  materials?: Prisma.MaterialListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -281,6 +289,14 @@ export type BusinessOrderByWithRelationInput = {
   serviceListings?: Prisma.ServiceListingOrderByRelationAggregateInput
   customers?: Prisma.CustomerRecordOrderByRelationAggregateInput
   quotations?: Prisma.QuotationOrderByRelationAggregateInput
+  jobs?: Prisma.JobOrderByRelationAggregateInput
+  materials?: Prisma.MaterialOrderByRelationAggregateInput
+  stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
+  expenses?: Prisma.ExpenseOrderByRelationAggregateInput
+  subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
+  paymentTransactions?: Prisma.PaymentTransactionOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -306,6 +322,14 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   serviceListings?: Prisma.ServiceListingListRelationFilter
   customers?: Prisma.CustomerRecordListRelationFilter
   quotations?: Prisma.QuotationListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  materials?: Prisma.MaterialListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -368,6 +392,14 @@ export type BusinessCreateInput = {
   serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -390,6 +422,14 @@ export type BusinessUncheckedCreateInput = {
   serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -412,6 +452,14 @@ export type BusinessUpdateInput = {
   serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -434,6 +482,14 @@ export type BusinessUncheckedUpdateInput = {
   serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -613,6 +669,118 @@ export type BusinessUpdateOneRequiredWithoutQuotationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutQuotationsInput, Prisma.BusinessUpdateWithoutQuotationsInput>, Prisma.BusinessUncheckedUpdateWithoutQuotationsInput>
 }
 
+export type BusinessCreateNestedOneWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutJobsInput, Prisma.BusinessUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutJobsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutJobsInput, Prisma.BusinessUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutJobsInput
+  upsert?: Prisma.BusinessUpsertWithoutJobsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutJobsInput, Prisma.BusinessUpdateWithoutJobsInput>, Prisma.BusinessUncheckedUpdateWithoutJobsInput>
+}
+
+export type BusinessCreateNestedOneWithoutMaterialsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutMaterialsInput, Prisma.BusinessUncheckedCreateWithoutMaterialsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutMaterialsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutMaterialsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutMaterialsInput, Prisma.BusinessUncheckedCreateWithoutMaterialsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutMaterialsInput
+  upsert?: Prisma.BusinessUpsertWithoutMaterialsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutMaterialsInput, Prisma.BusinessUpdateWithoutMaterialsInput>, Prisma.BusinessUncheckedUpdateWithoutMaterialsInput>
+}
+
+export type BusinessCreateNestedOneWithoutStockMovementsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutStockMovementsInput, Prisma.BusinessUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutStockMovementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutStockMovementsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutStockMovementsInput, Prisma.BusinessUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutStockMovementsInput
+  upsert?: Prisma.BusinessUpsertWithoutStockMovementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutStockMovementsInput, Prisma.BusinessUpdateWithoutStockMovementsInput>, Prisma.BusinessUncheckedUpdateWithoutStockMovementsInput>
+}
+
+export type BusinessCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInvoicesInput, Prisma.BusinessUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInvoicesInput, Prisma.BusinessUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.BusinessUpsertWithoutInvoicesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutInvoicesInput, Prisma.BusinessUpdateWithoutInvoicesInput>, Prisma.BusinessUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type BusinessCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentsInput, Prisma.BusinessUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentsInput, Prisma.BusinessUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.BusinessUpsertWithoutPaymentsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutPaymentsInput, Prisma.BusinessUpdateWithoutPaymentsInput>, Prisma.BusinessUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type BusinessCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutExpensesInput, Prisma.BusinessUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutExpensesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutExpensesInput, Prisma.BusinessUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.BusinessUpsertWithoutExpensesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutExpensesInput, Prisma.BusinessUpdateWithoutExpensesInput>, Prisma.BusinessUncheckedUpdateWithoutExpensesInput>
+}
+
+export type BusinessCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.BusinessUpsertWithoutSubscriptionsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.BusinessUpdateWithoutSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type BusinessCreateNestedOneWithoutPaymentTransactionsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedCreateWithoutPaymentTransactionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPaymentTransactionsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutPaymentTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedCreateWithoutPaymentTransactionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPaymentTransactionsInput
+  upsert?: Prisma.BusinessUpsertWithoutPaymentTransactionsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutPaymentTransactionsInput, Prisma.BusinessUpdateWithoutPaymentTransactionsInput>, Prisma.BusinessUncheckedUpdateWithoutPaymentTransactionsInput>
+}
+
 export type BusinessCreateWithoutMembersInput = {
   id?: string
   name: string
@@ -632,6 +800,14 @@ export type BusinessCreateWithoutMembersInput = {
   serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutMembersInput = {
@@ -653,6 +829,14 @@ export type BusinessUncheckedCreateWithoutMembersInput = {
   serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutMembersInput = {
@@ -690,6 +874,14 @@ export type BusinessUpdateWithoutMembersInput = {
   serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutMembersInput = {
@@ -711,6 +903,14 @@ export type BusinessUncheckedUpdateWithoutMembersInput = {
   serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProviderProfilesInput = {
@@ -732,6 +932,14 @@ export type BusinessCreateWithoutProviderProfilesInput = {
   serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProviderProfilesInput = {
@@ -753,6 +961,14 @@ export type BusinessUncheckedCreateWithoutProviderProfilesInput = {
   serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProviderProfilesInput = {
@@ -790,6 +1006,14 @@ export type BusinessUpdateWithoutProviderProfilesInput = {
   serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProviderProfilesInput = {
@@ -811,6 +1035,14 @@ export type BusinessUncheckedUpdateWithoutProviderProfilesInput = {
   serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutServiceListingsInput = {
@@ -832,6 +1064,14 @@ export type BusinessCreateWithoutServiceListingsInput = {
   providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutServiceListingsInput = {
@@ -853,6 +1093,14 @@ export type BusinessUncheckedCreateWithoutServiceListingsInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutServiceListingsInput = {
@@ -890,6 +1138,14 @@ export type BusinessUpdateWithoutServiceListingsInput = {
   providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutServiceListingsInput = {
@@ -911,6 +1167,14 @@ export type BusinessUncheckedUpdateWithoutServiceListingsInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutCustomersInput = {
@@ -932,6 +1196,14 @@ export type BusinessCreateWithoutCustomersInput = {
   providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
   serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutCustomersInput = {
@@ -953,6 +1225,14 @@ export type BusinessUncheckedCreateWithoutCustomersInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
   serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
   quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutCustomersInput = {
@@ -990,6 +1270,14 @@ export type BusinessUpdateWithoutCustomersInput = {
   providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
   serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutCustomersInput = {
@@ -1011,6 +1299,14 @@ export type BusinessUncheckedUpdateWithoutCustomersInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
   serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
   quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutQuotationsInput = {
@@ -1032,6 +1328,14 @@ export type BusinessCreateWithoutQuotationsInput = {
   providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
   serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutQuotationsInput = {
@@ -1053,6 +1357,14 @@ export type BusinessUncheckedCreateWithoutQuotationsInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
   serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
   customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutQuotationsInput = {
@@ -1090,6 +1402,14 @@ export type BusinessUpdateWithoutQuotationsInput = {
   providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
   serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutQuotationsInput = {
@@ -1111,6 +1431,1070 @@ export type BusinessUncheckedUpdateWithoutQuotationsInput = {
   providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
   serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
   customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutJobsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutJobsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutJobsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutJobsInput, Prisma.BusinessUncheckedCreateWithoutJobsInput>
+}
+
+export type BusinessUpsertWithoutJobsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutJobsInput, Prisma.BusinessUncheckedUpdateWithoutJobsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutJobsInput, Prisma.BusinessUncheckedCreateWithoutJobsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutJobsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutJobsInput, Prisma.BusinessUncheckedUpdateWithoutJobsInput>
+}
+
+export type BusinessUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutMaterialsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutMaterialsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutMaterialsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutMaterialsInput, Prisma.BusinessUncheckedCreateWithoutMaterialsInput>
+}
+
+export type BusinessUpsertWithoutMaterialsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutMaterialsInput, Prisma.BusinessUncheckedUpdateWithoutMaterialsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutMaterialsInput, Prisma.BusinessUncheckedCreateWithoutMaterialsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutMaterialsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutMaterialsInput, Prisma.BusinessUncheckedUpdateWithoutMaterialsInput>
+}
+
+export type BusinessUpdateWithoutMaterialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutMaterialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutStockMovementsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutStockMovementsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutStockMovementsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutStockMovementsInput, Prisma.BusinessUncheckedCreateWithoutStockMovementsInput>
+}
+
+export type BusinessUpsertWithoutStockMovementsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutStockMovementsInput, Prisma.BusinessUncheckedUpdateWithoutStockMovementsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutStockMovementsInput, Prisma.BusinessUncheckedCreateWithoutStockMovementsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutStockMovementsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutStockMovementsInput, Prisma.BusinessUncheckedUpdateWithoutStockMovementsInput>
+}
+
+export type BusinessUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInvoicesInput, Prisma.BusinessUncheckedCreateWithoutInvoicesInput>
+}
+
+export type BusinessUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutInvoicesInput, Prisma.BusinessUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInvoicesInput, Prisma.BusinessUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutInvoicesInput, Prisma.BusinessUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type BusinessUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutPaymentsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentsInput, Prisma.BusinessUncheckedCreateWithoutPaymentsInput>
+}
+
+export type BusinessUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutPaymentsInput, Prisma.BusinessUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentsInput, Prisma.BusinessUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutPaymentsInput, Prisma.BusinessUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type BusinessUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutExpensesInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutExpensesInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutExpensesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutExpensesInput, Prisma.BusinessUncheckedCreateWithoutExpensesInput>
+}
+
+export type BusinessUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutExpensesInput, Prisma.BusinessUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutExpensesInput, Prisma.BusinessUncheckedCreateWithoutExpensesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutExpensesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutExpensesInput, Prisma.BusinessUncheckedUpdateWithoutExpensesInput>
+}
+
+export type BusinessUpdateWithoutExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type BusinessUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type BusinessUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutPaymentTransactionsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutPaymentTransactionsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutPaymentTransactionsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedCreateWithoutPaymentTransactionsInput>
+}
+
+export type BusinessUpsertWithoutPaymentTransactionsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedUpdateWithoutPaymentTransactionsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedCreateWithoutPaymentTransactionsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutPaymentTransactionsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutPaymentTransactionsInput, Prisma.BusinessUncheckedUpdateWithoutPaymentTransactionsInput>
+}
+
+export type BusinessUpdateWithoutPaymentTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutPaymentTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 
@@ -1124,6 +2508,14 @@ export type BusinessCountOutputType = {
   serviceListings: number
   customers: number
   quotations: number
+  jobs: number
+  materials: number
+  stockMovements: number
+  invoices: number
+  payments: number
+  expenses: number
+  subscriptions: number
+  paymentTransactions: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1132,6 +2524,14 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   serviceListings?: boolean | BusinessCountOutputTypeCountServiceListingsArgs
   customers?: boolean | BusinessCountOutputTypeCountCustomersArgs
   quotations?: boolean | BusinessCountOutputTypeCountQuotationsArgs
+  jobs?: boolean | BusinessCountOutputTypeCountJobsArgs
+  materials?: boolean | BusinessCountOutputTypeCountMaterialsArgs
+  stockMovements?: boolean | BusinessCountOutputTypeCountStockMovementsArgs
+  invoices?: boolean | BusinessCountOutputTypeCountInvoicesArgs
+  payments?: boolean | BusinessCountOutputTypeCountPaymentsArgs
+  expenses?: boolean | BusinessCountOutputTypeCountExpensesArgs
+  subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
+  paymentTransactions?: boolean | BusinessCountOutputTypeCountPaymentTransactionsArgs
 }
 
 /**
@@ -1179,6 +2579,62 @@ export type BusinessCountOutputTypeCountQuotationsArgs<ExtArgs extends runtime.T
   where?: Prisma.QuotationWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountMaterialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MaterialWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountStockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockMovementWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExpenseWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountPaymentTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentTransactionWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1200,6 +2656,14 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   serviceListings?: boolean | Prisma.Business$serviceListingsArgs<ExtArgs>
   customers?: boolean | Prisma.Business$customersArgs<ExtArgs>
   quotations?: boolean | Prisma.Business$quotationsArgs<ExtArgs>
+  jobs?: boolean | Prisma.Business$jobsArgs<ExtArgs>
+  materials?: boolean | Prisma.Business$materialsArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.Business$stockMovementsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Business$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Business$paymentsArgs<ExtArgs>
+  expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  paymentTransactions?: boolean | Prisma.Business$paymentTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -1261,6 +2725,14 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   serviceListings?: boolean | Prisma.Business$serviceListingsArgs<ExtArgs>
   customers?: boolean | Prisma.Business$customersArgs<ExtArgs>
   quotations?: boolean | Prisma.Business$quotationsArgs<ExtArgs>
+  jobs?: boolean | Prisma.Business$jobsArgs<ExtArgs>
+  materials?: boolean | Prisma.Business$materialsArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.Business$stockMovementsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Business$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Business$paymentsArgs<ExtArgs>
+  expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  paymentTransactions?: boolean | Prisma.Business$paymentTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1274,6 +2746,14 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     serviceListings: Prisma.$ServiceListingPayload<ExtArgs>[]
     customers: Prisma.$CustomerRecordPayload<ExtArgs>[]
     quotations: Prisma.$QuotationPayload<ExtArgs>[]
+    jobs: Prisma.$JobPayload<ExtArgs>[]
+    materials: Prisma.$MaterialPayload<ExtArgs>[]
+    stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
+    expenses: Prisma.$ExpensePayload<ExtArgs>[]
+    subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+    paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1689,6 +3169,14 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   serviceListings<T extends Prisma.Business$serviceListingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$serviceListingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customers<T extends Prisma.Business$customersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$customersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   quotations<T extends Prisma.Business$quotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobs<T extends Prisma.Business$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  materials<T extends Prisma.Business$materialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$materialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockMovements<T extends Prisma.Business$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.Business$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Business$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.Business$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentTransactions<T extends Prisma.Business$paymentTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2242,6 +3730,198 @@ export type Business$quotationsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.QuotationScalarFieldEnum | Prisma.QuotationScalarFieldEnum[]
+}
+
+/**
+ * Business.jobs
+ */
+export type Business$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * Business.materials
+ */
+export type Business$materialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Material
+   */
+  select?: Prisma.MaterialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Material
+   */
+  omit?: Prisma.MaterialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MaterialInclude<ExtArgs> | null
+  where?: Prisma.MaterialWhereInput
+  orderBy?: Prisma.MaterialOrderByWithRelationInput | Prisma.MaterialOrderByWithRelationInput[]
+  cursor?: Prisma.MaterialWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MaterialScalarFieldEnum | Prisma.MaterialScalarFieldEnum[]
+}
+
+/**
+ * Business.stockMovements
+ */
+export type Business$stockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockMovement
+   */
+  select?: Prisma.StockMovementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockMovement
+   */
+  omit?: Prisma.StockMovementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockMovementInclude<ExtArgs> | null
+  where?: Prisma.StockMovementWhereInput
+  orderBy?: Prisma.StockMovementOrderByWithRelationInput | Prisma.StockMovementOrderByWithRelationInput[]
+  cursor?: Prisma.StockMovementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
+}
+
+/**
+ * Business.invoices
+ */
+export type Business$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Business.payments
+ */
+export type Business$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * Business.expenses
+ */
+export type Business$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Expense
+   */
+  select?: Prisma.ExpenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Expense
+   */
+  omit?: Prisma.ExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExpenseInclude<ExtArgs> | null
+  where?: Prisma.ExpenseWhereInput
+  orderBy?: Prisma.ExpenseOrderByWithRelationInput | Prisma.ExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.ExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExpenseScalarFieldEnum | Prisma.ExpenseScalarFieldEnum[]
+}
+
+/**
+ * Business.subscriptions
+ */
+export type Business$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
+  orderBy?: Prisma.SubscriptionOrderByWithRelationInput | Prisma.SubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Business.paymentTransactions
+ */
+export type Business$paymentTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentTransaction
+   */
+  select?: Prisma.PaymentTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentTransaction
+   */
+  omit?: Prisma.PaymentTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentTransactionInclude<ExtArgs> | null
+  where?: Prisma.PaymentTransactionWhereInput
+  orderBy?: Prisma.PaymentTransactionOrderByWithRelationInput | Prisma.PaymentTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentTransactionScalarFieldEnum | Prisma.PaymentTransactionScalarFieldEnum[]
 }
 
 /**

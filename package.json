@@ -7,7 +7,7 @@
     "dev": "node scripts/dev.mjs",
     "dev:services": "concurrently --kill-others-on-fail \"npm --workspace apps/api run dev\" \"npm --workspace apps/web run dev\"",
     "build": "npm run typecheck && npm --workspace apps/web run build",
-    "typecheck": "npm --workspace apps/api run typecheck && npm --workspace apps/web exec tsc -b",
+    "typecheck": "npm --workspace apps/api run typecheck && npm --workspace apps/web exec -- tsc -b",
     "test": "npm --workspace apps/api test",
     "prisma:generate": "npm --workspace apps/api run prisma:generate",
     "prisma:migrate": "npm --workspace apps/api run prisma:migrate",

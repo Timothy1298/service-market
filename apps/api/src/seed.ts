@@ -1,26 +1,90 @@
 import 'dotenv/config'
+import crypto from 'node:crypto'
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from './generated/prisma/client'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const databaseUrl = process.env.DATABASE_URL ?? ''
+const databaseName = (() => { try { return new URL(databaseUrl).pathname.replace(/^\//, '') } catch { return '' } })()
+if (process.env.NODE_ENV === 'production') throw new Error('Demo seed is disabled in production')
+if (process.env.ALLOW_DEMO_SEED !== 'true') throw new Error('Set ALLOW_DEMO_SEED=true to run the demo seed')
+if (!databaseName || process.env.DEMO_SEED_DATABASE !== databaseName) throw new Error('Set DEMO_SEED_DATABASE to the exact development database name before seeding')
+
+const pool = new Pool({ connectionString: databaseUrl })
 const prisma = new PrismaClient({ adapter: new PrismaPg(pool) })
-const categories = [
-  ['electrical', 'Electrical installation and repairs'],
-  ['plumbing', 'Plumbing'],
-  ['hvac-refrigeration', 'HVAC and refrigeration'],
-  ['masonry-construction', 'Masonry and construction'],
-  ['painting', 'Painting'],
-  ['carpentry-joinery', 'Carpentry and joinery'],
-  ['general-maintenance', 'General maintenance'],
-  ['other', 'Other'],
-]
+const categories = [['electrical', 'Electrical installation and repairs'], ['plumbing', 'Plumbing'], ['hvac-refrigeration', 'HVAC and refrigeration'], ['masonry-construction', 'Masonry and construction'], ['painting', 'Painting'], ['carpentry-joinery', 'Carpentry and joinery'], ['general-maintenance', 'General maintenance'], ['other', 'Other']] as const
+const day = (value: number) => new Date(`2026-10-${String(value).padStart(2, '0')}T10:00:00.000Z`)
+const hashPassword = (password: string) => new Promise<string>((resolve, reject) => { const salt = 'fundiquote-demo-salt'; crypto.scrypt(password, salt, 64, (error, derived) => error ? reject(error) : resolve(`${salt}:${derived.toString('hex')}`)) })
+const money = (value: number) => value.toFixed(2)
 
 async function seed() {
-  for (const [slug, name] of categories) await prisma.serviceCategory.upsert({ where: { slug }, update: { name, isActive: true }, create: { slug, name } })
-  await prisma.$disconnect()
-  await pool.end()
-  console.log(`Seeded ${categories.length} service categories.`)
+  const categoryMap = new Map<string, string>()
+  for (const [slug, name] of categories) categoryMap.set(slug, (await prisma.serviceCategory.upsert({ where: { slug }, update: { name, isActive: true }, create: { slug, name } })).id)
+
+  const providerEmail = 'demo.provider@mwangaza.example'
+  const passwordHash = await hashPassword('DemoPass123!')
+  const provider = await prisma.user.upsert({ where: { phone: '0700000001' }, update: { fullName: 'Daniel Mwangi (Demo)', email: providerEmail, passwordHash, role: 'PROVIDER', isActive: true }, create: { fullName: 'Daniel Mwangi (Demo)', phone: '0700000001', email: providerEmail, passwordHash, role: 'PROVIDER' } })
+  let business = await prisma.business.findFirst({ where: { name: 'Mwangaza Electrical & Maintenance' } })
+  if (!business) business = await prisma.business.create({ data: { name: 'Mwangaza Electrical & Maintenance', phone: '0700000001', email: 'hello@mwangaza.example', address: 'Kilimani, Nairobi, Kenya', currency: 'KES', slogan: 'Reliable electrical and property maintenance', paymentInstructions: 'Demo account — do not send real payments.', mpesaNumber: '0700000001' } })
+  await prisma.businessMember.upsert({ where: { businessId_userId: { businessId: business.id, userId: provider.id } }, update: { status: 'ACTIVE', role: 'OWNER' }, create: { businessId: business.id, userId: provider.id, status: 'ACTIVE', role: 'OWNER' } })
+  await prisma.providerProfile.upsert({ where: { userId: provider.id }, update: { businessId: business.id, tradeCategory: 'Electrical installation and repairs', serviceDescription: 'Residential, retail, and small-office electrical maintenance.', location: 'Nairobi' }, create: { userId: provider.id, businessId: business.id, tradeCategory: 'Electrical installation and repairs', serviceDescription: 'Residential, retail, and small-office electrical maintenance.', location: 'Nairobi' } })
+
+  const customerNames = ['Amina Wanjiku', 'Brian Otieno', 'Cynthia Njeri', 'David Kamau', 'Esther Chebet', 'Faith Mutua', 'George Maina', 'Halima Noor', 'Irene Achieng', 'James Kariuki', 'Kendi Muthoni', 'Lydia Wambui', 'Mercy Atieno', 'Nelson Kiptoo', 'Olivia Nyambura', 'Peter Ochieng', 'Queen Wairimu', 'Robert Karanja', 'Sarah Jepchirchir', 'Tom Muriuki', 'Umoja Mini Mart', 'Kibera Corner Shop', 'Westlands Office Hub', 'Nairobi Homes Property Care']
+  const customers = []
+  for (let index = 0; index < customerNames.length; index += 1) {
+    const customer = await prisma.customerRecord.findFirst({ where: { businessId: business.id, name: customerNames[index] } }) ?? await prisma.customerRecord.create({ data: { businessId: business.id, name: customerNames[index], phone: `072${String(index + 10).padStart(7, '0')}`, email: `demo.customer${index + 1}@example.test`, billingAddress: `${['Kilimani', 'Westlands', 'Embakasi', 'Lavington'][index % 4]}, Nairobi`, projectLocation: `${['Nairobi', 'Kiambu', 'Westlands', 'Kasarani'][index % 4]}` } })
+    customers.push(customer)
+  }
+
+  const listingData = [['electrical', 'Electrical fault diagnosis', 'Fast diagnosis and repair of domestic and small-business electrical faults.', 2500], ['electrical', 'Lighting installation', 'LED, security, and interior lighting installation.', 1800], ['plumbing', 'Leak repair and fixtures', 'Leak tracing, tap replacement, and plumbing fixture repair.', 2200], ['general-maintenance', 'Property maintenance visit', 'A practical maintenance visit for landlords and small offices.', 3500], ['electrical', 'Electrical safety inspection', 'Inspection and recommendations for safer premises.', 4000], ['painting', 'Room repainting', 'Professional preparation and repainting for rooms and offices.', 6500], ['carpentry-joinery', 'Door and cabinet repairs', 'Small carpentry repairs and hardware replacement.', 2800], ['hvac-refrigeration', 'AC service visit', 'Routine air-conditioning inspection and cleaning.', 4500]] as const
+  for (const [slug, title, description, startingPrice] of listingData) { const existing = await prisma.serviceListing.findFirst({ where: { businessId: business.id, title } }); if (!existing) await prisma.serviceListing.create({ data: { businessId: business.id, categoryId: categoryMap.get(slug)!, title, description, startingPrice, status: 'PUBLISHED' } }) }
+
+  const requestTitles = ['Kitchen rewiring', 'Shop lighting repair', 'Office leak repair', 'Rental inspection']
+  const requests = []
+  for (let index = 0; index < requestTitles.length; index += 1) { const account = await prisma.user.upsert({ where: { phone: `071${String(index + 20).padStart(7, '0')}` }, update: { fullName: `${customerNames[index]} (Demo)` }, create: { fullName: `${customerNames[index]} (Demo)`, phone: `071${String(index + 20).padStart(7, '0')}`, email: `demo.requester${index + 1}@example.test`, passwordHash, role: 'CUSTOMER' } }); const request = await prisma.serviceRequest.findFirst({ where: { customerId: account.id, title: requestTitles[index] } }) ?? await prisma.serviceRequest.create({ data: { customerId: account.id, categoryId: categoryMap.get(index % 2 ? 'plumbing' : 'electrical')!, title: requestTitles[index], description: 'Demo service request for testing the customer and provider workflow.', location: ['Kilimani', 'Ngara', 'Westlands', 'Embakasi'][index], budgetMin: 1500, budgetMax: 12000, preferredDate: day(index + 5) } }); requests.push(request) }
+
+  const quoteStatuses = ['ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'ACCEPTED', 'DRAFT', 'ISSUED', 'REJECTED', 'EXPIRED', 'ISSUED', 'DRAFT'] as const
+  const quotes = []
+  for (let index = 0; index < 18; index += 1) {
+    const number = `DEMO-QT-2026-${String(index + 1).padStart(3, '0')}`
+    const customer = customers[index % customers.length]
+    const existing = await prisma.quotation.findFirst({ where: { businessId: business.id, quotationNumber: number } })
+    const subtotal = 2500 + index * 475
+    const quote = existing ?? await prisma.quotation.create({ data: { businessId: business.id, customerId: customer.id, serviceRequestId: requests[index % requests.length].id, quotationNumber: number, title: ['Kitchen rewiring', 'Lighting upgrade', 'Plumbing repairs', 'Maintenance visit'][index % 4], description: 'Demo quotation with realistic line items for UI and workflow testing.', location: customer.projectLocation, issueDate: quoteStatuses[index % quoteStatuses.length] === 'DRAFT' ? null : day((index % 20) + 1), expiryDate: day(Math.min(31, (index % 20) + 12)), subtotal: money(subtotal), discount: money(index % 4 === 0 ? 250 : 0), tax: money(index % 3 === 0 ? 0 : 0), grandTotal: money(subtotal - (index % 4 === 0 ? 250 : 0)), status: quoteStatuses[index % quoteStatuses.length], issuedSnapshot: quoteStatuses[index % quoteStatuses.length] === 'DRAFT' ? undefined : { demo: true, businessName: business.name }, items: { create: [{ description: 'Labour and installation', quantity: 1, unit: 'job', unitPrice: money(subtotal), lineTotal: money(subtotal), sortOrder: 0 }, ...(index % 3 === 0 ? [{ description: 'Materials allowance', quantity: 1, unit: 'lot', unitPrice: money(450), lineTotal: money(450), sortOrder: 1 }] : [])] } } })
+    quotes.push(quote)
+  }
+
+  const acceptedQuotes = quotes.filter(quote => quote.status === 'ACCEPTED')
+  const jobStatuses = ['SCHEDULED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED'] as const
+  const jobs = []
+  for (let index = 0; index < 12; index += 1) {
+    const quote = acceptedQuotes[index]
+    if (!quote) continue
+    const status = jobStatuses[index % jobStatuses.length]
+    const jobNumber = `DEMO-JOB-2026-${String(index + 1).padStart(3, '0')}`
+    const existing = await prisma.job.findFirst({ where: { businessId: business.id, jobNumber } })
+    const job = existing ?? await prisma.job.create({ data: { businessId: business.id, customerId: quote.customerId, quotationId: quote.id, jobNumber, title: quote.title, description: 'Demo job created for operational workflow testing.', location: quote.location, scheduledStart: day((index % 20) + 1), expectedCompletion: day(Math.min(31, (index % 20) + 3)), actualStart: ['IN_PROGRESS', 'ON_HOLD', 'COMPLETED'].includes(status) ? day((index % 20) + 2) : null, completedAt: status === 'COMPLETED' ? day((index % 20) + 5) : null, status, priority: index % 4 === 0 ? 'HIGH' : 'NORMAL', activities: { create: [{ userId: provider.id, type: 'CREATED', message: 'Demo job created for testing.' }, { userId: provider.id, type: 'STATUS_CHANGED', message: `Demo status: ${status}` }] } } })
+    jobs.push(job)
+  }
+
+  const materialsData = [['Electrical cable 2.5mm', 'metre', 'Electrical', 115, 35, 80], ['Twin cable 1.5mm', 'metre', 'Electrical', 82, 25, 120], ['13A socket outlet', 'piece', 'Electrical', 480, 800, 12], ['One-way light switch', 'piece', 'Electrical', 180, 350, 18], ['LED bulb 12W', 'piece', 'Electrical', 220, 400, 25], ['6-way consumer unit', 'piece', 'Electrical', 4200, 6500, 4], ['20A circuit breaker', 'piece', 'Electrical', 650, 950, 6], ['PVC conduit 20mm', 'metre', 'Electrical', 95, 160, 45], ['Junction box', 'piece', 'Electrical', 65, 120, 20], ['Insulation tape', 'roll', 'Electrical', 90, 150, 8], ['PPR pipe 20mm', 'metre', 'Plumbing', 190, 320, 30], ['PPR elbow 20mm', 'piece', 'Plumbing', 75, 140, 15], ['Chrome tap', 'piece', 'Plumbing', 1500, 2300, 5], ['Ball valve', 'piece', 'Plumbing', 480, 800, 7], ['PTFE seal tape', 'roll', 'Plumbing', 55, 100, 10], ['Silicone sealant', 'tube', 'Maintenance', 420, 650, 3], ['Wall plugs and screws', 'pack', 'Maintenance', 260, 450, 14], ['Paint 20L', 'tin', 'Painting', 3800, 5500, 2], ['Paint brush set', 'pack', 'Painting', 500, 850, 6], ['Safety gloves', 'pair', 'Safety', 180, 300, 9]] as const
+  const materials = []
+  for (let index = 0; index < materialsData.length; index += 1) { const [name, unit, category, cost, sellingPrice, stock] = materialsData[index]; const sku = `DEMO-MAT-${String(index + 1).padStart(3, '0')}`; const existing = await prisma.material.findFirst({ where: { businessId: business.id, sku } }); const material = existing ?? await prisma.material.create({ data: { businessId: business.id, sku, name, unit, category, costPerUnit: money(cost), sellingPrice: money(sellingPrice), stockQuantity: stock, reorderLevel: index % 4 === 0 ? 10 : 4, supplier: 'Demo Nairobi Trade Supplies' } }); materials.push(material); const movement = await prisma.stockMovement.findFirst({ where: { businessId: business.id, materialId: material.id, reference: `DEMO-OPENING-${sku}` } }); if (!movement) await prisma.stockMovement.create({ data: { businessId: business.id, materialId: material.id, type: 'OPENING', quantity: stock, costPerUnit: money(cost), reference: `DEMO-OPENING-${sku}`, reason: 'Demo opening stock', createdById: provider.id } }) }
+  for (let index = 0; index < Math.min(8, jobs.length); index += 1) { const material = materials[index % materials.length]; const reference = `DEMO-USAGE-${index + 1}`; if (!await prisma.stockMovement.findFirst({ where: { businessId: business.id, reference } })) { const quantity = 1; const movement = await prisma.stockMovement.create({ data: { businessId: business.id, materialId: material.id, jobId: jobs[index].id, type: 'CONSUMPTION', quantity, costPerUnit: material.costPerUnit, reference, reason: 'Demo job consumption', createdById: provider.id } }); await prisma.jobMaterialUsage.create({ data: { jobId: jobs[index].id, materialId: material.id, movementId: movement.id, quantity, costPerUnit: material.costPerUnit } }); await prisma.material.update({ where: { id: material.id }, data: { stockQuantity: { decrement: quantity } } }) } }
+
+  const invoiceStatuses = ['DRAFT', 'ISSUED', 'PARTIALLY_PAID', 'PAID', 'OVERDUE', 'ISSUED', 'PAID', 'DRAFT', 'PARTIALLY_PAID', 'ISSUED'] as const
+  const invoices = []
+  for (let index = 0; index < 10; index += 1) { const invoiceNumber = `DEMO-INV-2026-${String(index + 1).padStart(3, '0')}`; const existing = await prisma.invoice.findFirst({ where: { businessId: business.id, invoiceNumber } }); const job = jobs[index % Math.max(jobs.length, 1)]; const total = 4500 + index * 700; const discount = index % 3 === 0 ? 200 : 0; const materialsCharge = index % 2 === 0 ? 300 : 0; const invoiceTotal = total - discount + materialsCharge; const invoice = existing ?? await prisma.invoice.create({ data: { businessId: business.id, customerId: customers[index % customers.length].id, jobId: job?.id, quotationId: job?.quotationId, invoiceNumber, issueDate: invoiceStatuses[index] === 'DRAFT' ? null : day((index % 20) + 1), dueDate: day(Math.min(31, (index % 20) + 14)), subtotal: money(total + materialsCharge), discount: money(discount), tax: '0.00', grandTotal: money(invoiceTotal), amountPaid: '0.00', status: invoiceStatuses[index], paymentTerms: 'Payment due within 14 days.', notes: 'Demo invoice — no real payment is requested.', items: { create: [{ description: job?.title ?? 'Maintenance service', quantity: 1, unit: 'job', unitPrice: money(total), lineTotal: money(total), sortOrder: 0 }, ...(materialsCharge ? [{ description: 'Materials and transport', quantity: 1, unit: 'lot', unitPrice: money(materialsCharge), lineTotal: money(materialsCharge), sortOrder: 1 }] : [])] } } }); invoices.push(invoice) }
+  const paymentPlans = [{ index: 3, amounts: [Number(invoices[3]?.grandTotal ?? 0)], method: 'CASH' as const }, { index: 2, amounts: [2500, 1500], method: 'BANK_TRANSFER' as const }, { index: 4, amounts: [1800], method: 'MPESA' as const }, { index: 6, amounts: [8700], method: 'OTHER' as const }]
+  for (const plan of paymentPlans) { const invoice = invoices[plan.index]; if (!invoice) continue; for (let part = 0; part < plan.amounts.length; part += 1) { const reference = `DEMO-PAY-${plan.index + 1}-${part + 1}`; if (!await prisma.payment.findFirst({ where: { businessId: business.id, reference } })) await prisma.payment.create({ data: { businessId: business.id, invoiceId: invoice.id, amount: money(plan.amounts[part]), paymentDate: day(Math.min(31, 10 + plan.index + part)), method: plan.method, reference, notes: 'Demo manual payment; not verified by Safaricom.', recordedById: provider.id } }) } const paid = plan.amounts.reduce((sum, amount) => sum + amount, 0); await prisma.invoice.update({ where: { id: invoice.id }, data: { amountPaid: money(paid), status: paid >= Number(invoice.grandTotal) ? 'PAID' : 'PARTIALLY_PAID' } }) }
+
+  const expenseData = [['MATERIALS', 'Electrical supplies top-up', 4200], ['TRANSPORT', 'Site visit transport', 650], ['LABOUR', 'Subcontractor assistance', 3200], ['TOOLS', 'Replacement hand tools', 1850], ['UTILITIES', 'Workshop electricity', 2400], ['MAINTENANCE', 'Van maintenance', 6800], ['OTHER', 'Mobile communication', 850], ['TRANSPORT', 'Fuel for service visits', 3100], ['MATERIALS', 'Plumbing supplies', 2750], ['TOOLS', 'Drill bit set', 1200], ['LABOUR', 'Casual site assistance', 2100], ['OTHER', 'Printing and stationery', 500], ['TRANSPORT', 'Parking and access fees', 420], ['MAINTENANCE', 'Equipment servicing', 1900], ['UTILITIES', 'Workshop water', 380], ['OTHER', 'Protective workwear', 1600]] as const
+  for (let index = 0; index < expenseData.length; index += 1) { const [category, description, amount] = expenseData[index]; const reference = `DEMO-EXP-${String(index + 1).padStart(3, '0')}`; if (!await prisma.expense.findFirst({ where: { businessId: business.id, reference } })) await prisma.expense.create({ data: { businessId: business.id, jobId: index % 3 === 0 ? jobs[index % Math.max(jobs.length, 1)]?.id : undefined, category, description, amount: money(amount), currency: 'KES', expenseDate: day((index % 28) + 1), method: index % 2 === 0 ? 'CASH' : 'MPESA', reference, notes: 'Demo expense for reporting tests.', recordedById: provider.id } }) }
+
+  const active = await prisma.subscription.findFirst({ where: { businessId: business.id, status: 'ACTIVE' } }) ?? await prisma.subscription.create({ data: { businessId: business.id, planCode: 'PRO_MONTHLY', status: 'ACTIVE', price: '299.00', currency: 'KES', startsAt: day(1), expiresAt: new Date('2026-11-01T00:00:00.000Z') } })
+  if (!await prisma.paymentTransaction.findFirst({ where: { businessId: business.id, idempotencyKey: 'DEMO-MPESA-COMPLETED' } })) await prisma.paymentTransaction.create({ data: { businessId: business.id, subscriptionId: active.id, provider: 'MPESA', status: 'COMPLETED', amount: '299.00', currency: 'KES', phoneNumber: '254700000001', idempotencyKey: 'DEMO-MPESA-COMPLETED', mpesaReceipt: 'DEMO-RECEIPT-001', requestedAt: day(1), callbackAt: day(1), completedAt: day(1) } })
+  const counts = { customers: customers.length, quotations: quotes.length, jobs: jobs.length, materials: materials.length, invoices: invoices.length, expenses: expenseData.length, categories: categories.length }
+  console.log(JSON.stringify({ seeded: true, database: databaseName, providerEmail, demoPassword: 'DemoPass123!', business: business.name, period: '2026-10-01 through 2026-10-31', counts }, null, 2))
 }
 
-seed().catch(async (error) => { console.error(error instanceof Error ? error.message : error); await prisma.$disconnect(); await pool.end(); process.exitCode = 1 })
+seed().catch(error => { console.error(error instanceof Error ? error.message : error); process.exitCode = 1 }).finally(async () => { await prisma.$disconnect(); await pool.end() })

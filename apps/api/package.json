@@ -11,7 +11,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "db:seed": "tsx src/seed.ts",
-    "test": "node --import tsx test/api.test.ts"
+    "test": "node --import tsx --test test/api.test.ts test/phase3.integration.test.ts"
   },
   "keywords": [],
   "author": "",
