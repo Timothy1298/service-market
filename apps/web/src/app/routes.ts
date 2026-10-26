@@ -9,6 +9,7 @@ export const ROUTES = {
   quotations: '/app/quotations',
   jobs: '/app/jobs',
   inventory: '/app/materials',
+  inventoryAlias: '/app/inventory',
   invoices: '/app/invoices',
   payments: '/app/payments',
   expenses: '/app/expenses',
@@ -16,6 +17,7 @@ export const ROUTES = {
   billing: '/app/billing',
   profile: '/app/profile',
   businessProfile: '/app/business-profile',
+  resetPassword: '/reset-password',
 } as const
 
 export const route = (path: string) => `#${path}`

@@ -1,25 +1,180 @@
 import { useEffect, useRef, useState, type ButtonHTMLAttributes, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
+import { ArrowRight, Check, Circle, Eye, EyeOff, FileText, UserRound, Wallet, Wrench } from 'lucide-react'
+import { Navigate, useLocation } from 'react-router-dom'
 import './App.css'
 import { API, apiRequest, errorMessage } from './services/apiClient'
 import { AppLayout } from './layouts/AppLayout'
 import CustomersPage from './features/customers/pages/CustomersPage'
 import QuotationsPage from './features/quotations/pages/QuotationsPage'
 import JobsPage from './features/jobs/pages/JobsPage'
+import InventoryPage from './features/inventory/pages/InventoryWorkspacePage'
+import { RequireAuth } from './app/guards'
+import NotFoundPage from './features/errors/NotFoundPage'
+import { useDocumentTitle } from './lib/hooks/useDocumentTitle'
+import DashboardPage from './features/dashboard/pages/DashboardPage'
+import CustomerDetailPage from './features/customers/pages/CustomerDetailPage'
+import QuotationDetailPage from './features/quotations/pages/QuotationDetailPage'
+import JobDetailPage from './features/jobs/pages/JobDetailPage'
+import PublicQuotationSharePage from './features/quotations/pages/PublicQuotationSharePage'
 
 type Role = 'PROVIDER' | 'CUSTOMER' | 'ADMIN'
 type User = { id: string; fullName: string; phone: string; email?: string | null; role: Role; createdAt?: string }
 const categories = ['Electrical installation and repairs', 'Plumbing', 'HVAC and refrigeration', 'Masonry and construction', 'Painting', 'Carpentry and joinery', 'General maintenance', 'Other']
 const request = apiRequest
-const pause = (milliseconds: number) => new Promise<void>(resolve => window.setTimeout(resolve, milliseconds))
 const Logo = () => <a className="logo" href="#/"><span className="logo-mark">F</span> Fundi<span>Quote</span></a>
 const Button = ({ children, variant = 'primary', ...props }: { children: ReactNode; variant?: 'primary' | 'ghost' } & ButtonHTMLAttributes<HTMLButtonElement>) => <button className={`button ${variant}`} {...props}>{props.disabled && <span className="spinner" aria-label="Loading" />} {children}</button>
 const LinkButton = ({ children, href }: { children: ReactNode; href: string }) => <a className="button" href={href}>{children}</a>
 const Field = ({ label, error, ...props }: { label: string; error?: string } & InputHTMLAttributes<HTMLInputElement>) => <label className={`field${error ? ' has-error' : ''}`}><span>{label}</span><input {...props} />{error && <small className="field-error">{error}</small>}</label>
-function AuthLayout({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) { return <div className="auth-page"><section className="auth-visual"><Logo /><div><p className="eyebrow green">BUILT FOR LOCAL BUSINESS</p><h1>Do great work.<br /><em>Grow your business.</em></h1><p>FundiQuote gives Kenyan fundis the simple tools they need to win more work and stay in control.</p><div className="visual-card"><span className="check">✓</span><div><strong>Everything in one place</strong><small>Quotes, jobs and payments — organised.</small></div></div></div><small className="visual-foot">Made for the people who keep Kenya moving.</small></section><section className="auth-form"><div className="form-wrap"><Logo /><div className="form-heading"><h2>{title}</h2><p>{subtitle}</p></div>{children}</div></section></div> }
-function Login({ onLogin }: { onLogin: (user: User) => void }) { const [identifier, setIdentifier] = useState(''); const [password, setPassword] = useState(''); const [show, setShow] = useState(false); const [error, setError] = useState(''); const [success, setSuccess] = useState(''); const [loading, setLoading] = useState(false); const submit = async (event: FormEvent) => { event.preventDefault(); setError(''); setSuccess(''); setLoading(true); try { const result = await request<{ user: User }>('/auth/login', { method: 'POST', body: JSON.stringify({ identifier, password }) }); await pause(650); setSuccess('Signed in successfully. Opening your workspace…'); window.setTimeout(() => { onLogin(result.user); window.location.hash = '/app/dashboard' }, 700) } catch (e) { setError(errorMessage(e)); setLoading(false) } }; return <AuthLayout title="Welcome back" subtitle="Sign in to keep your work moving."><form onSubmit={submit}>{error && <div className="message error">{error}</div>}{success && <div className="message success-message">{success}</div>}<Field label="Phone or email" value={identifier} onChange={e => setIdentifier(e.target.value)} autoComplete="username" required placeholder="e.g. 0712 345 678" /><label className="field"><span>Password</span><div className="password"><input type={show ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required /><button type="button" onClick={() => setShow(!show)}>{show ? 'Hide' : 'Show'}</button></div></label><div className="form-row"><label className="check-label"><input type="checkbox" /> Remember me</label><a href="#/forgot-password">Forgot password?</a></div><Button disabled={loading}>{loading ? 'Signing in…' : 'Sign in'} <span>→</span></Button><p className="switch">New to FundiQuote? <a href="#/register">Create an account</a></p></form></AuthLayout> }
-function Register({ onLogin }: { onLogin: (user: User) => void }) { const [type, setType] = useState<'PROVIDER' | 'CUSTOMER'>('PROVIDER'); const [form, setForm] = useState({ fullName: '', phone: '', email: '', password: '', confirmPassword: '', businessName: '', tradeCategory: categories[0] }); const [error, setError] = useState(''); const [success, setSuccess] = useState(''); const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({}); const [loading, setLoading] = useState(false); const update = (key: string, value: string) => { setForm(prev => ({ ...prev, [key]: value })); setFieldErrors(prev => ({ ...prev, [key]: '' })) }; const submit = async (event: FormEvent) => { event.preventDefault(); setError(''); setSuccess(''); setFieldErrors({}); setLoading(true); try { const result = await request<{ user: User }>('/api/auth/register', { method: 'POST', body: JSON.stringify({ ...form, accountType: type }) }); await pause(650); setSuccess('Account created successfully. Opening your workspace…'); window.setTimeout(() => { onLogin(result.user); window.location.hash = '/app/dashboard' }, 700) } catch (e) { const typed = e as Error & { fields?: Record<string, string[]> }; setError(errorMessage(e)); setLoading(false); if (typed.fields) setFieldErrors(Object.fromEntries(Object.entries(typed.fields).map(([key, messages]) => [key, messages[0] ?? 'Invalid value']))) }}; return <AuthLayout title="Create your account" subtitle="Start building a better business today."><form onSubmit={submit}>{error && <div className="message error">{error}</div>}{success && <div className="message success-message">{success}</div>}<div className="account-types"><button type="button" className={type === 'PROVIDER' ? 'selected' : ''} onClick={() => setType('PROVIDER')}><b>I'm a service provider</b><small>I offer services to customers</small></button><button type="button" className={type === 'CUSTOMER' ? 'selected' : ''} onClick={() => setType('CUSTOMER')}><b>I'm a customer</b><small>I'm looking for a service</small></button></div><div className="two-col"><Field label="Full name" error={fieldErrors.fullName} value={form.fullName} onChange={e => update('fullName', e.target.value)} required placeholder="Your full name" /><Field label="Phone number" error={fieldErrors.phone} value={form.phone} onChange={e => update('phone', e.target.value)} required placeholder="0712 345 678" /></div><Field label="Email address (optional)" error={fieldErrors.email} type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="you@example.com" />{type === 'PROVIDER' && <><Field label="Business name" error={fieldErrors.businessName} value={form.businessName} onChange={e => update('businessName', e.target.value)} required placeholder="e.g. Kamau Electricals" /><label className={`field${fieldErrors.tradeCategory ? ' has-error' : ''}`}><span>Trade or service</span><select value={form.tradeCategory} onChange={e => update('tradeCategory', e.target.value)}>{categories.map(category => <option key={category}>{category}</option>)}</select>{fieldErrors.tradeCategory && <small className="field-error">{fieldErrors.tradeCategory}</small>}</label></>}<div className="two-col"><Field label="Password" error={fieldErrors.password} type="password" value={form.password} onChange={e => update('password', e.target.value)} required placeholder="At least 8 characters" /><Field label="Confirm password" error={fieldErrors.confirmPassword} type="password" value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} required /></div><p className="hint">Use at least 8 characters with a letter and a number.</p><Button disabled={loading}>{loading ? 'Creating account…' : 'Create account'} <span>→</span></Button><p className="switch">Already have an account? <a href="#/login">Sign in</a></p></form></AuthLayout> }
+function AuthLayout({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
+  const benefits = [
+    { Icon: FileText, title: 'Send professional quotes', detail: 'Share them with customers on WhatsApp.' },
+    { Icon: Wrench, title: 'Organise your jobs', detail: 'Turn accepted quotations into work.' },
+    { Icon: Wallet, title: 'Track your cash flow', detail: 'Keep invoices and M-Pesa payments together.' },
+  ]
+  return <div className="auth-page">
+    <section className="auth-visual">
+      <Logo />
+      <div className="auth-hero-copy">
+        <h1>Quote faster.<br /><em>Get paid sooner.</em></h1>
+        <p>Quotations, jobs, invoices and M-Pesa payments for Kenyan fundis — in one simple app.</p>
+        <div className="auth-benefits">{benefits.map(({ Icon, title: benefitTitle, detail }) => <div className="auth-benefit" key={benefitTitle}><span><Icon size={18} /></span><div><b>{benefitTitle}</b><small>{detail}</small></div></div>)}</div>
+      </div>
+      <small className="visual-foot">Made for the people who keep Kenya moving.</small>
+    </section>
+    <section className="auth-form"><div className="form-wrap">
+      <Logo />
+      <div className="form-heading"><h2>{title}</h2><p>{subtitle}</p></div>
+      {children}
+    </div></section>
+  </div>
+}
+
+function Login({ onLogin }: { onLogin: (user: User) => void }) {
+  const [identifier, setIdentifier] = useState('')
+  const [password, setPassword] = useState('')
+  const [show, setShow] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const submit = async (event: FormEvent) => {
+    event.preventDefault(); setError(''); setLoading(true)
+    try {
+      const result = await request<{ user: User }>('/auth/login', { method: 'POST', body: JSON.stringify({ identifier, password }) })
+      onLogin(result.user)
+      window.location.hash = '/app/dashboard'
+    } catch (cause) { setError(errorMessage(cause)); setLoading(false) }
+  }
+  return <AuthLayout title="Welcome back" subtitle="Sign in to keep your work moving.">
+    <form onSubmit={submit}>
+      {error && <div className="message error" role="alert">{error}</div>}
+      <Field label="Phone or email" value={identifier} onChange={event => setIdentifier(event.target.value)} autoComplete="username" required placeholder="0712 345 678" />
+      <label className="field"><span>Password</span><div className="password"><input type={show ? 'text' : 'password'} value={password} onChange={event => setPassword(event.target.value)} autoComplete="current-password" required /><button type="button" aria-label={show ? 'Hide password' : 'Show password'} onClick={() => setShow(!show)}>{show ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
+      <div className="form-row"><span /><a href="#/forgot-password">Forgot password?</a></div>
+      <Button disabled={loading}>{loading ? 'Signing in…' : 'Sign in'} <ArrowRight size={18} /></Button>
+      <p className="switch">New to FundiQuote? <a href="#/register">Create an account</a></p>
+    </form>
+  </AuthLayout>
+}
+
+function Register({ onLogin }: { onLogin: (user: User) => void }) {
+  const [type, setType] = useState<'PROVIDER' | 'CUSTOMER'>('PROVIDER')
+  const [form, setForm] = useState({ fullName: '', phone: '', email: '', password: '', confirmPassword: '', businessName: '', tradeCategory: categories[0] })
+  const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [loading, setLoading] = useState(false)
+  const update = (key: string, value: string) => { setForm(current => ({ ...current, [key]: value })); setFieldErrors(current => ({ ...current, [key]: '' })) }
+  const rules = [form.password.length >= 8, /[A-Za-z]/.test(form.password), /\d/.test(form.password)]
+  const submit = async (event: FormEvent) => {
+    event.preventDefault(); setError(''); setFieldErrors({}); setLoading(true)
+    try {
+      const result = await request<{ user: User }>('/auth/register', { method: 'POST', body: JSON.stringify({ ...form, accountType: type }) })
+      onLogin(result.user)
+      window.location.hash = '/app/dashboard'
+    } catch (cause) {
+      const typed = cause as Error & { fields?: Record<string, string[]> }
+      setError(errorMessage(cause)); setLoading(false)
+      if (typed.fields) setFieldErrors(Object.fromEntries(Object.entries(typed.fields).map(([key, messages]) => [key, messages[0] ?? 'Invalid value'])))
+    }
+  }
+  return <AuthLayout title="Create your account" subtitle="Start building a better business today.">
+    <form onSubmit={submit}>
+      {error && <div className="message error" role="alert">{error}</div>}
+      <div className="account-types">
+        <button type="button" className={type === 'PROVIDER' ? 'selected' : ''} onClick={() => setType('PROVIDER')}><Wrench size={20} /><b>Service provider</b><small>I offer services to customers</small>{type === 'PROVIDER' && <Check size={16} />}</button>
+        <button type="button" className={type === 'CUSTOMER' ? 'selected' : ''} onClick={() => setType('CUSTOMER')}><UserRound size={20} /><b>Customer</b><small>I'm looking for a service</small>{type === 'CUSTOMER' && <Check size={16} />}</button>
+      </div>
+      <div className="two-col"><Field label="Full name" error={fieldErrors.fullName} value={form.fullName} onChange={event => update('fullName', event.target.value)} required /><Field label="Phone number" error={fieldErrors.phone} value={form.phone} onChange={event => update('phone', event.target.value)} required placeholder="0712 345 678" inputMode="tel" /></div>
+      <Field label="Email address (optional)" error={fieldErrors.email} type="email" value={form.email} onChange={event => update('email', event.target.value)} />
+      {type === 'PROVIDER' && <><Field label="Business name" error={fieldErrors.businessName} value={form.businessName} onChange={event => update('businessName', event.target.value)} required /><label className={`field${fieldErrors.tradeCategory ? ' has-error' : ''}`}><span>Trade or service</span><select value={form.tradeCategory} onChange={event => update('tradeCategory', event.target.value)}>{categories.map(category => <option key={category}>{category}</option>)}</select>{fieldErrors.tradeCategory && <small className="field-error">{fieldErrors.tradeCategory}</small>}</label></>}
+      <Field label="Password" error={fieldErrors.password} type="password" value={form.password} onChange={event => update('password', event.target.value)} required autoComplete="new-password" />
+      <div className="password-rules" aria-live="polite">{['At least 8 characters', 'At least one letter', 'At least one number'].map((rule, index) => <span className={rules[index] ? 'is-valid' : ''} key={rule}>{rules[index] ? <Check size={14} /> : <Circle size={14} />}{rule}</span>)}</div>
+      <Field label="Confirm password" error={fieldErrors.confirmPassword} type="password" value={form.confirmPassword} onChange={event => update('confirmPassword', event.target.value)} required autoComplete="new-password" />
+      <Button disabled={loading}>{loading ? 'Creating account…' : 'Create account'} <ArrowRight size={18} /></Button>
+      <p className="auth-terms">By creating an account, you agree to use FundiQuote responsibly.</p>
+      <p className="switch">Already have an account? <a href="#/login">Sign in</a></p>
+    </form>
+  </AuthLayout>
+}
 function Dashboard({ user }: { user: User }) { const provider = user.role === 'PROVIDER'; const admin = user.role === 'ADMIN'; return <><div className="page-heading"><div><p className="eyebrow green">{admin ? 'ADMINISTRATION' : provider ? 'YOUR WORKSPACE' : 'YOUR SPACE'}</p><h1>Good morning, {user.fullName.split(' ')[0]}.</h1><p>{admin ? 'Manage the FundiQuote platform.' : provider ? 'Here’s what’s happening with your business.' : 'Find the right people for your next project.'}</p></div>{provider ? <LinkButton href="#/app/business-profile">Manage business <span>→</span></LinkButton> : null}</div>{provider ? <><div className="subscription"><div><span className="status-dot"></span><b>Free plan</b><span>Subscription management is coming soon.</span></div><a href="#/app/business-profile">Manage business →</a></div><div className="metrics">{['Quotations', 'Accepted', 'Active jobs', 'Outstanding'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div><section className="panel"><div className="panel-title"><div><h3>Recent activity</h3><p>Your latest business activity will appear here.</p></div></div><div className="empty"><div className="empty-icon">◷</div><b>No activity yet</b><p>Once you start sending quotations, your activity will show up here.</p></div></section></> : admin ? <section className="panel profile-panel"><div className="panel-title"><p className="eyebrow green">PLATFORM OVERVIEW</p><h2>Administrator dashboard</h2><p>Administration tools will be added in a future phase.</p></div></section> : <><section className="customer-hero"><div><p className="eyebrow green">COMING SOON</p><h2>What do you need help with?</h2><p>Discover trusted local fundis and get the right quote for your project.</p><LinkButton href="#/app/customer-dashboard">Explore services <span>→</span></LinkButton></div><div className="hero-shape">⌂</div></section><div className="metrics">{['Service requests', 'Received quotes', 'Completed jobs'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div></>}</> }
-function App() { const [user, setUser] = useState<User | null>(null); const [checking, setChecking] = useState(true); const [path, setPath] = useState(() => window.location.hash.replace('#', '') || '/'); const authCheckStarted = useRef(false); useEffect(() => { const onHashChange = () => setPath(window.location.hash.replace('#', '') || '/'); window.addEventListener('hashchange', onHashChange); return () => window.removeEventListener('hashchange', onHashChange) }, []); useEffect(() => { if (authCheckStarted.current) return; authCheckStarted.current = true; request<{ user: User | null }>('/auth/me').then(r => setUser(r.user)).finally(() => setChecking(false)) }, []); const logout = async () => { await request('/auth/logout', { method: 'POST' }).catch(() => undefined); setUser(null); window.location.hash = '/login' }; if (path.startsWith('/quotation/share/')) return <PublicQuotationShare token={path.split('/').pop() ?? ''} />; if (checking) return <div className="loading-screen"><Logo /><span>Loading your workspace…</span></div>; if (!user && path.startsWith('/app')) { window.location.hash = '/login'; return null } if (path === '/login' || (!user && path === '/')) return <Login onLogin={setUser} />; if (path === '/register') return <Register onLogin={setUser} />; if (path === '/forgot-password') return <ForgotPassword />; if (user) return <AppLayout user={user} onLogout={logout}>{path.includes('customers') ? <CustomersPage /> : path.includes('quotations') ? <QuotationsPage /> : path.includes('jobs') ? <JobsPage /> : path.includes('materials') ? <Operations section="materials" /> : path.includes('invoices') ? <Operations section="invoices" /> : path.includes('payments') ? <Operations section="payments" /> : path.includes('expenses') ? <Operations section="expenses" /> : path.includes('reports') ? <Operations section="reports" /> : path.includes('billing') ? <Billing user={user} /> : path.includes('business-profile') ? <ConnectedProfile user={user} business /> : path.includes('/profile') ? <ConnectedProfile user={user} /> : <ProviderDashboard user={user} />}</AppLayout>; return <div /> }
+function App() {
+  const [user, setUser] = useState<User | null>(null)
+  const [checking, setChecking] = useState(true)
+  const location = useLocation()
+  const path = location.pathname
+  const authCheckStarted = useRef(false)
+
+  useEffect(() => {
+    if (authCheckStarted.current) return
+    authCheckStarted.current = true
+    request<{ user: User | null }>('/auth/me')
+      .then(result => setUser(result.user))
+      .catch(() => setUser(null))
+      .finally(() => setChecking(false))
+  }, [])
+
+  const logout = async () => {
+    await request('/auth/logout', { method: 'POST' }).catch(() => undefined)
+    setUser(null)
+    window.location.hash = '/login'
+  }
+  const titles: Record<string, string> = {
+    '/login': 'Sign in', '/register': 'Create account', '/forgot-password': 'Forgot password',
+    '/reset-password': 'Reset password', '/app/dashboard': 'Dashboard', '/app/customers': 'Customers',
+    '/app/quotations': 'Quotations', '/app/jobs': 'Jobs', '/app/materials': 'Inventory',
+    '/app/invoices': 'Invoices', '/app/payments': 'Payments', '/app/expenses': 'Expenses',
+    '/app/reports': 'Reports', '/app/billing': 'Subscription', '/app/profile': 'My profile',
+    '/app/business-profile': 'Business profile',
+  }
+  useDocumentTitle(path.startsWith('/quotation/share/') ? 'Shared quotation' : titles[path] ?? 'FundiQuote')
+
+  if (path.startsWith('/quotation/share/')) return <PublicQuotationSharePage token={path.split('/').pop() ?? ''} />
+  if (checking) return <div className="loading-screen"><Logo /><span>Loading your workspace…</span></div>
+  if (path === '/login' || (!user && path === '/')) return <Login onLogin={setUser} />
+  if (path === '/register') return <Register onLogin={setUser} />
+  if (path === '/forgot-password') return <ForgotPassword />
+  if (path === '/reset-password') return <ResetPassword />
+  if (path === '/' && user) return <Navigate to="/app/dashboard" replace />
+  if (path.startsWith('/app')) {
+    const page = path.match(/^\/app\/customers\/[^/]+$/) ? <CustomerDetailPage id={path.split('/').pop() ?? ''} />
+      : path === '/app/customers' ? <CustomersPage />
+      : path.match(/^\/app\/quotations\/[^/]+\/edit$/) ? <QuotationsPage editId={path.split('/').at(-2) ?? ''} />
+      : path.match(/^\/app\/quotations\/[^/]+$/) && path !== '/app/quotations/new' ? <QuotationDetailPage id={path.split('/').pop() ?? ''} />
+        : path.match(/^\/app\/jobs\/[^/]+$/) ? <JobDetailPage id={path.split('/').pop() ?? ''} />
+      : path.includes('quotations') ? <QuotationsPage />
+        : path.includes('jobs') ? <JobsPage />
+          : path.includes('materials') || path.startsWith('/app/inventory') ? <InventoryPage />
+            : path.includes('invoices') ? <Operations section="invoices" />
+              : path.includes('payments') ? <Operations section="payments" />
+                : path.includes('expenses') ? <Operations section="expenses" />
+                  : path.includes('reports') ? <Operations section="reports" />
+                    : path.includes('billing') ? <Billing user={user!} />
+                      : path.includes('business-profile') ? <ConnectedProfile user={user!} business />
+                        : path.includes('/profile') ? <ConnectedProfile user={user!} />
+                          : path === '/app' || path === '/app/dashboard' ? user!.role === 'PROVIDER' ? <DashboardPage user={user!} /> : <Dashboard user={user!} />
+                            : <NotFoundPage />
+    return <RequireAuth user={user}><AppLayout user={user!} onLogout={logout}>{page}</AppLayout></RequireAuth>
+  }
+  return <NotFoundPage />
+}
 export default App
 
 function Customers() {
@@ -92,26 +247,6 @@ function ConnectedProfile({ user, business = false }: { user: User; business?: b
   return <section className="panel profile-panel"><div className="panel-title"><p className="eyebrow green">{business ? 'BUSINESS DETAILS' : 'ACCOUNT DETAILS'}</p><h2>{business ? 'Your business profile' : 'Personal profile'}</h2><p>{loading ? 'Loading saved details…' : 'Changes are saved to your account.'}</p></div><form onSubmit={submit}>{error && <div className="message error">{error}</div>}{message && <div className="message success-message">{message}</div>}{business ? <><Field label="Business name" value={form.name} onChange={event => update('name', event.target.value)} required /><Field label="Business phone" value={form.phone} onChange={event => update('phone', event.target.value)} required /><Field label="Business email" value={form.email} onChange={event => update('email', event.target.value)} /><Field label="Business address" value={form.address} onChange={event => update('address', event.target.value)} /><label className="field"><span>Trade category</span><select value={form.tradeCategory} onChange={event => update('tradeCategory', event.target.value)}>{categories.map(category => <option key={category}>{category}</option>)}</select></label><Field label="M-Pesa number" value={form.mpesaNumber} onChange={event => update('mpesaNumber', event.target.value)} /></> : <><Field label="Full name" value={form.fullName} onChange={event => update('fullName', event.target.value)} required /><Field label="Phone number" value={form.phone} onChange={event => update('phone', event.target.value)} required /><Field label="Email address" value={form.email} onChange={event => update('email', event.target.value)} /></>}<Button disabled={loading || saving}>{saving ? 'Saving…' : 'Save changes'}</Button></form></section>
 }
 
-function ProviderDashboard({ user }: { user: User }) {
-  const [data, setData] = useState<any>(null)
-  const [period, setPeriod] = useState('month')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const load = async () => { setLoading(true); setError(''); try { const now = new Date(); const from = new Date(now); if (period === 'today') from.setHours(0, 0, 0, 0); else if (period === 'week') from.setDate(now.getDate() - 6); else from.setDate(1); const [report, jobs, invoices, payments, expenses, materials] = await Promise.all([request<any>(`/reports/overview?from=${encodeURIComponent(from.toISOString())}&to=${encodeURIComponent(now.toISOString())}`), request<any>('/jobs'), request<any>('/invoices'), request<any>('/payments'), request<any>('/expenses'), request<any>('/materials')]); setData({ report, jobs: jobs.jobs ?? [], invoices: invoices.invoices ?? [], payments: payments.payments ?? [], expenses: expenses.expenses ?? [], materials: materials.materials ?? [] }) } catch (requestError) { setError(errorMessage(requestError)) } finally { setLoading(false) } }
-  useEffect(() => { load() }, [period])
-  if (user.role !== 'PROVIDER') return <Dashboard user={user} />
-  const firstName = user.fullName.split(' ')[0]
-  const report = data?.report
-  const money = (value: unknown) => `KES ${Number(value ?? 0).toLocaleString('en-KE', { maximumFractionDigits: 0 })}`
-  const jobs = data?.jobs ?? []; const invoices = data?.invoices ?? []; const payments = data?.payments ?? []; const expenses = data?.expenses ?? []; const materials = data?.materials ?? []
-  const activeJobs = jobs.filter((job: any) => ['SCHEDULED', 'IN_PROGRESS', 'ON_HOLD'].includes(job.status)); const outstanding = invoices.filter((invoice: any) => ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'].includes(invoice.status)); const lowStock = materials.filter((material: any) => Number(material.stockQuantity) <= Number(material.reorderLevel)); const activity = [...payments.map((item: any) => ({ title: 'Payment received', detail: `${item.invoice?.invoiceNumber ?? 'Invoice'} · ${money(item.amount)}`, date: item.createdAt, icon: '↗' })), ...invoices.map((item: any) => ({ title: `Invoice ${item.invoiceNumber}`, detail: `${item.customer?.name ?? 'Customer'} · ${item.status}`, date: item.createdAt, icon: '▤' })), ...jobs.map((item: any) => ({ title: `Job ${item.jobNumber}`, detail: `${item.customer?.name ?? 'Customer'} · ${item.status}`, date: item.createdAt, icon: '◷' })), ...expenses.map((item: any) => ({ title: 'Expense recorded', detail: `${item.description} · ${money(item.amount)}`, date: item.createdAt, icon: '−' }))].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 6)
-  const statusCounts = ['SCHEDULED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED'].map(status => ({ status, count: jobs.filter((job: any) => job.status === status).length }))
-  return <div className="dashboard-page"><div className="dashboard-header"><div><p className="eyebrow green">YOUR WORKSPACE</p><h1>Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, {firstName}.</h1><p>Here’s what’s happening with your business.</p></div><div className="dashboard-actions"><select aria-label="Reporting period" value={period} onChange={event => setPeriod(event.target.value)}><option value="today">Today</option><option value="week">Last 7 days</option><option value="month">This month</option></select><LinkButton href="#/app/quotations">Create quotation <span>+</span></LinkButton></div></div>{error && <div className="message error">{error} <button type="button" onClick={load}>Retry</button></div>}{loading ? <DashboardSkeleton /> : <><section className="dashboard-metrics">{[['Active jobs', activeJobs.length, 'Jobs requiring attention', '#/app/jobs'], ['Invoiced', money(report?.invoicedAmount), 'Issued in selected period', '#/app/invoices'], ['Payments received', money(report?.paymentsReceived), 'Recorded in selected period', '#/app/payments'], ['Outstanding', money(report?.outstandingBalance), 'Receivables to follow up', '#/app/invoices']].map(([label, value, note, href]) => <a className="dashboard-metric" href={href as string} key={label as string}><span className="metric-icon">{label === 'Active jobs' ? '◷' : label === 'Payments received' ? '↗' : label === 'Outstanding' ? '◉' : '▤'}</span><small>{label}</small><strong>{value}</strong><em>{note}</em></a>)}</section><div className="dashboard-secondary"><a href="#/app/quotations"><b>{report?.jobs ? report.jobs.filter((job: any) => job.status === 'SCHEDULED').reduce((sum: number, item: any) => sum + item._count, 0) : 0}</b><span>Scheduled work</span></a><a href="#/app/quotations"><b>{report?.lowStock?.length ?? lowStock.length}</b><span>Low-stock materials</span></a><a href="#/app/invoices"><b>{outstanding.filter((item: any) => item.status === 'OVERDUE').length}</b><span>Overdue invoices</span></a><a href="#/app/quotations"><b>{report?.jobs ? report.jobs.filter((job: any) => ['ISSUED', 'SENT'].includes(job.status)).reduce((sum: number, item: any) => sum + item._count, 0) : 0}</b><span>Awaiting response</span></a></div><div className="dashboard-grid"><section className="panel dashboard-chart"><div className="panel-title"><div><h2>Business performance</h2><p>Invoices, payments and expenses in the selected period.</p></div><a href="#/app/reports">View reports →</a></div><div className="chart-bars">{[report?.invoicedAmount ?? 0, report?.paymentsReceived ?? 0, report?.recordedExpenses ?? 0].map((value, index) => <div className={`chart-bar bar-${index}`} key={index} style={{ height: `${Math.max(10, Math.min(100, Number(value) / Math.max(Number(report?.invoicedAmount) || 1, 1) * 100))}%` }}><span>{money(value)}</span></div>)}</div><div className="chart-legend"><span><i className="legend-invoiced" /> Invoiced</span><span><i className="legend-payments" /> Payments</span><span><i className="legend-expenses" /> Expenses</span></div></section><section className="panel jobs-overview"><div className="panel-title"><div><h2>Jobs overview</h2><p>Current state of your work.</p></div></div>{statusCounts.map(item => <a className="status-row" href={`#/app/jobs?status=${item.status}`} key={item.status}><span>{item.status.replace('_', ' ')}</span><b>{item.count}</b></a>)}</section></div><div className="dashboard-grid dashboard-lists"><section className="panel"><div className="panel-title"><div><h2>Recent activity</h2><p>Latest business records.</p></div></div>{activity.length ? <div className="activity-list">{activity.map((item, index) => <div className="activity-row" key={`${item.title}-${index}`}><span className="activity-icon">{item.icon}</span><div><b>{item.title}</b><small>{item.detail}</small></div><time>{new Date(item.date).toLocaleDateString('en-KE', { day: 'numeric', month: 'short' })}</time></div>)}</div> : <DashboardEmpty text="No activity yet" href="#/app/quotations" action="Create your first quotation" />}</section><section className="panel"><div className="panel-title"><div><h2>Upcoming jobs</h2><p>Scheduled work and active jobs.</p></div><a href="#/app/jobs">View all →</a></div>{activeJobs.slice(0, 5).length ? <div className="compact-list">{activeJobs.slice(0, 5).map((job: any) => <a className="compact-row" href="#/app/jobs" key={job.id}><div><b>{job.jobNumber}</b><small>{job.customer?.name ?? 'Customer'} · {job.title}</small></div><time>{job.scheduledStart ? new Date(job.scheduledStart).toLocaleDateString('en-KE', { day: 'numeric', month: 'short' }) : 'Not scheduled'}</time></a>)}</div> : <DashboardEmpty text="No upcoming jobs" href="#/app/quotations" action="Create a quotation" />}</section></div><div className="dashboard-grid dashboard-lists"><section className="panel"><div className="panel-title"><div><h2>Outstanding invoices</h2><p>Prioritise unpaid customer balances.</p></div><a href="#/app/invoices">View all →</a></div>{outstanding.slice(0, 5).map((invoice: any) => <a className="compact-row" href="#/app/invoices" key={invoice.id}><div><b>{invoice.invoiceNumber}</b><small>{invoice.customer?.name ?? 'Customer'} · {invoice.status}</small></div><strong>{money(Number(invoice.grandTotal) - Number(invoice.amountPaid))}</strong></a>)}{!outstanding.length && <DashboardEmpty text="All invoices are settled" href="#/app/invoices" action="View invoices" />}</section><section className="panel"><div className="panel-title"><div><h2>Inventory alerts</h2><p>Materials at or below reorder level.</p></div><a href="#/app/materials">Manage stock →</a></div>{lowStock.slice(0, 5).map((material: any) => <a className="compact-row" href="#/app/materials" key={material.id}><div><b>{material.name}</b><small>{material.stockQuantity} {material.unit} remaining</small></div><span className="warning-label">Low stock</span></a>)}{!lowStock.length && <DashboardEmpty text="Inventory levels look healthy" href="#/app/materials" action="View materials" />}</section></div><section className="panel quick-actions"><div className="panel-title"><div><h2>Quick actions</h2><p>Move your business forward.</p></div></div><div className="action-grid"><LinkButton href="#/app/quotations">＋ Create quotation</LinkButton><LinkButton href="#/app/customers">＋ Add customer</LinkButton><LinkButton href="#/app/jobs">◷ View scheduled work</LinkButton><LinkButton href="#/app/invoices">▤ Create invoice</LinkButton><LinkButton href="#/app/payments">↗ Record payment</LinkButton><LinkButton href="#/app/reports">▥ View reports</LinkButton></div></section></>}</div>
-}
-
-function DashboardSkeleton() { return <><section className="dashboard-metrics skeleton-grid">{[1, 2, 3, 4].map(item => <div className="dashboard-metric skeleton" key={item} />)}</section><div className="dashboard-grid"><section className="panel skeleton panel-skeleton" /><section className="panel skeleton panel-skeleton" /></div></> }
-function DashboardEmpty({ text, href, action }: { text: string; href: string; action: string }) { return <div className="dashboard-empty"><b>{text}</b><a href={href}>{action} →</a></div> }
-
 function Quotations({ user }: { user: User }) {
   const [quotations, setQuotations] = useState<Array<{ id: string; quotationNumber: string; title: string; status: string; grandTotal: string; customer: { name: string } }>>([])
   const [customers, setCustomers] = useState<Array<{ id: string; name: string }>>([])
@@ -133,19 +268,41 @@ function Quotations({ user }: { user: User }) {
 
 void Quotations
 
-function PublicQuotationShare({ token }: { token: string }) {
-  const [quotation, setQuotation] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [working, setWorking] = useState(false)
-  const [message, setMessage] = useState('')
+function ResetPassword() {
+  const token = new URLSearchParams(window.location.hash.split('?')[1] ?? '').get('token') ?? ''
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
-  useEffect(() => { request<{ quotation: any }>(`/quotations/share/${token}`).then(result => setQuotation(result.quotation)).catch(requestError => setError(errorMessage(requestError))).finally(() => setLoading(false)) }, [token])
-  const respond = async (decision: 'ACCEPTED' | 'REJECTED') => { setWorking(true); setError(''); try { const result = await request<{ status: string }>(`/quotations/share/${token}/respond`, { method: 'POST', body: JSON.stringify({ decision }) }); setQuotation((current: any) => ({ ...current, status: result.status })); setMessage(result.status === 'ACCEPTED' ? 'Quotation accepted successfully.' : 'Quotation rejected.') } catch (requestError) { setError(errorMessage(requestError)) } finally { setWorking(false) } }
-  if (loading) return <div className="loading-screen"><Logo /><span>Loading quotation…</span></div>
-  if (error) return <AuthLayout title="Quotation unavailable" subtitle={error}><p className="switch"><a href="#/login">Sign in to FundiQuote</a></p></AuthLayout>
-  if (!quotation) return null
-  const responded = quotation.status === 'ACCEPTED' || quotation.status === 'REJECTED'
-  return <AuthLayout title={quotation.title} subtitle={`${quotation.business.name} · ${quotation.quotationNumber}`}><section className="panel public-quotation"><p>{quotation.description}</p>{quotation.items.map((item: any) => <div className="quote-row" key={item.id}><span>{item.description} · {item.quantity} {item.unit}</span><strong>{quotation.currency} {item.lineTotal}</strong></div>)}<div className="quote-total"><span>Total</span><strong>{quotation.currency} {quotation.grandTotal}</strong></div>{quotation.terms && <p>{quotation.terms}</p>}{message && <div className="message success-message">{message}</div>}{!responded && <div className="profile-actions"><Button disabled={working} onClick={() => respond('ACCEPTED')}>{working ? 'Processing…' : 'Accept quotation'}</Button><button className="text-button" type="button" disabled={working} onClick={() => respond('REJECTED')}>Reject</button></div>}{responded && <div className="message success-message">This quotation is {quotation.status.toLowerCase()}.</div>}</section></AuthLayout>
+  const [message, setMessage] = useState('')
+  const [saving, setSaving] = useState(false)
+  const rules = [password.length >= 8, /[A-Za-z]/.test(password), /\d/.test(password)]
+  const submit = async (event: FormEvent) => {
+    event.preventDefault()
+    setError('')
+    setMessage('')
+    if (!token) { setError('This reset link is missing its token. Request a new link.'); return }
+    if (password !== confirm) { setError('The passwords do not match.'); return }
+    if (!rules.every(Boolean)) { setError('Use at least 8 characters, including a letter and a number.'); return }
+    setSaving(true)
+    try {
+      const result = await request<{ message: string }>('/auth/reset-password', { method: 'POST', body: JSON.stringify({ token, password }) })
+      setMessage(result.message)
+      window.setTimeout(() => { window.location.hash = '/login' }, 1200)
+    } catch (cause) { setError(errorMessage(cause)) } finally { setSaving(false) }
+  }
+  return <AuthLayout title="Choose a new password" subtitle="Use a strong password you have not used before.">
+    <form onSubmit={submit}>
+      {error && <div className="message error" role="alert">{error}</div>}
+      {message && <div className="message success-message" role="status">{message}</div>}
+      <Field label="New password" type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} required />
+      <div className="password-rules" aria-live="polite">
+        {['At least 8 characters', 'At least one letter', 'At least one number'].map((rule, index) => <span className={rules[index] ? 'is-valid' : ''} key={rule}>{rules[index] ? '✓' : '○'} {rule}</span>)}
+      </div>
+      <Field label="Confirm new password" type="password" autoComplete="new-password" value={confirm} onChange={event => setConfirm(event.target.value)} required />
+      <Button disabled={saving || !token}>{saving ? 'Saving password…' : 'Reset password'} <span>→</span></Button>
+      <p className="switch"><a href="#/forgot-password">Request a new reset link</a></p>
+    </form>
+  </AuthLayout>
 }
 
 function ForgotPassword() {

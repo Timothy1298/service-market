@@ -4,3 +4,43 @@
 @media (max-width: 850px) { .jobs-page__metrics { grid-template-columns: repeat(2, 1fr); }.jobs-page__toolbar { align-items: stretch; flex-direction: column; }.jobs-page__controls, .jobs-page__search { width: 100%; }.jobs-page__controls { flex-direction: column; }.jobs-page__controls > button { padding: 11px; }.jobs-page__filters { align-items: stretch; flex-direction: column; }.jobs-page__filters select { width: 100%; }.job-row { grid-template-columns: 38px minmax(0, 1fr); }.job-row__date, .job-row__actions { grid-column: 2; }.job-row__actions { justify-content: flex-start; } }
 @media (max-width: 520px) { .jobs-page { padding: 22px 16px 34px; }.jobs-page__header { align-items: stretch; flex-direction: column; }.jobs-page__primary { text-align: center; }.jobs-page__workspace { padding: 16px; }.jobs-page__metrics { gap: 10px; }.jobs-page__metrics > div { padding: 13px; }.job-row { grid-template-columns: 34px minmax(0, 1fr); }.job-row__icon { width: 34px; height: 34px; } }
 .jobs-page__workspace { box-shadow: 0 2px 9px rgba(23, 43, 40, .025); }.jobs-page__primary { display: inline-block; transition: background .18s, transform .18s; }.jobs-page__primary:hover { transform: translateY(-1px); }.jobs-page__search:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px #dff1e9; }.job-row { transition: background .18s; }.job-row:hover { background: #fbfdfc; }
+.jobs-page__metrics > article { min-width: 0; min-height: 126px; padding: 17px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+.jobs-page__controls { align-items: center; }
+.jobs-page__search > svg { flex: 0 0 auto; }
+.jobs-page__search > button { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border: 0; color: var(--muted); background: transparent; font-size: 19px; cursor: pointer; }
+.jobs-page__controls > button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 7px; white-space: nowrap; }
+.jobs-page__view-toggle { display: flex; flex: 0 0 auto; gap: 3px; border: 1px solid var(--line); border-radius: 8px; padding: 3px; background: white; }
+.jobs-page__view-toggle button { display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 5px; color: var(--muted); background: transparent; cursor: pointer; }
+.jobs-page__view-toggle button.active { color: var(--green); background: var(--mint); }
+.jobs-page__status-tabs button { display: inline-flex; align-items: center; gap: 7px; }
+.jobs-page__status-tabs button span { display: grid; min-width: 20px; height: 20px; place-items: center; border-radius: 10px; padding: 0 5px; color: inherit; background: rgb(0 0 0 / 6%); font-size: 11px; font-variant-numeric: tabular-nums; }
+.jobs-page__table-wrap { width: 100%; overflow-x: auto; }
+.jobs-page__table { width: 100%; min-width: 1000px; border-collapse: collapse; text-align: left; }
+.jobs-page__table th { height: 42px; border-bottom: 1px solid var(--line-strong, #b8cec3); padding: 0 10px; color: var(--muted); font-size: 11px; font-weight: 700; white-space: nowrap; }
+.jobs-page__table td { border-bottom: 1px solid var(--line); padding: 13px 10px; color: var(--navy); font-size: 12px; white-space: nowrap; }
+.jobs-page__table td:first-child { min-width: 190px; }
+.jobs-page__table td:first-child small { display: block; margin-top: 4px; color: var(--muted); white-space: normal; }
+.jobs-page__job-link { color: var(--green); font-weight: 700; text-decoration: none; }
+.jobs-page__amount { text-align: right; font-variant-numeric: tabular-nums; }
+.jobs-page__priority { display: inline-flex; border-radius: 999px; padding: 4px 8px; color: var(--muted); background: #eef2f1; font-size: 10px; font-weight: 700; }
+.jobs-page__priority--urgent { color: #a44747; background: #fff0ef; }
+.jobs-page__priority--high { color: #8a5a0b; background: #fff3dc; }
+.jobs-page__priority--normal { color: #276491; background: #e9f3fb; }
+.jobs-page__priority--low { color: #4f615b; background: #eef2f1; }
+.jobs-page__table .is-overdue { color: #a44747; font-weight: 700; }
+.jobs-page__row-actions { display: flex; align-items: center; gap: 8px; }
+.jobs-page__row-actions a { color: var(--green); font-size: 11px; font-weight: 700; text-decoration: none; }
+.jobs-page__row-actions select, .jobs-page__board-card select { max-width: 130px; border: 1px solid var(--line); border-radius: 6px; padding: 7px; color: var(--navy); background: white; font-size: 11px; }
+.jobs-page__board { display: grid; grid-auto-columns: minmax(260px, 1fr); grid-auto-flow: column; gap: 12px; overflow-x: auto; padding: 14px 1px 8px; }
+.jobs-page__board-column { min-height: 210px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #f8fbf9; }
+.jobs-page__board-column > header { display: flex; height: auto; align-items: center; justify-content: space-between; border: 0; padding: 0 0 10px; background: transparent; box-shadow: none; }
+.jobs-page__board-column > header h3 { margin: 0; color: var(--navy); font-size: 13px; }
+.jobs-page__board-column > header span { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.jobs-page__board-card { display: grid; gap: 7px; margin-top: 9px; border: 1px solid var(--line); border-radius: 9px; padding: 12px; background: white; box-shadow: 0 1px 2px rgb(23 37 43 / 5%); }
+.jobs-page__board-card > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.jobs-page__board-card > div:first-child > a { color: var(--green); font-size: 11px; font-weight: 700; text-decoration: none; }
+.jobs-page__board-card > b { color: var(--navy); font-size: 13px; }
+.jobs-page__board-card > small { color: var(--muted); font-size: 11px; }
+.jobs-page__board-card > div:last-child { flex-wrap: wrap; margin-top: 3px; }
+.jobs-page__board-card > div:last-child > a { color: var(--green); font-size: 11px; font-weight: 700; text-decoration: none; }
+@media (max-width: 850px) { .jobs-page__controls { flex-wrap: wrap; }.jobs-page__search { flex: 1 1 100%; }.jobs-page__view-toggle { margin-left: auto; }.jobs-page__table { min-width: 900px; } }

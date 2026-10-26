@@ -6,3 +6,15 @@
 @media (max-width: 520px) { .quotations-page { padding: 22px 16px 34px; }.quotations-page__header { align-items: stretch; flex-direction: column; }.quotations-page__primary { width: 100%; }.quotations-page__workspace { padding: 16px; }.quotation-row { grid-template-columns: 34px minmax(0, 1fr); }.quotation-row__icon { width: 34px; height: 34px; }.quotation-row__total, .quotation-row__actions { grid-column: 2; }.quotation-item { grid-template-columns: 1fr 75px 100px 30px; }.quotations-page__modal section { padding: 18px; } }
 .quotations-page__search-wrap { position: relative; width: min(440px, 100%); }.quotations-page__search-wrap .quotations-page__search { width: 100%; }.quotations-page__sort { position: absolute; z-index: 3; right: 0; top: calc(100% + 7px); width: 230px; padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: white; box-shadow: 0 10px 28px #13212b1c; }.quotations-page__sort label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 700; }.quotations-page__sort select { border: 1px solid var(--line); border-radius: 7px; padding: 9px; background: white; color: var(--navy); }.quotations-page__sort button { margin-top: 11px; border: 0; background: none; color: var(--green); font-size: 12px; font-weight: 700; cursor: pointer; }
 @media (max-width: 800px) { .quotations-page__search-wrap { width: 100%; } }
+.quotation-item { grid-template-columns: minmax(0, 1fr) 78px 90px 125px 32px; }
+.quotations-page__secondary { border: 1px solid var(--line); border-radius: 8px; padding: 11px 15px; color: var(--navy); background: white; font-weight: 700; cursor: pointer; }
+.quotations-page__secondary:hover { border-color: var(--green); color: var(--green); }
+.quotations-page__secondary:disabled, .quotations-page__primary:disabled { opacity: .6; cursor: wait; }
+@media (max-width: 520px) {
+  .quotation-item { grid-template-columns: minmax(0, 1fr) 34px; gap: 7px; border: 1px solid var(--line); border-radius: 8px; padding: 9px; }
+  .quotation-item input:first-child { grid-column: 1 / -1; }
+  .quotation-item input:nth-child(2), .quotation-item input:nth-child(3), .quotation-item input:nth-child(4) { min-width: 0; grid-row: 2; padding: 9px 7px; }
+  .quotation-item button { grid-column: 2; grid-row: 1; width: 30px; height: 34px; }
+  .quotations-page__modal-actions { flex-wrap: wrap; }
+  .quotations-page__modal-actions button { flex: 1 1 120px; }
+}
