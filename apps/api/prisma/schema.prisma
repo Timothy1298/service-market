@@ -497,6 +497,7 @@ model Invoice {
   payments       Payment[]
 
   @@unique([businessId, invoiceNumber])
+  @@unique([quotationId])
   @@index([businessId, status, dueDate])
 }
 

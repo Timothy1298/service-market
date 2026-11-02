@@ -20,6 +20,9 @@ export const statusMeta: Record<string, { label: string; tone: StatusTone }> = {
   ACTIVE: { label: 'Active', tone: 'success' },
   FAILED: { label: 'Failed', tone: 'danger' },
   UNKNOWN: { label: 'Unknown', tone: 'neutral' },
+  IN_STOCK: { label: 'In stock', tone: 'success' },
+  LOW_STOCK: { label: 'Low stock', tone: 'warning' },
+  OUT_OF_STOCK: { label: 'Out of stock', tone: 'danger' },
 }
 
 export const getStatusMeta = (status: string) => statusMeta[status] ?? {

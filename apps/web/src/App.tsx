@@ -16,6 +16,9 @@ import CustomerDetailPage from './features/customers/pages/CustomerDetailPage'
 import QuotationDetailPage from './features/quotations/pages/QuotationDetailPage'
 import JobDetailPage from './features/jobs/pages/JobDetailPage'
 import PublicQuotationSharePage from './features/quotations/pages/PublicQuotationSharePage'
+import InvoiceListPage from './features/invoices/InvoiceListPage'
+import InvoiceFormPage from './features/invoices/InvoiceFormPage'
+import InvoiceDetailPage from './features/invoices/InvoiceDetailPage'
 
 type Role = 'PROVIDER' | 'CUSTOMER' | 'ADMIN'
 type User = { id: string; fullName: string; phone: string; email?: string | null; role: Role; createdAt?: string }
@@ -156,6 +159,10 @@ function App() {
   if (path.startsWith('/app')) {
     const page = path.match(/^\/app\/customers\/[^/]+$/) ? <CustomerDetailPage id={path.split('/').pop() ?? ''} />
       : path === '/app/customers' ? <CustomersPage />
+      : path.match(/^\/app\/invoices\/[^/]+\/edit$/) ? <InvoiceFormPage editId={path.split('/').at(-2) ?? ''} />
+      : path === '/app/invoices/new' ? <InvoiceFormPage />
+      : path.match(/^\/app\/invoices\/[^/]+$/) ? <InvoiceDetailPage id={path.split('/').pop() ?? ''} />
+      : path === '/app/invoices' ? <InvoiceListPage />
       : path.match(/^\/app\/quotations\/[^/]+\/edit$/) ? <QuotationsPage editId={path.split('/').at(-2) ?? ''} />
       : path.match(/^\/app\/quotations\/[^/]+$/) && path !== '/app/quotations/new' ? <QuotationDetailPage id={path.split('/').pop() ?? ''} />
         : path.match(/^\/app\/jobs\/[^/]+$/) ? <JobDetailPage id={path.split('/').pop() ?? ''} />

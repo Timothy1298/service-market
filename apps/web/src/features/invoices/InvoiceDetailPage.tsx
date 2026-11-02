@@ -1,0 +1,52 @@
+import { useEffect, useState, type FormEvent } from 'react'
+import { ArrowLeft, Download, Printer, Wallet } from 'lucide-react'
+import { formatDate, formatKESPrecise } from '../../lib/format'
+import { API, apiRequest, errorMessage } from '../../services/apiClient'
+import type { Invoice } from './types'
+import './InvoiceWorkspace.css'
+
+export default function InvoiceDetailPage({ id }: { id: string }) {
+  const [invoice, setInvoice] = useState<Invoice | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [working, setWorking] = useState(false)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+  const [payOpen, setPayOpen] = useState(false)
+  const [payment, setPayment] = useState({ amount: '', method: 'CASH', reference: '', paymentDate: new Date().toISOString().slice(0, 10) })
+  const load = async () => { setLoading(true); setError(''); try { const result = await apiRequest<{ invoice: Invoice }>(`/invoices/${id}`); setInvoice(result.invoice) } catch (cause) { setError(errorMessage(cause)) } finally { setLoading(false) } }
+  useEffect(() => { void load() }, [id])
+  const balance = invoice ? Math.max(0, Number(invoice.grandTotal) - Number(invoice.amountPaid)) : 0
+  const business = invoice?.issuedSnapshot?.business ?? invoice?.business
+  const customer = invoice?.issuedSnapshot?.customer ?? invoice?.customer
+  const perform = async (action: 'issue' | 'cancel') => {
+    if (!invoice) return
+    if (action === 'cancel' && !window.confirm(`Cancel ${invoice.invoiceNumber}? This invoice will remain in your records.`)) return
+    setWorking(true); setError(''); setMessage('')
+    try { await apiRequest(`/invoices/${id}/${action}`, { method: 'POST' }); setMessage(action === 'issue' ? 'Invoice issued successfully.' : 'Invoice cancelled.'); await load() } catch (cause) { setError(errorMessage(cause)) } finally { setWorking(false) }
+  }
+  const recordPayment = async (event: FormEvent) => {
+    event.preventDefault(); setWorking(true); setError(''); setMessage('')
+    try { await apiRequest(`/invoices/${id}/payments`, { method: 'POST', body: JSON.stringify({ ...payment, amount: Number(payment.amount) }) }); setMessage('Payment recorded.'); setPayOpen(false); setPayment({ ...payment, amount: '', reference: '' }); await load() } catch (cause) { setError(errorMessage(cause)) } finally { setWorking(false) }
+  }
+  if (loading) return <main className="invoice-page"><div className="invoice-page__workspace">Loading invoice…</div></main>
+  if (!invoice) return <main className="invoice-page"><a href="#/app/invoices" className="invoice-page__back"><ArrowLeft size={16} /> Invoices</a><div className="invoice-page__message is-error" role="alert">{error || 'Invoice not found'} <button type="button" onClick={() => void load()}>Retry</button></div></main>
+  const status = invoice.status !== 'DRAFT' && invoice.status !== 'CANCELLED' && balance > 0 && invoice.dueDate && new Date(invoice.dueDate).getTime() < new Date().setHours(0, 0, 0, 0) ? 'OVERDUE' : invoice.status
+  const label = status.replaceAll('_', ' ').toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase())
+  return <main className="invoice-page"><a className="invoice-page__back" href="#/app/invoices"><ArrowLeft size={16} /> Invoices</a>
+    <header className="invoice-page__header"><div><p className="eyebrow green">INVOICE DETAILS</p><h1>{invoice.invoiceNumber}</h1><p>{invoice.customer.name} · Issued {formatDate(invoice.issueDate)}</p></div><span className={`invoice-page__status invoice-page__status--${status.toLowerCase()}`}>{label}</span></header>
+    {(error || message) && <div className={`invoice-page__message${error ? ' is-error' : ''}`} role={error ? 'alert' : 'status'}>{error || message}{error && <button type="button" className="invoice-page__secondary" onClick={() => void load()}>Retry</button>}</div>}
+    <div className="invoice-page__detail-layout"><article className="invoice-page__document"><header className="invoice-page__document-head"><div><strong>{business?.name ?? invoice.business.name}</strong><small>{business?.phone ?? invoice.business.phone}{business?.email ? ` · ${business.email}` : ''}</small>{business?.address && <small>{business.address}</small>}</div><div className="invoice-page__document-title"><span>INVOICE</span><strong>{invoice.invoiceNumber}</strong></div></header>
+      <div className="invoice-page__parties"><section><small>BILL TO</small><b>{customer?.name ?? invoice.customer.name}</b><span>{customer?.phone ?? invoice.customer.phone}</span>{customer?.email && <span>{customer.email}</span>}{customer?.billingAddress && <span>{customer.billingAddress}</span>}</section><section><small>DATES</small><span>Issue date: {formatDate(invoice.issueDate)}</span><span>Due date: {formatDate(invoice.dueDate)}</span><span>Source: {invoice.quotation ? `Quotation ${invoice.quotation.quotationNumber}` : 'Direct invoice'}</span></section></div>
+      {invoice.quotation && <p>Source quotation: <a href={`#/app/quotations/${invoice.quotation.id}`}>{invoice.quotation.quotationNumber} · {invoice.quotation.title}</a></p>}{invoice.job && <p>Related job: <a href={`#/app/jobs/${invoice.job.id}`}>{invoice.job.jobNumber} · {invoice.job.title}</a></p>}
+      <table className="invoice-page__detail-items"><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total</th></tr></thead><tbody>{invoice.items.map(item => <tr key={item.id}><td>{item.description}<small>{item.unit}</small></td><td>{item.quantity}</td><td>{formatKESPrecise(item.unitPrice, invoice.currency)}</td><td>{formatKESPrecise(item.lineTotal, invoice.currency)}</td></tr>)}</tbody></table>
+      <div className="invoice-page__totals"><span>Subtotal<strong>{formatKESPrecise(invoice.subtotal, invoice.currency)}</strong></span><span>Discount<strong>− {formatKESPrecise(invoice.discount, invoice.currency)}</strong></span><span>Tax<strong>{formatKESPrecise(invoice.tax, invoice.currency)}</strong></span><b>Total<strong>{formatKESPrecise(invoice.grandTotal, invoice.currency)}</strong></b><span>Paid<strong>{formatKESPrecise(invoice.amountPaid, invoice.currency)}</strong></span><b>Balance due<strong>{formatKESPrecise(balance, invoice.currency)}</strong></b></div>
+      {invoice.paymentTerms && <section><h2>Payment terms</h2><p>{invoice.paymentTerms}</p></section>}{invoice.notes && <section><h2>Notes</h2><p>{invoice.notes}</p></section>}
+    </article><aside className="invoice-page__detail-aside"><section className="invoice-page__side-card"><h2>Actions</h2><div className="invoice-page__side-actions">{invoice.status === 'DRAFT' && <><a href={`#/app/invoices/${id}/edit`}>Edit draft</a><button type="button" className="invoice-page__primary" disabled={working} onClick={() => void perform('issue')}>Issue invoice</button></>}{invoice.status !== 'DRAFT' && invoice.status !== 'CANCELLED' && <><a href={`${API}/invoices/${id}/pdf`} target="_blank" rel="noreferrer"><Download size={15} />Download PDF</a><button type="button" onClick={() => window.print()}><Printer size={15} />Print invoice</button>{balance > 0 && <button type="button" className="invoice-page__primary" onClick={() => setPayOpen(value => !value)}><Wallet size={15} />Record payment</button>}<button type="button" onClick={() => void perform('cancel')}>Cancel invoice</button></>}{invoice.status === 'CANCELLED' && <span>Cancelled invoices stay in your records.</span>}</div></section>
+      {payOpen && <section className="invoice-page__side-card"><h2>Record payment</h2><form onSubmit={event => void recordPayment(event)} className="invoice-page__payment-form"><label className="invoice-page__field">Amount<input required type="number" min="0.01" max={balance} step="0.01" value={payment.amount} onChange={event => setPayment({ ...payment, amount: event.target.value })} /></label><label className="invoice-page__field">Method<select value={payment.method} onChange={event => setPayment({ ...payment, method: event.target.value })}><option value="CASH">Cash</option><option value="BANK_TRANSFER">Bank transfer</option><option value="OTHER">Other</option></select></label><label className="invoice-page__field">Payment date<input type="date" value={payment.paymentDate} onChange={event => setPayment({ ...payment, paymentDate: event.target.value })} /></label><label className="invoice-page__field">Reference (optional)<input value={payment.reference} onChange={event => setPayment({ ...payment, reference: event.target.value })} /></label><button className="invoice-page__primary" disabled={working}>{working ? 'Recording…' : 'Save payment'}</button><small>M-Pesa invoice verification is not connected yet; only confirmed cash, bank, or other receipts can be recorded here.</small></form></section>}
+      <section className="invoice-page__side-card"><h2>Payment history</h2>{invoice.payments.length ? invoice.payments.map(item => <div className="invoice-page__payment" key={item.id}><b>{formatKESPrecise(item.amount, invoice.currency)} · {item.method.replaceAll('_', ' ')}</b><small>{formatDate(item.paymentDate)}{item.reference ? ` · ${item.reference}` : ''}</small></div>) : <p>No payments recorded.</p>}</section>
+      <section className="invoice-page__side-card"><h2>Client</h2><a href={`#/app/customers/${invoice.customer.id}`}>{customer?.name ?? invoice.customer.name}</a><p>{customer?.phone ?? invoice.customer.phone}{customer?.email ? ` · ${customer.email}` : ''}</p></section>
+      {(business?.paymentInstructions ?? invoice.business.paymentInstructions) && <section className="invoice-page__side-card"><h2>Payment instructions</h2><p>{business?.paymentInstructions ?? invoice.business.paymentInstructions}</p></section>}
+    </aside></div>
+  </main>
+}
+

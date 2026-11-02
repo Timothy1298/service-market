@@ -77,7 +77,6 @@ export default function JobsPage() {
     { title: 'In progress', value: stats?.inProgress, note: 'Currently underway', Icon: PlayCircle },
     { title: 'Completed this month', value: stats?.completedThisMonth, note: 'Finished this month', Icon: CheckCircle2 },
   ]
-
   return <main className="jobs-page">
     <header className="jobs-page__header"><div><p className="eyebrow green">OPERATIONS</p><h1>Jobs</h1><p>Track work from scheduled to completed.</p></div><a className="jobs-page__primary" href={acceptedHref}>From an accepted quotation</a></header>
     {message && <div className="jobs-page__alert jobs-page__alert--success" role="status">{message}</div>}

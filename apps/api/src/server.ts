@@ -1,178 +1,1567 @@
-import 'dotenv/config'
-import express, { type NextFunction, type Request, type Response } from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
-import crypto from 'node:crypto'
-import { Pool } from 'pg'
-import { PrismaPg } from '@prisma/adapter-pg'
-import PDFDocument from 'pdfkit'
-import { z } from 'zod'
-import { PrismaClient, type User, type UserRole } from './generated/prisma/client'
+import "dotenv/config";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
+import cors from "cors";
+import helmet from "helmet";
+import crypto from "node:crypto";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { z } from "zod";
+import PDFDocument from "pdfkit";
+import {
+  InvoiceStatus,
+  PrismaClient,
+  type User,
+  type UserRole,
+} from "./generated/prisma/client";
 
-const app = express()
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter: new PrismaPg(pool) })
-const port = Number(process.env.PORT ?? 4000)
-const origin = process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173'
-const sessionSecret = process.env.SESSION_SECRET ?? 'development-only-change-me'
-if (process.env.NODE_ENV === 'production' && (sessionSecret === 'development-only-change-me' || sessionSecret.length < 32)) throw new Error('SESSION_SECRET must be configured with at least 32 characters in production')
-const rateBuckets = new Map<string, { count: number; resetAt: number }>()
+const app = express();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
+const port = Number(process.env.PORT ?? 4000);
+const origin = process.env.FRONTEND_ORIGIN ?? "http://localhost:5173";
+const sessionSecret =
+  process.env.SESSION_SECRET ?? "development-only-change-me";
+if (
+  process.env.NODE_ENV === "production" &&
+  (sessionSecret === "development-only-change-me" || sessionSecret.length < 32)
+)
+  throw new Error(
+    "SESSION_SECRET must be configured with at least 32 characters in production",
+  );
+const rateBuckets = new Map<string, { count: number; resetAt: number }>();
 
-app.use(helmet())
-app.use(cors({ origin, credentials: true }))
-app.use(express.json({ limit: '100kb' }))
+app.use(helmet());
+app.use(cors({ origin, credentials: true }));
+app.use(express.json({ limit: "100kb" }));
 app.use((req, res, next) => {
-  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) && req.headers.cookie) {
-    const requestOrigin = req.headers.origin
-    if (requestOrigin && requestOrigin !== origin) return res.status(403).json({ error: 'Request origin is not allowed' })
+  if (
+    ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) &&
+    req.headers.cookie
+  ) {
+    const requestOrigin = req.headers.origin;
+    if (requestOrigin && requestOrigin !== origin)
+      return res.status(403).json({ error: "Request origin is not allowed" });
   }
-  next()
-})
+  next();
+});
 app.use((req, res, next) => {
-  const startedAt = Date.now()
-  res.on('finish', () => {
-    console.log(`[api] ${req.method} ${req.path} ${res.statusCode} ${Date.now() - startedAt}ms`)
+  const startedAt = Date.now();
+  res.on("finish", () => {
+    console.log(
+      `[api] ${req.method} ${req.path} ${res.statusCode} ${Date.now() - startedAt}ms`,
+    );
+  });
+  next();
+});
+
+type AuthedRequest = Request & { user?: User };
+const cookieOptions = `Path=/; HttpOnly; SameSite=Lax${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
+const hashPassword = (
+  password: string,
+  salt = crypto.randomBytes(16).toString("hex"),
+) =>
+  new Promise<string>((resolve, reject) =>
+    crypto.scrypt(password, salt, 64, (error, derived) =>
+      error ? reject(error) : resolve(`${salt}:${derived.toString("hex")}`),
+    ),
+  );
+const verifyPassword = (password: string, stored: string) =>
+  new Promise<boolean>((resolve, reject) => {
+    const [salt, hash] = stored.split(":");
+    if (!salt || !hash) return resolve(false);
+    crypto.scrypt(password, salt, 64, (error, derived) =>
+      error
+        ? reject(error)
+        : resolve(crypto.timingSafeEqual(Buffer.from(hash, "hex"), derived)),
+    );
+  });
+const tokenHash = (token: string) =>
+  crypto.createHash("sha256").update(token).digest("hex");
+const parseCookies = (header = "") =>
+  Object.fromEntries(
+    header
+      .split(";")
+      .map((part) => part.trim().split("=" as string))
+      .filter(([key, value]) => key && value),
+  );
+const publicUser = (user: User) => ({
+  id: user.id,
+  fullName: user.fullName,
+  phone: user.phone,
+  email: user.email,
+  role: user.role,
+  createdAt: user.createdAt,
+});
+const phoneSchema = z.preprocess(
+  (value) => (typeof value === "string" ? value.replace(/[\s-]/g, "") : value),
+  z
+    .string()
+    .trim()
+    .regex(/^(?:\+?254|0)7\d{8}$/, "Use a valid Kenyan mobile number"),
+);
+const registrationSchema = z
+  .object({
+    fullName: z.string().trim().min(2).max(100),
+    phone: phoneSchema,
+    email: z.string().trim().email().optional().or(z.literal("")),
+    password: z
+      .string()
+      .min(8)
+      .max(128)
+      .regex(/[A-Za-z]/)
+      .regex(/\d/),
+    confirmPassword: z.string(),
+    accountType: z.enum(["PROVIDER", "CUSTOMER"]),
+    businessName: z.string().trim().min(2).max(120).optional(),
+    tradeCategory: z.string().trim().min(2).max(80).optional(),
   })
-  next()
-})
-
-type AuthedRequest = Request & { user?: User }
-const cookieOptions = `Path=/; HttpOnly; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`
-const hashPassword = (password: string, salt = crypto.randomBytes(16).toString('hex')) => new Promise<string>((resolve, reject) => crypto.scrypt(password, salt, 64, (error, derived) => error ? reject(error) : resolve(`${salt}:${derived.toString('hex')}`)))
-const verifyPassword = (password: string, stored: string) => new Promise<boolean>((resolve, reject) => { const [salt, hash] = stored.split(':'); if (!salt || !hash) return resolve(false); crypto.scrypt(password, salt, 64, (error, derived) => error ? reject(error) : resolve(crypto.timingSafeEqual(Buffer.from(hash, 'hex'), derived))) })
-const tokenHash = (token: string) => crypto.createHash('sha256').update(token).digest('hex')
-const parseCookies = (header = '') => Object.fromEntries(header.split(';').map((part) => part.trim().split('=' as string)).filter(([key, value]) => key && value))
-const publicUser = (user: User) => ({ id: user.id, fullName: user.fullName, phone: user.phone, email: user.email, role: user.role, createdAt: user.createdAt })
-const phoneSchema = z.preprocess((value) => typeof value === 'string' ? value.replace(/[\s-]/g, '') : value, z.string().trim().regex(/^(?:\+?254|0)7\d{8}$/, 'Use a valid Kenyan mobile number'))
-const registrationSchema = z.object({ fullName: z.string().trim().min(2).max(100), phone: phoneSchema, email: z.string().trim().email().optional().or(z.literal('')), password: z.string().min(8).max(128).regex(/[A-Za-z]/).regex(/\d/), confirmPassword: z.string(), accountType: z.enum(['PROVIDER', 'CUSTOMER']), businessName: z.string().trim().min(2).max(120).optional(), tradeCategory: z.string().trim().min(2).max(80).optional() }).refine((data) => data.password === data.confirmPassword, { path: ['confirmPassword'], message: 'Passwords do not match' }).refine((data) => data.accountType !== 'PROVIDER' || Boolean(data.businessName && data.tradeCategory), { path: ['businessName'], message: 'Business name and trade are required for providers' })
-const loginSchema = z.object({ identifier: z.string().trim().min(3), password: z.string().min(1) })
-const auth = async (req: AuthedRequest, res: Response, next: NextFunction) => { try { const sessionId = parseCookies(req.headers.cookie).fq_session; const session = sessionId ? await prisma.session.findUnique({ where: { id: sessionId } }) : undefined; if (!session || session.expiresAt < new Date()) { if (sessionId) await prisma.session.deleteMany({ where: { id: sessionId } }); return res.status(401).json({ error: 'Authentication required' }); } const user = await prisma.user.findUnique({ where: { id: session.userId } }); if (!user?.isActive) return res.status(401).json({ error: 'Authentication required' }); req.user = user; next() } catch (error) { next(error) } }
-const role = (...roles: UserRole[]) => (req: AuthedRequest, res: Response, next: NextFunction) => req.user && roles.includes(req.user.role) ? next() : res.status(403).json({ error: 'You do not have permission to perform this action' })
-const issueSession = async (res: Response, userId: string) => { const id = crypto.randomBytes(32).toString('hex'); await prisma.session.create({ data: { id, userId, expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) } }); res.setHeader('Set-Cookie', `fq_session=${id}; ${cookieOptions}`) }
-const rateLimit = (name: string, max: number, windowMs: number) => (req: Request, res: Response, next: NextFunction) => { const key = `${name}:${req.ip ?? 'unknown'}`; const now = Date.now(); const bucket = rateBuckets.get(key); if (!bucket || bucket.resetAt <= now) rateBuckets.set(key, { count: 1, resetAt: now + windowMs }); else { bucket.count += 1; if (bucket.count > max) return res.status(429).json({ error: 'Too many attempts. Please try again shortly.' }) } next() }
-
-app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'fundiquote-api' }))
-app.post('/api/auth/register', rateLimit('register', 8, 15 * 60 * 1000), async (req, res, next) => { try { const data = registrationSchema.parse(req.body); const phone = data.phone.replace(/^\+?254/, '0'); const email = data.email || null; const existing = await prisma.user.findFirst({ where: { OR: [{ phone }, ...(email ? [{ email }] : [])] } }); if (existing) return res.status(409).json({ error: existing.phone === phone ? 'That phone number is already registered' : 'That email address is already registered' }); const passwordHash = await hashPassword(data.password); const user = await prisma.$transaction(async (tx) => { const created = await tx.user.create({ data: { fullName: data.fullName, phone, email, passwordHash, role: data.accountType } }); if (data.accountType === 'PROVIDER') { const business = await tx.business.create({ data: { name: data.businessName!, phone, email } }); await tx.businessMember.create({ data: { businessId: business.id, userId: created.id, role: 'OWNER' } }); await tx.providerProfile.create({ data: { userId: created.id, businessId: business.id, tradeCategory: data.tradeCategory! } }); } else await tx.customerProfile.create({ data: { userId: created.id } }); return created }); await issueSession(res, user.id); res.status(201).json({ user: publicUser(user) }) } catch (error) { next(error) } })
-app.post('/api/auth/login', rateLimit('login', 10, 15 * 60 * 1000), async (req, res, next) => { try { const data = loginSchema.parse(req.body); const identifier = data.identifier.replace(/[\s-]/g, ''); const user = await prisma.user.findFirst({ where: { OR: [{ phone: identifier }, { email: identifier.toLowerCase() }] } }); if (!user || !user.isActive || !(await verifyPassword(data.password, user.passwordHash))) return res.status(401).json({ error: 'Invalid sign-in details' }); await issueSession(res, user.id); res.json({ user: publicUser(user) }) } catch (error) { next(error) } })
-app.post('/api/auth/logout', async (req, res, next) => { try { const id = parseCookies(req.headers.cookie).fq_session; if (id) await prisma.session.deleteMany({ where: { id } }); res.setHeader('Set-Cookie', `fq_session=; Max-Age=0; ${cookieOptions}`); res.status(204).send() } catch (error) { next(error) } })
-app.get('/api/auth/me', async (req, res, next) => {
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  })
+  .refine(
+    (data) =>
+      data.accountType !== "PROVIDER" ||
+      Boolean(data.businessName && data.tradeCategory),
+    {
+      path: ["businessName"],
+      message: "Business name and trade are required for providers",
+    },
+  );
+const loginSchema = z.object({
+  identifier: z.string().trim().min(3),
+  password: z.string().min(1),
+});
+const auth = async (req: AuthedRequest, res: Response, next: NextFunction) => {
   try {
-    const sessionId = parseCookies(req.headers.cookie).fq_session
-    const session = sessionId ? await prisma.session.findUnique({ where: { id: sessionId } }) : undefined
-    if (!session || session.expiresAt < new Date()) return res.json({ user: null })
-    const user = await prisma.user.findUnique({ where: { id: session.userId } })
-    res.json({ user: user?.isActive ? publicUser(user) : null })
+    const sessionId = parseCookies(req.headers.cookie).fq_session;
+    const session = sessionId
+      ? await prisma.session.findUnique({ where: { id: sessionId } })
+      : undefined;
+    if (!session || session.expiresAt < new Date()) {
+      if (sessionId)
+        await prisma.session.deleteMany({ where: { id: sessionId } });
+      return res.status(401).json({ error: "Authentication required" });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: session.userId },
+    });
+    if (!user?.isActive)
+      return res.status(401).json({ error: "Authentication required" });
+    req.user = user;
+    next();
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
-app.post('/api/auth/forgot-password', rateLimit('recovery', 5, 15 * 60 * 1000), async (req, res, next) => { try { const input = z.object({ identifier: z.string().trim().min(3) }).parse(req.body); const user = await prisma.user.findFirst({ where: { OR: [{ email: input.identifier.toLowerCase() }, { phone: input.identifier }] } }); if (user) { await prisma.passwordResetToken.deleteMany({ where: { userId: user.id } }); const token = crypto.randomBytes(32).toString('hex'); await prisma.passwordResetToken.create({ data: { userId: user.id, tokenHash: tokenHash(token), expiresAt: new Date(Date.now() + 30 * 60 * 1000) } }); } res.json({ message: 'If an account matches those details, recovery instructions have been prepared.' }) } catch (error) { next(error) } })
-app.post('/api/auth/reset-password', async (req, res, next) => { try { const input = z.object({ token: z.string().min(20), password: z.string().min(8).regex(/[A-Za-z]/).regex(/\d/) }).parse(req.body); const reset = await prisma.passwordResetToken.findFirst({ where: { tokenHash: tokenHash(input.token), usedAt: null, expiresAt: { gt: new Date() } } }); if (!reset) return res.status(400).json({ error: 'That reset link is invalid or expired' }); const passwordHash = await hashPassword(input.password); await prisma.$transaction([prisma.user.update({ where: { id: reset.userId }, data: { passwordHash } }), prisma.passwordResetToken.update({ where: { id: reset.id }, data: { usedAt: new Date() } }), prisma.session.deleteMany({ where: { userId: reset.userId } })]); res.json({ message: 'Password updated. You can now sign in.' }) } catch (error) { next(error) } })
-app.get('/api/profile', auth, async (req: AuthedRequest, res, next) => { try { const user = await prisma.user.findUnique({ where: { id: req.user!.id }, include: { customerProfile: true, providerProfile: { include: { business: true } } } }); res.json({ user: publicUser(user!), profile: user?.customerProfile ?? user?.providerProfile }) } catch (error) { next(error) } })
-app.patch('/api/profile', auth, async (req: AuthedRequest, res, next) => { try { const data = z.object({ fullName: z.string().trim().min(2).max(100), phone: phoneSchema, email: z.string().trim().email().optional().or(z.literal('')) }).parse(req.body); const phone = data.phone.replace(/^\+?254/, '0'); const duplicate = await prisma.user.findFirst({ where: { OR: [{ phone }, ...(data.email ? [{ email: data.email }] : [])], NOT: { id: req.user!.id } } }); if (duplicate) return res.status(409).json({ error: 'That phone number or email is already registered' }); const user = await prisma.user.update({ where: { id: req.user!.id }, data: { fullName: data.fullName, phone, email: data.email || null } }); res.json({ user: publicUser(user) }) } catch (error) { next(error) } })
-app.get('/api/business-profile', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const profile = await prisma.providerProfile.findUnique({ where: { userId: req.user!.id }, include: { business: true } }); if (!profile) return res.status(404).json({ error: 'Business profile not found' }); res.json({ profile }) } catch (error) { next(error) } })
-app.patch('/api/business-profile', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const input = z.object({ name: z.string().trim().min(2).max(120), phone: phoneSchema, email: z.string().trim().email().optional().or(z.literal('')), address: z.string().trim().max(200).optional(), tradeCategory: z.string().trim().min(2).max(80), slogan: z.string().trim().max(160).optional(), paymentInstructions: z.string().trim().max(500).optional(), mpesaNumber: z.string().trim().max(30).optional() }).parse(req.body); const provider = await prisma.providerProfile.findUnique({ where: { userId: req.user!.id } }); if (!provider) return res.status(404).json({ error: 'Business profile not found' }); const profile = await prisma.$transaction(async (tx) => { await tx.providerProfile.update({ where: { userId: req.user!.id }, data: { tradeCategory: input.tradeCategory } }); return tx.business.update({ where: { id: provider.businessId }, data: { name: input.name, phone: input.phone.replace(/^\+?254/, '0'), email: input.email || null, address: input.address, slogan: input.slogan, paymentInstructions: input.paymentInstructions, mpesaNumber: input.mpesaNumber } }) }); res.json({ profile }) } catch (error) { next(error) } })
-app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => { if (error instanceof z.ZodError) { const fields = error.flatten().fieldErrors as Record<string, string[]>; console.warn(`[api] validation failed: ${Object.entries(fields).map(([field, messages]) => `${field}=${messages.join(', ')}`).join('; ')}`); return res.status(400).json({ error: 'Please correct the highlighted fields', fields }); } console.error('[api] request failed:', error instanceof Error ? error.message : 'Unknown error'); res.status(500).json({ error: 'Something went wrong. Please try again.' }) })
+};
+const role =
+  (...roles: UserRole[]) =>
+  (req: AuthedRequest, res: Response, next: NextFunction) =>
+    req.user && roles.includes(req.user.role)
+      ? next()
+      : res
+          .status(403)
+          .json({ error: "You do not have permission to perform this action" });
+const issueSession = async (res: Response, userId: string) => {
+  const id = crypto.randomBytes(32).toString("hex");
+  await prisma.session.create({
+    data: {
+      id,
+      userId,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    },
+  });
+  res.setHeader("Set-Cookie", `fq_session=${id}; ${cookieOptions}`);
+};
+const rateLimit =
+  (name: string, max: number, windowMs: number) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    const key = `${name}:${req.ip ?? "unknown"}`;
+    const now = Date.now();
+    const bucket = rateBuckets.get(key);
+    if (!bucket || bucket.resetAt <= now)
+      rateBuckets.set(key, { count: 1, resetAt: now + windowMs });
+    else {
+      bucket.count += 1;
+      if (bucket.count > max)
+        return res
+          .status(429)
+          .json({ error: "Too many attempts. Please try again shortly." });
+    }
+    next();
+  };
 
-app.get('/api/marketplace/categories', async (_req, res, next) => { try { const categories = await prisma.serviceCategory.findMany({ where: { isActive: true }, orderBy: { name: 'asc' }, select: { id: true, slug: true, name: true, description: true } }); res.json({ categories }) } catch (error) { next(error) } })
-app.get('/api/marketplace/providers', async (req, res, next) => { try { const query = z.object({ search: z.string().trim().max(80).optional(), category: z.string().trim().max(80).optional(), page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(30).default(12) }).parse(req.query); const where = { providerProfiles: { some: {} }, ...(query.search ? { OR: [{ name: { contains: query.search, mode: 'insensitive' as const } }, { slogan: { contains: query.search, mode: 'insensitive' as const } }] } : {}), ...(query.category ? { providerProfiles: { some: { tradeCategory: { equals: query.category, mode: 'insensitive' as const } } } } : {}) }; const [businesses, total] = await prisma.$transaction([prisma.business.findMany({ where, skip: (query.page - 1) * query.pageSize, take: query.pageSize, orderBy: { name: 'asc' }, select: { id: true, name: true, slogan: true, address: true, currency: true, providerProfiles: { select: { tradeCategory: true, serviceDescription: true } }, serviceListings: { where: { status: 'PUBLISHED' }, select: { id: true, title: true, description: true, startingPrice: true, category: { select: { slug: true, name: true } } } } } }), prisma.business.count({ where })]); res.json({ providers: businesses, page: query.page, pageSize: query.pageSize, total }) } catch (error) { next(error) } })
-app.get('/api/marketplace/providers/:id', async (req, res, next) => { try { const business = await prisma.business.findFirst({ where: { id: String(req.params.id), providerProfiles: { some: {} } }, select: { id: true, name: true, slogan: true, address: true, phone: true, providerProfiles: { select: { tradeCategory: true, serviceDescription: true, location: true } }, serviceListings: { where: { status: 'PUBLISHED' }, select: { id: true, title: true, description: true, startingPrice: true, category: { select: { slug: true, name: true } } } } } }); if (!business) return res.status(404).json({ error: 'Provider not found' }); res.json({ provider: business }) } catch (error) { next(error) } })
-app.get('/api/provider/listings', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await prisma.businessMember.findFirst({ where: { userId: req.user!.id, status: 'ACTIVE', role: { in: ['OWNER', 'ADMIN', 'MEMBER'] } } }); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const listings = await prisma.serviceListing.findMany({ where: { businessId: membership.businessId }, include: { category: { select: { id: true, slug: true, name: true } } }, orderBy: { createdAt: 'desc' } }); res.json({ listings }) } catch (error) { next(error) } })
-app.post('/api/provider/listings', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const input = z.object({ categoryId: z.string().uuid(), title: z.string().trim().min(2).max(120), description: z.string().trim().min(10).max(2000), startingPrice: z.coerce.number().nonnegative().optional(), status: z.enum(['DRAFT', 'PUBLISHED']).default('DRAFT') }).parse(req.body); const membership = await prisma.businessMember.findFirst({ where: { userId: req.user!.id, status: 'ACTIVE' } }); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const listing = await prisma.serviceListing.create({ data: { businessId: membership.businessId, categoryId: input.categoryId, title: input.title, description: input.description, startingPrice: input.startingPrice, status: input.status } }); res.status(201).json({ listing }) } catch (error) { next(error) } })
-app.patch('/api/provider/listings/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const input = z.object({ title: z.string().trim().min(2).max(120).optional(), description: z.string().trim().min(10).max(2000).optional(), startingPrice: z.coerce.number().nonnegative().nullable().optional(), status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional() }).strict().parse(req.body); const membership = await prisma.businessMember.findFirst({ where: { userId: req.user!.id, status: 'ACTIVE' } }); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const listing = await prisma.serviceListing.updateMany({ where: { id: String(req.params.id), businessId: membership.businessId }, data: input }); if (!listing.count) return res.status(404).json({ error: 'Listing not found' }); res.json({ updated: true }) } catch (error) { next(error) } })
-const requestInput = z.object({ categoryId: z.string().uuid(), title: z.string().trim().min(3).max(120), description: z.string().trim().min(10).max(3000), location: z.string().trim().min(2).max(160), budgetMin: z.coerce.number().nonnegative().optional(), budgetMax: z.coerce.number().nonnegative().optional(), preferredDate: z.coerce.date().optional() }).refine((value) => value.budgetMin === undefined || value.budgetMax === undefined || value.budgetMax >= value.budgetMin, { path: ['budgetMax'], message: 'Maximum budget must be greater than minimum budget' })
-app.post('/api/requests', auth, role('CUSTOMER'), async (req: AuthedRequest, res, next) => { try { const input = requestInput.parse(req.body); const request = await prisma.serviceRequest.create({ data: { ...input, customerId: req.user!.id } }); res.status(201).json({ request }) } catch (error) { next(error) } })
-app.get('/api/requests', auth, role('CUSTOMER'), async (req: AuthedRequest, res, next) => { try { const query = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(30).default(20), status: z.enum(['OPEN', 'IN_PROGRESS', 'FULFILLED', 'CANCELLED']).optional() }).parse(req.query); const where = { customerId: req.user!.id, ...(query.status ? { status: query.status } : {}) }; const [requests, total] = await prisma.$transaction([prisma.serviceRequest.findMany({ where, skip: (query.page - 1) * query.pageSize, take: query.pageSize, orderBy: { createdAt: 'desc' }, include: { category: { select: { slug: true, name: true } }, quotations: { select: { id: true, quotationNumber: true, status: true, grandTotal: true } } } }), prisma.serviceRequest.count({ where })]); res.json({ requests, page: query.page, pageSize: query.pageSize, total }) } catch (error) { next(error) } })
-app.get('/api/requests/:id', auth, async (req: AuthedRequest, res, next) => { try { const id = String(req.params.id); const request = await prisma.serviceRequest.findFirst({ where: req.user!.role === 'CUSTOMER' ? { id, customerId: req.user!.id } : { id, status: { in: ['OPEN', 'IN_PROGRESS'] } }, include: { category: true, quotations: { select: { id: true, quotationNumber: true, status: true, grandTotal: true, currency: true } } } }); if (!request) return res.status(404).json({ error: 'Service request not found' }); res.json({ request }) } catch (error) { next(error) } })
-app.patch('/api/requests/:id', auth, role('CUSTOMER'), async (req: AuthedRequest, res, next) => { try { const input = requestInput.partial().extend({ status: z.enum(['OPEN', 'CANCELLED']).optional() }).strict().parse(req.body); const current = await prisma.serviceRequest.findFirst({ where: { id: String(req.params.id), customerId: req.user!.id } }); if (!current) return res.status(404).json({ error: 'Service request not found' }); if (current.status !== 'OPEN') return res.status(409).json({ error: 'Only open requests can be changed' }); const request = await prisma.serviceRequest.update({ where: { id: current.id }, data: input }); res.json({ request }) } catch (error) { next(error) } })
-app.get('/api/provider/requests', auth, role('PROVIDER'), async (_req, res, next) => { try { const requests = await prisma.serviceRequest.findMany({ where: { status: 'OPEN' }, orderBy: { createdAt: 'asc' }, take: 50, select: { id: true, title: true, description: true, location: true, budgetMin: true, budgetMax: true, preferredDate: true, createdAt: true, category: { select: { slug: true, name: true } } } }); res.json({ requests }) } catch (error) { next(error) } })
-const customerInput = z.object({ name: z.string().trim().min(2).max(120), phone: z.string().trim().regex(/^(?:\+?254|0)7\d{8}$/).transform((value) => value.replace(/[\s-]/g, '').replace(/^\+?254/, '0')), email: z.string().trim().email().optional().or(z.literal('')), billingAddress: z.string().trim().max(240).optional(), projectLocation: z.string().trim().max(240).optional(), notes: z.string().trim().max(1000).optional() }).strict()
-const providerMembership = async (userId: string) => prisma.businessMember.findFirst({ where: { userId, status: 'ACTIVE' } })
-app.get('/api/customers', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const query = z.object({ search: z.string().trim().max(80).optional(), page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(50).default(20) }).parse(req.query); const where = { businessId: membership.businessId, ...(query.search ? { OR: [{ name: { contains: query.search, mode: 'insensitive' as const } }, { phone: { contains: query.search } }] } : {}) }; const [customers, total] = await prisma.$transaction([prisma.customerRecord.findMany({ where, skip: (query.page - 1) * query.pageSize, take: query.pageSize, orderBy: { name: 'asc' }, include: { _count: { select: { quotations: true } }, invoices: { where: { status: { notIn: ['DRAFT', 'CANCELLED', 'PAID'] } }, select: { grandTotal: true, amountPaid: true } } } }), prisma.customerRecord.count({ where })]); const rows = customers.map(({ invoices, _count, ...customer }) => ({ ...customer, quotationCount: _count.quotations, outstandingBalance: invoices.reduce((sum, invoice) => sum + Math.max(0, Number(invoice.grandTotal) - Number(invoice.amountPaid)), 0) })); res.json({ customers: rows, page: query.page, pageSize: query.pageSize, total }) } catch (error) { next(error) } })
-app.get('/api/customers/stats', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0); const [total, newThisMonth, invoices] = await prisma.$transaction([prisma.customerRecord.count({ where: { businessId: membership.businessId } }), prisma.customerRecord.count({ where: { businessId: membership.businessId, createdAt: { gte: monthStart } } }), prisma.invoice.findMany({ where: { businessId: membership.businessId, status: { notIn: ['DRAFT', 'CANCELLED', 'PAID'] } }, select: { customerId: true, grandTotal: true, amountPaid: true } })]); const balanceByCustomer = new Map<string, number>(); for (const invoice of invoices) { const balance = Math.max(0, Number(invoice.grandTotal) - Number(invoice.amountPaid)); balanceByCustomer.set(invoice.customerId, (balanceByCustomer.get(invoice.customerId) ?? 0) + balance) } const balances = [...balanceByCustomer.values()].filter(balance => balance > 0); res.json({ total, newThisMonth, withBalance: balances.length, outstandingTotal: balances.reduce((sum, balance) => sum + balance, 0) }) } catch (error) { next(error) } })
-app.post('/api/customers', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = customerInput.parse(req.body); const customer = await prisma.customerRecord.create({ data: { ...input, email: input.email || null, businessId: membership.businessId } }); res.status(201).json({ customer }) } catch (error) { next(error) } })
-app.get('/api/customers/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const customer = await prisma.customerRecord.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { quotations: { orderBy: { createdAt: 'desc' }, select: { id: true, quotationNumber: true, title: true, status: true, grandTotal: true, createdAt: true } }, jobs: { orderBy: { createdAt: 'desc' }, select: { id: true, jobNumber: true, title: true, status: true, createdAt: true } }, invoices: { orderBy: { createdAt: 'desc' }, select: { id: true, invoiceNumber: true, status: true, grandTotal: true, amountPaid: true, issueDate: true, dueDate: true } } } }); if (!customer) return res.status(404).json({ error: 'Customer not found' }); res.json({ customer }) } catch (error) { next(error) } })
-app.patch('/api/customers/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = customerInput.partial().parse(req.body); const result = await prisma.customerRecord.updateMany({ where: { id: String(req.params.id), businessId: membership.businessId }, data: { ...input, ...(input.email !== undefined ? { email: input.email || null } : {}) } }); if (!result.count) return res.status(404).json({ error: 'Customer not found' }); const customer = await prisma.customerRecord.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); res.json({ customer }) } catch (error) { next(error) } })
-const paidFeaturePath = (path: string) => (path === '/api/quotations' || (path.startsWith('/api/quotations/') && !path.startsWith('/api/quotations/share/')) || path === '/api/invoices' || path.startsWith('/api/invoices/'))
-app.use((req, res, next) => { if (process.env.NODE_ENV !== 'production' || !paidFeaturePath(req.path)) return next(); auth(req as AuthedRequest, res, async () => { const authed = req as AuthedRequest; const membership = await providerMembership(authed.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); if (!(await activeSubscription(membership.businessId))) return res.status(402).json({ error: 'An active subscription is required for this paid feature' }); next() }) })
-const moneyCents = (value: number) => Math.round(value * 100)
-const centsMoney = (value: number) => (value / 100).toFixed(2)
-const quotationItemInput = z.object({ description: z.string().trim().min(1).max(240), quantity: z.coerce.number().positive().max(100000), unit: z.string().trim().min(1).max(30), unitPrice: z.coerce.number().nonnegative().max(100000000) }).strict()
-const quotationInput = z.object({ customerId: z.string().uuid(), serviceRequestId: z.string().uuid().optional(), title: z.string().trim().min(3).max(160), description: z.string().trim().max(3000).optional(), location: z.string().trim().max(240).optional(), expiryDate: z.coerce.date().optional(), discount: z.coerce.number().nonnegative().default(0), tax: z.coerce.number().nonnegative().default(0), terms: z.string().trim().max(4000).optional(), paymentTerms: z.string().trim().max(1000).optional(), items: z.array(quotationItemInput).min(1).max(100) }).strict()
-const calculateQuotation = (items: Array<z.infer<typeof quotationItemInput>>, discount: number, tax: number) => { const lineItems = items.map((item) => ({ ...item, lineTotal: centsMoney(moneyCents(item.quantity * item.unitPrice)) })); const subtotal = lineItems.reduce((sum, item) => sum + moneyCents(Number(item.lineTotal)), 0); const grandTotal = subtotal - moneyCents(discount) + moneyCents(tax); if (grandTotal < 0) throw new Error('Quotation total cannot be negative'); return { lineItems, subtotal: centsMoney(subtotal), discount: centsMoney(moneyCents(discount)), tax: centsMoney(moneyCents(tax)), grandTotal: centsMoney(grandTotal) } }
-app.get('/api/quotations', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const quotations = await prisma.quotation.findMany({ where: { businessId: membership.businessId }, orderBy: { createdAt: 'desc' }, take: 100, include: { customer: { select: { id: true, name: true, phone: true, email: true } }, items: true } }); res.json({ quotations }) } catch (error) { next(error) } })
-app.post('/api/quotations', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { if (process.env.NODE_ENV === 'production' && process.env.QUOTATION_ENTITLEMENT !== 'enabled') return res.status(402).json({ error: 'An active subscription is required for quotations' }); const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = quotationInput.parse(req.body); const customer = await prisma.customerRecord.findFirst({ where: { id: input.customerId, businessId: membership.businessId } }); if (!customer) return res.status(404).json({ error: 'Customer not found' }); const totals = calculateQuotation(input.items, input.discount, input.tax); const year = new Date().getFullYear(); const count = await prisma.quotation.count({ where: { businessId: membership.businessId } }); const quotation = await prisma.quotation.create({ data: { businessId: membership.businessId, customerId: customer.id, serviceRequestId: input.serviceRequestId, quotationNumber: `QT-${year}-${String(count + 1).padStart(5, '0')}`, title: input.title, description: input.description, location: input.location, expiryDate: input.expiryDate, subtotal: totals.subtotal, discount: totals.discount, tax: totals.tax, grandTotal: totals.grandTotal, terms: input.terms, paymentTerms: input.paymentTerms, items: { create: totals.lineItems.map((item, index) => ({ description: item.description, quantity: item.quantity, unit: item.unit, unitPrice: item.unitPrice, lineTotal: item.lineTotal, sortOrder: index })) } }, include: { items: true, customer: true } }); res.status(201).json({ quotation }) } catch (error) { next(error) } })
-app.get('/api/quotations/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const quotation = await prisma.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { items: { orderBy: { sortOrder: 'asc' } }, customer: true, business: { select: { name: true, phone: true, email: true, address: true, slogan: true } }, request: true, jobs: { select: { id: true, jobNumber: true, status: true } } } }); if (!quotation) return res.status(404).json({ error: 'Quotation not found' }); res.json({ quotation }) } catch (error) { next(error) } })
-app.patch('/api/quotations/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const current = await prisma.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); if (!current) return res.status(404).json({ error: 'Quotation not found' }); if (current.status !== 'DRAFT') return res.status(409).json({ error: 'Only draft quotations can be edited' }); const input = quotationInput.parse(req.body); const customer = await prisma.customerRecord.findFirst({ where: { id: input.customerId, businessId: membership.businessId } }); if (!customer) return res.status(404).json({ error: 'Customer not found' }); const totals = calculateQuotation(input.items, input.discount, input.tax); const quotation = await prisma.$transaction(async (tx) => { await tx.quotationItem.deleteMany({ where: { quotationId: current.id } }); return tx.quotation.update({ where: { id: current.id }, data: { customerId: input.customerId, serviceRequestId: input.serviceRequestId, title: input.title, description: input.description, location: input.location, expiryDate: input.expiryDate, subtotal: totals.subtotal, discount: totals.discount, tax: totals.tax, grandTotal: totals.grandTotal, terms: input.terms, paymentTerms: input.paymentTerms, items: { create: totals.lineItems.map((item, index) => ({ description: item.description, quantity: item.quantity, unit: item.unit, unitPrice: item.unitPrice, lineTotal: item.lineTotal, sortOrder: index })) } }, include: { items: true, customer: true } }) }); res.json({ quotation }) } catch (error) { next(error) } })
-app.post('/api/quotations/:id/issue', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const current = await prisma.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: 'DRAFT' }, include: { business: true, customer: true, items: true } }); if (!current) return res.status(404).json({ error: 'Draft quotation not found' }); const issued = await prisma.quotation.update({ where: { id: current.id }, data: { status: 'ISSUED', issueDate: new Date(), issuedSnapshot: { business: { name: current.business.name, phone: current.business.phone, email: current.business.email, address: current.business.address, slogan: current.business.slogan }, customer: { name: current.customer.name, phone: current.customer.phone, email: current.customer.email, billingAddress: current.customer.billingAddress }, totals: { subtotal: current.subtotal.toString(), discount: current.discount.toString(), tax: current.tax.toString(), grandTotal: current.grandTotal.toString() } } } }); res.json({ quotation: issued }) } catch (error) { next(error) } })
-const shareTokenHash = (token: string) => crypto.createHash('sha256').update(token).digest('hex')
-app.post('/api/quotations/:id/share', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const quotation = await prisma.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { in: ['ISSUED', 'ACCEPTED', 'REJECTED'] } } }); if (!quotation) return res.status(404).json({ error: 'Issued quotation not found' }); const token = crypto.randomBytes(32).toString('hex'); await prisma.quotationShare.create({ data: { quotationId: quotation.id, tokenHash: shareTokenHash(token), expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) } }); res.status(201).json({ shareUrl: `${process.env.PUBLIC_APP_URL ?? 'http://localhost:5173'}/#/quotation/share/${token}`, message: 'Share link created. Download the PDF separately and attach it manually in WhatsApp.' }) } catch (error) { next(error) } })
-const sharedQuotation = async (token: string) => prisma.quotationShare.findFirst({ where: { tokenHash: shareTokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } }, include: { quotation: { include: { items: { orderBy: { sortOrder: 'asc' } }, business: true, customer: true } } } })
-app.get('/api/quotations/share/:token', rateLimit('share', 30, 15 * 60 * 1000), async (req, res, next) => { try { const share = await sharedQuotation(String(req.params.token)); if (!share) return res.status(404).json({ error: 'Share link is invalid or expired' }); const { quotation } = share; res.json({ quotation: { id: quotation.id, quotationNumber: quotation.quotationNumber, revision: quotation.revision, title: quotation.title, description: quotation.description, location: quotation.location, currency: quotation.currency, issueDate: quotation.issueDate, expiryDate: quotation.expiryDate, subtotal: quotation.subtotal, discount: quotation.discount, tax: quotation.tax, grandTotal: quotation.grandTotal, terms: quotation.terms, paymentTerms: quotation.paymentTerms, status: quotation.status, items: quotation.items, business: { name: quotation.business.name, phone: quotation.business.phone, email: quotation.business.email, address: quotation.business.address }, customer: { name: quotation.customer.name } } }) } catch (error) { next(error) } })
-app.post('/api/quotations/share/:token/respond', rateLimit('share-response', 10, 15 * 60 * 1000), async (req, res, next) => { try { const input = z.object({ decision: z.enum(['ACCEPTED', 'REJECTED']) }).parse(req.body); const share = await sharedQuotation(String(req.params.token)); if (!share) return res.status(404).json({ error: 'Share link is invalid or expired' }); const result = await prisma.quotation.updateMany({ where: { id: share.quotation.id, status: 'ISSUED' }, data: { status: input.decision } }); if (!result.count) { const current = await prisma.quotation.findUnique({ where: { id: share.quotation.id }, select: { status: true } }); return res.json({ status: current?.status ?? 'UNKNOWN', alreadyResponded: true }) } res.json({ status: input.decision, alreadyResponded: false }) } catch (error) { next(error) } })
-app.get('/api/quotations/:id/pdf', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await providerMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const quotation = await prisma.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { not: 'DRAFT' } }, include: { items: { orderBy: { sortOrder: 'asc' } }, business: true, customer: true } }); if (!quotation) return res.status(404).json({ error: 'Issued quotation not found' }); const document = new PDFDocument({ margin: 48 }); const chunks: Buffer[] = []; document.on('data', (chunk: Buffer) => chunks.push(chunk)); document.on('end', () => { res.type('application/pdf').setHeader('Content-Disposition', `attachment; filename="${quotation.quotationNumber}.pdf"`).send(Buffer.concat(chunks)) }); document.fontSize(22).fillColor('#13212b').text(quotation.business.name); document.fontSize(10).fillColor('#596a65').text(`${quotation.business.phone}${quotation.business.email ? ` · ${quotation.business.email}` : ''}`); document.moveDown(); document.fontSize(18).fillColor('#13212b').text(`Quotation ${quotation.quotationNumber}`); document.fontSize(11).text(`Customer: ${quotation.customer.name}`); document.text(`Title: ${quotation.title}`); if (quotation.location) document.text(`Location: ${quotation.location}`); document.moveDown(); quotation.items.forEach((item, index) => document.fontSize(10).text(`${index + 1}. ${item.description} — ${item.quantity} ${item.unit} × KES ${item.unitPrice} = KES ${item.lineTotal}`)); document.moveDown(); document.fontSize(11).text(`Subtotal: KES ${quotation.subtotal}`).text(`Discount: KES ${quotation.discount}`).text(`Tax: KES ${quotation.tax}`).fontSize(14).text(`Total: KES ${quotation.grandTotal}`); if (quotation.terms) document.moveDown().fontSize(10).text(`Terms: ${quotation.terms}`); document.end() } catch (error) { next(error) } })
-const monthlyPrice = () => Number(process.env.SUBSCRIPTION_MONTHLY_PRICE ?? 299)
-const normalizeMpesaPhone = (value: string) => { const compact = value.replace(/[\s-]/g, ''); if (/^07\d{8}$/.test(compact)) return `254${compact.slice(1)}`; if (/^2547\d{8}$/.test(compact)) return compact; if (/^\+2547\d{8}$/.test(compact)) return compact.slice(1); throw new Error('Use a valid Kenyan M-Pesa number') }
-const darajaBase = () => process.env.MPESA_ENVIRONMENT === 'production' ? 'https://api.safaricom.co.ke' : 'https://sandbox.safaricom.co.ke'
-const subscriptionForBusiness = async (businessId: string) => { const subscription = await prisma.subscription.findFirst({ where: { businessId, status: { in: ['ACTIVE', 'PENDING'] } }, orderBy: { createdAt: 'desc' } }); if (subscription?.status === 'ACTIVE' && subscription.expiresAt && subscription.expiresAt <= new Date()) return prisma.subscription.update({ where: { id: subscription.id }, data: { status: 'EXPIRED' } }); return subscription }
-const activeSubscription = async (businessId: string) => { const subscription = await subscriptionForBusiness(businessId); return subscription?.status === 'ACTIVE' && !!subscription.expiresAt && subscription.expiresAt > new Date() ? subscription : null }
-const billingMembership = async (userId: string) => providerMembership(userId)
-const currentPlan = async () => prisma.subscriptionPlan.upsert({ where: { code: 'PRO_MONTHLY' }, create: { code: 'PRO_MONTHLY', name: 'Pro monthly', price: monthlyPrice(), currency: 'KES', durationMonths: 1 }, update: {} })
-app.get('/api/billing/plans', async (_req, res, next) => { try { const plan = await currentPlan(); res.json({ plans: [plan] }) } catch (error) { next(error) } })
-app.get('/api/admin/subscription-plan', auth, role('ADMIN'), async (_req, res, next) => { try { res.json({ plan: await currentPlan() }) } catch (error) { next(error) } })
-app.patch('/api/admin/subscription-plan', auth, role('ADMIN'), async (req: AuthedRequest, res, next) => { try { const input = z.object({ price: z.coerce.number().positive().max(100000), currency: z.literal('KES') }).strict().parse(req.body); const plan = await currentPlan(); const updated = await prisma.$transaction(async tx => { const saved = await tx.subscriptionPlan.update({ where: { id: plan.id }, data: { price: input.price, currency: input.currency } }); await tx.subscriptionPlanAudit.create({ data: { planId: plan.id, userId: req.user!.id, oldPrice: plan.price, newPrice: input.price, currency: input.currency } }); return saved }); res.json({ plan: updated }) } catch (error) { next(error) } })
-app.get('/api/billing', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await billingMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const subscription = await subscriptionForBusiness(membership.businessId); const transactions = await prisma.paymentTransaction.findMany({ where: { businessId: membership.businessId }, orderBy: { createdAt: 'desc' }, take: 20, select: { id: true, amount: true, currency: true, provider: true, status: true, phoneNumber: true, mpesaReceipt: true, failureReason: true, requestedAt: true, completedAt: true } }); res.json({ subscription: subscription ?? { status: 'FREE', price: monthlyPrice(), currency: 'KES' }, entitlements: { quotations: !!(await activeSubscription(membership.businessId)), invoices: !!(await activeSubscription(membership.businessId)) }, transactions }) } catch (error) { next(error) } })
-app.post('/api/billing/mpesa/initiate', auth, role('PROVIDER'), rateLimit('mpesa-initiate', 3, 15 * 60 * 1000), async (req: AuthedRequest, res, next) => { try { const membership = await billingMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ phoneNumber: z.string().min(10) }).strict().parse(req.body); const phoneNumber = normalizeMpesaPhone(input.phoneNumber); const existing = await prisma.paymentTransaction.findFirst({ where: { businessId: membership.businessId, status: 'PENDING', createdAt: { gt: new Date(Date.now() - 10 * 60 * 1000) } } }); if (existing) return res.status(409).json({ error: 'A payment is already pending', transactionId: existing.id }); const subscription = await prisma.subscription.create({ data: { businessId: membership.businessId, status: 'PENDING', price: monthlyPrice(), currency: 'KES' } }); const transaction = await prisma.paymentTransaction.create({ data: { businessId: membership.businessId, subscriptionId: subscription.id, provider: 'MPESA', amount: monthlyPrice().toFixed(2), currency: 'KES', phoneNumber, idempotencyKey: crypto.randomUUID() } }); const consumerKey = process.env.MPESA_CONSUMER_KEY; const consumerSecret = process.env.MPESA_CONSUMER_SECRET; const shortcode = process.env.MPESA_SHORTCODE; const passkey = process.env.MPESA_PASSKEY; const callbackUrl = process.env.MPESA_CALLBACK_URL; if (!consumerKey || !consumerSecret || !shortcode || !passkey || !callbackUrl) { await prisma.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'UNKNOWN', failureReason: 'M-Pesa is not configured on the server' } }); return res.status(503).json({ error: 'M-Pesa payments are not configured yet' }) } const tokenResponse = await fetch(`${darajaBase()}/oauth/v1/generate?grant_type=client_credentials`, { headers: { Authorization: `Basic ${Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64')}` } }); if (!tokenResponse.ok) throw new Error('M-Pesa authentication failed'); const tokenBody = await tokenResponse.json() as { access_token?: string }; if (!tokenBody.access_token) throw new Error('M-Pesa authentication response was invalid'); const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14); const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64'); const stkResponse = await fetch(`${darajaBase()}/mpesa/stkpush/v1/processrequest`, { method: 'POST', headers: { Authorization: `Bearer ${tokenBody.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ BusinessShortCode: shortcode, Password: password, Timestamp: timestamp, TransactionType: 'CustomerPayBillOnline', Amount: monthlyPrice(), PartyA: phoneNumber, PartyB: shortcode, PhoneNumber: phoneNumber, CallBackURL: callbackUrl, AccountReference: `FundiQuote-${transaction.id.slice(0, 8)}`, TransactionDesc: 'FundiQuote Pro monthly subscription' }) }); const stkBody = await stkResponse.json() as { ResponseCode?: string; ResponseDescription?: string; CheckoutRequestID?: string; MerchantRequestID?: string }; if (!stkResponse.ok || stkBody.ResponseCode !== '0' || !stkBody.CheckoutRequestID) { await prisma.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'FAILED', failureReason: stkBody.ResponseDescription ?? 'M-Pesa payment request failed' } }); return res.status(502).json({ error: 'M-Pesa could not start the payment request' }) } await prisma.paymentTransaction.update({ where: { id: transaction.id }, data: { checkoutRequestId: stkBody.CheckoutRequestID, merchantRequestId: stkBody.MerchantRequestID } }); res.status(202).json({ transactionId: transaction.id, status: 'PENDING', message: 'Check your phone and enter your M-Pesa PIN to continue.' }) } catch (error) { next(error) } })
-app.get('/api/billing/transactions/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await billingMembership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const transaction = await prisma.paymentTransaction.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, select: { id: true, status: true, amount: true, currency: true, mpesaReceipt: true, failureReason: true, requestedAt: true, completedAt: true } }); if (!transaction) return res.status(404).json({ error: 'Payment transaction not found' }); res.json({ transaction }) } catch (error) { next(error) } })
-app.post('/api/billing/mpesa/callback', async (req, res, next) => { try { const callback = req.body?.Body?.stkCallback; if (!callback?.CheckoutRequestID) return res.status(400).json({ ResultCode: 1, ResultDesc: 'Invalid callback' }); const transaction = await prisma.paymentTransaction.findFirst({ where: { checkoutRequestId: callback.CheckoutRequestID }, include: { subscription: true } }); if (!transaction) return res.json({ ResultCode: 0, ResultDesc: 'Accepted' }); if (transaction.status !== 'PENDING') return res.json({ ResultCode: 0, ResultDesc: 'Already processed' }); const items = Array.isArray(callback.CallbackMetadata?.Item) ? callback.CallbackMetadata.Item : []; const value = (name: string) => items.find((item: { Name?: string }) => item.Name === name)?.Value; const resultCode = Number(callback.ResultCode); const receipt = value('MpesaReceiptNumber') ? String(value('MpesaReceiptNumber')) : undefined; const amount = Number(value('Amount')); await prisma.$transaction(async tx => { await tx.paymentEvent.create({ data: { transactionId: transaction.id, eventType: resultCode === 0 ? 'SUCCESS' : 'FAILURE', resultCode, payload: { resultCode, receipt: receipt ?? null, amount: Number.isFinite(amount) ? amount : null } } }); if (resultCode !== 0) { await tx.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'FAILED', failureReason: String(callback.ResultDesc ?? 'Payment failed'), callbackAt: new Date() } }); return } if (amount !== Number(transaction.amount) || !receipt) { await tx.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'UNKNOWN', failureReason: 'Payment amount or receipt did not match the pending transaction', callbackAt: new Date() } }); return } const duplicateReceipt = await tx.paymentTransaction.findFirst({ where: { mpesaReceipt: receipt, NOT: { id: transaction.id } } }); if (duplicateReceipt) { await tx.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'UNKNOWN', failureReason: 'Receipt already belongs to another transaction', callbackAt: new Date() } }); return } const startsAt = new Date(); const expiresAt = new Date(startsAt); expiresAt.setMonth(expiresAt.getMonth() + 1); await tx.paymentTransaction.update({ where: { id: transaction.id }, data: { status: 'COMPLETED', mpesaReceipt: receipt, callbackAt: new Date(), completedAt: new Date() } }); await tx.subscription.update({ where: { id: transaction.subscriptionId }, data: { status: 'ACTIVE', startsAt, expiresAt } }) }); res.json({ ResultCode: 0, ResultDesc: 'Accepted' }) } catch (error) { next(error) } })
+app.get("/api/health", (_req, res) =>
+  res.json({ status: "ok", service: "fundiquote-api" }),
+);
+app.post(
+  "/api/auth/register",
+  rateLimit("register", 8, 15 * 60 * 1000),
+  async (req, res, next) => {
+    try {
+      const data = registrationSchema.parse(req.body);
+      const phone = data.phone.replace(/^\+?254/, "0");
+      const email = data.email || null;
+      const existing = await prisma.user.findFirst({
+        where: { OR: [{ phone }, ...(email ? [{ email }] : [])] },
+      });
+      if (existing)
+        return res
+          .status(409)
+          .json({
+            error:
+              existing.phone === phone
+                ? "That phone number is already registered"
+                : "That email address is already registered",
+          });
+      const passwordHash = await hashPassword(data.password);
+      const user = await prisma.$transaction(async (tx) => {
+        const created = await tx.user.create({
+          data: {
+            fullName: data.fullName,
+            phone,
+            email,
+            passwordHash,
+            role: data.accountType,
+          },
+        });
+        if (data.accountType === "PROVIDER") {
+          const business = await tx.business.create({
+            data: { name: data.businessName!, phone, email },
+          });
+          await tx.businessMember.create({
+            data: {
+              businessId: business.id,
+              userId: created.id,
+              role: "OWNER",
+            },
+          });
+          await tx.providerProfile.create({
+            data: {
+              userId: created.id,
+              businessId: business.id,
+              tradeCategory: data.tradeCategory!,
+            },
+          });
+        } else
+          await tx.customerProfile.create({ data: { userId: created.id } });
+        return created;
+      });
+      await issueSession(res, user.id);
+      res.status(201).json({ user: publicUser(user) });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/auth/login",
+  rateLimit("login", 10, 15 * 60 * 1000),
+  async (req, res, next) => {
+    try {
+      const data = loginSchema.parse(req.body);
+      const identifier = data.identifier.replace(/[\s-]/g, "");
+      const user = await prisma.user.findFirst({
+        where: {
+          OR: [{ phone: identifier }, { email: identifier.toLowerCase() }],
+        },
+      });
+      if (
+        !user ||
+        !user.isActive ||
+        !(await verifyPassword(data.password, user.passwordHash))
+      )
+        return res.status(401).json({ error: "Invalid sign-in details" });
+      await issueSession(res, user.id);
+      res.json({ user: publicUser(user) });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post("/api/auth/logout", async (req, res, next) => {
+  try {
+    const id = parseCookies(req.headers.cookie).fq_session;
+    if (id) await prisma.session.deleteMany({ where: { id } });
+    res.setHeader("Set-Cookie", `fq_session=; Max-Age=0; ${cookieOptions}`);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/auth/me", async (req, res, next) => {
+  try {
+    const sessionId = parseCookies(req.headers.cookie).fq_session;
+    const session = sessionId
+      ? await prisma.session.findUnique({ where: { id: sessionId } })
+      : undefined;
+    if (!session || session.expiresAt < new Date())
+      return res.json({ user: null });
+    const user = await prisma.user.findUnique({
+      where: { id: session.userId },
+    });
+    res.json({ user: user?.isActive ? publicUser(user) : null });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post(
+  "/api/auth/forgot-password",
+  rateLimit("recovery", 5, 15 * 60 * 1000),
+  async (req, res, next) => {
+    try {
+      const input = z
+        .object({ identifier: z.string().trim().min(3) })
+        .parse(req.body);
+      const user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { email: input.identifier.toLowerCase() },
+            { phone: input.identifier },
+          ],
+        },
+      });
+      if (user) {
+        await prisma.passwordResetToken.deleteMany({
+          where: { userId: user.id },
+        });
+        const token = crypto.randomBytes(32).toString("hex");
+        await prisma.passwordResetToken.create({
+          data: {
+            userId: user.id,
+            tokenHash: tokenHash(token),
+            expiresAt: new Date(Date.now() + 30 * 60 * 1000),
+          },
+        });
+      }
+      res.json({
+        message:
+          "If an account matches those details, recovery instructions have been prepared.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post("/api/auth/reset-password", async (req, res, next) => {
+  try {
+    const input = z
+      .object({
+        token: z.string().min(20),
+        password: z
+          .string()
+          .min(8)
+          .regex(/[A-Za-z]/)
+          .regex(/\d/),
+      })
+      .parse(req.body);
+    const reset = await prisma.passwordResetToken.findFirst({
+      where: {
+        tokenHash: tokenHash(input.token),
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+    });
+    if (!reset)
+      return res
+        .status(400)
+        .json({ error: "That reset link is invalid or expired" });
+    const passwordHash = await hashPassword(input.password);
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: reset.userId },
+        data: { passwordHash },
+      }),
+      prisma.passwordResetToken.update({
+        where: { id: reset.id },
+        data: { usedAt: new Date() },
+      }),
+      prisma.session.deleteMany({ where: { userId: reset.userId } }),
+    ]);
+    res.json({ message: "Password updated. You can now sign in." });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/profile", auth, async (req: AuthedRequest, res, next) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user!.id },
+      include: {
+        customerProfile: true,
+        providerProfile: { include: { business: true } },
+      },
+    });
+    res.json({
+      user: publicUser(user!),
+      profile: user?.customerProfile ?? user?.providerProfile,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+app.patch("/api/profile", auth, async (req: AuthedRequest, res, next) => {
+  try {
+    const data = z
+      .object({
+        fullName: z.string().trim().min(2).max(100),
+        phone: phoneSchema,
+        email: z.string().trim().email().optional().or(z.literal("")),
+      })
+      .parse(req.body);
+    const phone = data.phone.replace(/^\+?254/, "0");
+    const duplicate = await prisma.user.findFirst({
+      where: {
+        OR: [{ phone }, ...(data.email ? [{ email: data.email }] : [])],
+        NOT: { id: req.user!.id },
+      },
+    });
+    if (duplicate)
+      return res
+        .status(409)
+        .json({ error: "That phone number or email is already registered" });
+    const user = await prisma.user.update({
+      where: { id: req.user!.id },
+      data: { fullName: data.fullName, phone, email: data.email || null },
+    });
+    res.json({ user: publicUser(user) });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get(
+  "/api/business-profile",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const profile = await prisma.providerProfile.findUnique({
+        where: { userId: req.user!.id },
+        include: { business: true },
+      });
+      if (!profile)
+        return res.status(404).json({ error: "Business profile not found" });
+      res.json({ profile });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.patch(
+  "/api/business-profile",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = z
+        .object({
+          name: z.string().trim().min(2).max(120),
+          phone: phoneSchema,
+          email: z.string().trim().email().optional().or(z.literal("")),
+          address: z.string().trim().max(200).optional(),
+          tradeCategory: z.string().trim().min(2).max(80),
+          slogan: z.string().trim().max(160).optional(),
+          paymentInstructions: z.string().trim().max(500).optional(),
+          mpesaNumber: z.string().trim().max(30).optional(),
+        })
+        .parse(req.body);
+      const provider = await prisma.providerProfile.findUnique({
+        where: { userId: req.user!.id },
+      });
+      if (!provider)
+        return res.status(404).json({ error: "Business profile not found" });
+      const profile = await prisma.$transaction(async (tx) => {
+        await tx.providerProfile.update({
+          where: { userId: req.user!.id },
+          data: { tradeCategory: input.tradeCategory },
+        });
+        return tx.business.update({
+          where: { id: provider.businessId },
+          data: {
+            name: input.name,
+            phone: input.phone.replace(/^\+?254/, "0"),
+            email: input.email || null,
+            address: input.address,
+            slogan: input.slogan,
+            paymentInstructions: input.paymentInstructions,
+            mpesaNumber: input.mpesaNumber,
+          },
+        });
+      });
+      res.json({ profile });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  if (error instanceof z.ZodError) {
+    const fields = error.flatten().fieldErrors as Record<string, string[]>;
+    console.warn(
+      `[api] validation failed: ${Object.entries(fields)
+        .map(([field, messages]) => `${field}=${messages.join(", ")}`)
+        .join("; ")}`,
+    );
+    return res
+      .status(400)
+      .json({ error: "Please correct the highlighted fields", fields });
+  }
+  console.error(
+    "[api] request failed:",
+    error instanceof Error ? error.message : "Unknown error",
+  );
+  res.status(500).json({ error: "Something went wrong. Please try again." });
+});
 
-const phase3Membership = async (userId: string) => providerMembership(userId)
-app.get('/api/jobs/stats', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const now = new Date(); const weekStart = new Date(now); weekStart.setHours(0, 0, 0, 0); weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7)); const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 7); const monthStart = new Date(now.getFullYear(), now.getMonth(), 1); const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1); const [grouped, startingThisWeek, completedThisMonth] = await prisma.$transaction([prisma.job.groupBy({ by: ['status'], where: { businessId: membership.businessId }, _count: { _all: true } }), prisma.job.count({ where: { businessId: membership.businessId, status: 'SCHEDULED', scheduledStart: { gte: weekStart, lt: weekEnd } } }), prisma.job.count({ where: { businessId: membership.businessId, status: 'COMPLETED', completedAt: { gte: monthStart, lt: nextMonth } } })]); const byStatus = Object.fromEntries(grouped.map(row => [row.status, row._count._all])); const total = grouped.reduce((sum, row) => sum + row._count._all, 0); res.json({ total, byStatus, active: (byStatus.SCHEDULED ?? 0) + (byStatus.IN_PROGRESS ?? 0) + (byStatus.ON_HOLD ?? 0), startingThisWeek, inProgress: byStatus.IN_PROGRESS ?? 0, completedThisMonth }) } catch (error) { next(error) } })
-const jobStatusTransitions: Record<string, string[]> = { SCHEDULED: ['IN_PROGRESS', 'CANCELLED'], IN_PROGRESS: ['ON_HOLD', 'COMPLETED', 'CANCELLED'], ON_HOLD: ['IN_PROGRESS', 'CANCELLED'], COMPLETED: [], CANCELLED: [] }
-const phase3JobInput = z.object({ title: z.string().trim().min(2).max(160), description: z.string().trim().max(3000).optional(), location: z.string().trim().max(240).optional(), scheduledStart: z.coerce.date().optional(), expectedCompletion: z.coerce.date().optional(), priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'URGENT']).default('NORMAL'), internalNotes: z.string().trim().max(3000).optional() }).strict()
-app.get('/api/jobs', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const query = z.object({ status: z.enum(['SCHEDULED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED']).optional(), search: z.string().trim().max(80).optional(), page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(50).default(20) }).parse(req.query); const where = { businessId: membership.businessId, ...(query.status ? { status: query.status } : {}), ...(query.search ? { OR: [{ title: { contains: query.search, mode: 'insensitive' as const } }, { jobNumber: { contains: query.search, mode: 'insensitive' as const } }] } : {}) }; const [jobs, total] = await prisma.$transaction([prisma.job.findMany({ where, skip: (query.page - 1) * query.pageSize, take: query.pageSize, orderBy: { createdAt: 'desc' }, include: { customer: true, quotation: { select: { quotationNumber: true, grandTotal: true } } } }), prisma.job.count({ where })]); res.json({ jobs, page: query.page, pageSize: query.pageSize, total }) } catch (error) { next(error) } })
-app.post('/api/quotations/:id/convert-to-job', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = phase3JobInput.parse(req.body); const result = await prisma.$transaction(async tx => { const quotation = await tx.quotation.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: 'ACCEPTED' }, include: { customer: true } }); if (!quotation) throw Object.assign(new Error('Only accepted quotations can become jobs'), { status: 409 }); const existing = await tx.job.findUnique({ where: { quotationId: quotation.id } }); if (existing) return existing; const count = await tx.job.count({ where: { businessId: membership.businessId } }); const job = await tx.job.create({ data: { businessId: membership.businessId, customerId: quotation.customerId, quotationId: quotation.id, jobNumber: `JOB-${new Date().getFullYear()}-${String(count + 1).padStart(5, '0')}`, ...input, activities: { create: { userId: req.user!.id, type: 'CREATED', message: 'Job created from accepted quotation' } } }, include: { customer: true, quotation: true } }); return job }); res.status(201).json({ job: result }) } catch (error) { next(error) } })
-app.get('/api/jobs/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const job = await prisma.job.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { customer: true, quotation: { include: { items: true } }, activities: { orderBy: { createdAt: 'desc' }, include: { user: { select: { fullName: true } } } }, materialsUsed: { include: { material: true } }, invoices: { include: { payments: true } }, expenses: true } }); if (!job) return res.status(404).json({ error: 'Job not found' }); res.json({ job }) } catch (error) { next(error) } })
-app.patch('/api/jobs/:id/status', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ status: z.enum(['SCHEDULED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED']) }).parse(req.body); const job = await prisma.job.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); if (!job) return res.status(404).json({ error: 'Job not found' }); if (!jobStatusTransitions[job.status].includes(input.status)) return res.status(409).json({ error: `Cannot change a ${job.status.toLowerCase()} job to ${input.status.toLowerCase()}` }); const updated = await prisma.$transaction(async tx => { const saved = await tx.job.update({ where: { id: job.id }, data: { status: input.status, ...(input.status === 'IN_PROGRESS' && !job.actualStart ? { actualStart: new Date() } : {}), ...(input.status === 'COMPLETED' ? { completedAt: new Date() } : {}) } }); await tx.jobActivity.create({ data: { jobId: job.id, userId: req.user!.id, type: 'STATUS_CHANGED', message: `${job.status} → ${input.status}` } }); return saved }); res.json({ job: updated }) } catch (error) { next(error) } })
-const materialInput = z.object({ sku: z.string().trim().max(40).optional(), name: z.string().trim().min(2).max(160), description: z.string().trim().max(1000).optional(), category: z.string().trim().max(80).optional(), unit: z.string().trim().min(1).max(30), costPerUnit: z.coerce.number().nonnegative(), sellingPrice: z.coerce.number().nonnegative().optional(), reorderLevel: z.coerce.number().nonnegative().default(0), supplier: z.string().trim().max(160).optional() }).strict()
-app.get('/api/materials', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const materials = await prisma.material.findMany({ where: { businessId: membership.businessId, ...(req.query.search ? { name: { contains: String(req.query.search), mode: 'insensitive' as const } } : {}) }, orderBy: { name: 'asc' } }); res.json({ materials }) } catch (error) { next(error) } })
-app.post('/api/materials', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = materialInput.parse(req.body); const material = await prisma.material.create({ data: { ...input, businessId: membership.businessId } }); res.status(201).json({ material }) } catch (error) { next(error) } })
-app.get('/api/materials/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const material = await prisma.material.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { movements: { orderBy: { createdAt: 'desc' }, take: 20, include: { job: { select: { id: true, jobNumber: true, title: true } }, createdBy: { select: { fullName: true } } } }, jobUsages: { orderBy: { createdAt: 'desc' }, take: 20, include: { job: { select: { id: true, jobNumber: true, title: true, status: true } } } } } }); if (!material) return res.status(404).json({ error: 'Inventory item not found' }); res.json({ material }) } catch (error) { next(error) } })
-app.patch('/api/materials/:id', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = materialInput.partial().parse(req.body); const result = await prisma.material.updateMany({ where: { id: String(req.params.id), businessId: membership.businessId }, data: input }); if (!result.count) return res.status(404).json({ error: 'Inventory item not found' }); const material = await prisma.material.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); res.json({ material }) } catch (error) { next(error) } })
-app.post('/api/materials/:id/restock', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ quantity: z.coerce.number().positive(), reason: z.string().trim().max(300).optional(), reference: z.string().trim().max(120).optional(), costPerUnit: z.coerce.number().nonnegative().optional() }).strict().parse(req.body); const material = await prisma.material.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); if (!material) return res.status(404).json({ error: 'Material not found' }); const updated = await prisma.$transaction(async tx => { const movement = await tx.stockMovement.create({ data: { businessId: membership.businessId, materialId: material.id, type: 'PURCHASE', quantity: input.quantity, costPerUnit: input.costPerUnit ?? material.costPerUnit, reason: input.reason, reference: input.reference, createdById: req.user!.id } }); return tx.material.update({ where: { id: material.id }, data: { stockQuantity: { increment: input.quantity }, ...(input.costPerUnit !== undefined ? { costPerUnit: input.costPerUnit } : {}) } }).then(value => ({ material: value, movement })) }); res.status(201).json(updated) } catch (error) { next(error) } })
-app.get('/api/stock-movements', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const query = z.object({ page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(20), materialId: z.string().uuid().optional() }).parse(req.query); const where = { businessId: membership.businessId, ...(query.materialId ? { materialId: query.materialId } : {}) }; const [movements, total] = await prisma.$transaction([prisma.stockMovement.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (query.page - 1) * query.pageSize, take: query.pageSize, include: { material: { select: { id: true, name: true, unit: true } }, job: { select: { id: true, jobNumber: true } }, createdBy: { select: { fullName: true } } } }), prisma.stockMovement.count({ where })]); res.json({ movements, page: query.page, pageSize: query.pageSize, total, pageCount: Math.ceil(total / query.pageSize) }) } catch (error) { next(error) } })
-const stockChangeInput = z.object({ quantity: z.coerce.number().positive(), reason: z.string().trim().min(2).max(300), reference: z.string().trim().max(120).optional() }).strict()
-app.post('/api/materials/:id/adjustments', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ delta: z.coerce.number().refine(value => value !== 0), reason: z.string().trim().min(2).max(300), reference: z.string().trim().max(120).optional() }).strict().parse(req.body); const material = await prisma.material.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); if (!material) return res.status(404).json({ error: 'Inventory item not found' }); const amount = Math.abs(input.delta); const result = await prisma.$transaction(async tx => { const changed = await tx.material.updateMany({ where: { id: material.id, businessId: membership.businessId, ...(input.delta < 0 ? { stockQuantity: { gte: amount } } : {}) }, data: { stockQuantity: input.delta < 0 ? { decrement: amount } : { increment: amount } } }); if (!changed.count) throw Object.assign(new Error('Adjustment would make stock negative'), { status: 409 }); const movement = await tx.stockMovement.create({ data: { businessId: membership.businessId, materialId: material.id, type: 'ADJUSTMENT', quantity: amount, costPerUnit: material.costPerUnit, reason: `${input.delta < 0 ? 'Stock decrease' : 'Stock increase'}: ${input.reason}`, reference: input.reference, createdById: req.user!.id } }); const updated = await tx.material.findUniqueOrThrow({ where: { id: material.id } }); return { material: updated, movement } }); res.status(201).json(result) } catch (error) { next(error) } })
-app.post('/api/materials/:id/returns', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = stockChangeInput.parse(req.body); const material = await prisma.material.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } }); if (!material) return res.status(404).json({ error: 'Inventory item not found' }); const result = await prisma.$transaction(async tx => { const movement = await tx.stockMovement.create({ data: { businessId: membership.businessId, materialId: material.id, type: 'RETURN', quantity: input.quantity, costPerUnit: material.costPerUnit, reason: input.reason, reference: input.reference, createdById: req.user!.id } }); const updated = await tx.material.update({ where: { id: material.id }, data: { stockQuantity: { increment: input.quantity } } }); return { material: updated, movement } }); res.status(201).json(result) } catch (error) { next(error) } })
-app.post('/api/jobs/:id/materials', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ materialId: z.string().uuid(), quantity: z.coerce.number().positive(), reason: z.string().trim().max(300).optional() }).strict().parse(req.body); const result = await prisma.$transaction(async tx => { const job = await tx.job.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { not: 'CANCELLED' } } }); const material = await tx.material.findFirst({ where: { id: input.materialId, businessId: membership.businessId } }); if (!job || !material) throw Object.assign(new Error('Job or material not found'), { status: 404 }); if (Number(material.stockQuantity) < input.quantity) throw Object.assign(new Error('Insufficient stock'), { status: 409 }); const movement = await tx.stockMovement.create({ data: { businessId: membership.businessId, materialId: material.id, jobId: job.id, type: 'CONSUMPTION', quantity: input.quantity, costPerUnit: material.costPerUnit, reason: input.reason, createdById: req.user!.id } }); await tx.material.update({ where: { id: material.id }, data: { stockQuantity: { decrement: input.quantity } } }); return tx.jobMaterialUsage.create({ data: { jobId: job.id, materialId: material.id, movementId: movement.id, quantity: input.quantity, costPerUnit: material.costPerUnit }, include: { material: true } }) }); res.status(201).json({ usage: result }) } catch (error) { next(error) } })
-
-const invoiceItemInput = z.object({ description: z.string().trim().min(1).max(240), quantity: z.coerce.number().positive(), unit: z.string().trim().min(1).max(30), unitPrice: z.coerce.number().nonnegative() }).strict()
-const invoiceInput = z.object({ jobId: z.string().uuid().optional(), customerId: z.string().uuid(), quotationId: z.string().uuid().optional(), dueDate: z.coerce.date().optional(), discount: z.coerce.number().nonnegative().default(0), tax: z.coerce.number().nonnegative().default(0), paymentTerms: z.string().trim().max(1000).optional(), notes: z.string().trim().max(3000).optional(), items: z.array(invoiceItemInput).min(1).max(100) }).strict()
-app.get('/api/invoices', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const invoices = await prisma.invoice.findMany({ where: { businessId: membership.businessId }, orderBy: { createdAt: 'desc' }, include: { customer: true, job: { select: { id: true, jobNumber: true, title: true } }, payments: true, items: true } }); res.json({ invoices }) } catch (error) { next(error) } })
-app.post('/api/invoices', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = invoiceInput.parse(req.body); const customer = await prisma.customerRecord.findFirst({ where: { id: input.customerId, businessId: membership.businessId } }); if (!customer) return res.status(404).json({ error: 'Customer not found' }); const job = input.jobId ? await prisma.job.findFirst({ where: { id: input.jobId, businessId: membership.businessId } }) : null; if (input.jobId && !job) return res.status(404).json({ error: 'Job not found' }); const lines = input.items.map(item => ({ ...item, lineTotal: (Math.round(item.quantity * item.unitPrice * 100) / 100).toFixed(2) })); const subtotal = lines.reduce((sum, item) => sum + Math.round(Number(item.lineTotal) * 100), 0); const grandTotal = subtotal - Math.round(input.discount * 100) + Math.round(input.tax * 100); if (grandTotal < 0) return res.status(400).json({ error: 'Invoice total cannot be negative' }); const count = await prisma.invoice.count({ where: { businessId: membership.businessId } }); const invoice = await prisma.invoice.create({ data: { businessId: membership.businessId, customerId: customer.id, jobId: job?.id, quotationId: input.quotationId, invoiceNumber: `INV-${new Date().getFullYear()}-${String(count + 1).padStart(5, '0')}`, dueDate: input.dueDate, subtotal: (subtotal / 100).toFixed(2), discount: input.discount.toFixed(2), tax: input.tax.toFixed(2), grandTotal: (grandTotal / 100).toFixed(2), paymentTerms: input.paymentTerms, notes: input.notes, items: { create: lines.map((line, index) => ({ ...line, sortOrder: index })) } }, include: { items: true, customer: true } }); res.status(201).json({ invoice }) } catch (error) { next(error) } })
-app.post('/api/invoices/:id/issue', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: 'DRAFT' }, include: { items: true, business: true, customer: true } }); if (!invoice) return res.status(404).json({ error: 'Draft invoice not found' }); const issued = await prisma.invoice.update({ where: { id: invoice.id }, data: { status: 'ISSUED', issueDate: new Date(), issuedSnapshot: { business: { name: invoice.business.name, phone: invoice.business.phone, email: invoice.business.email, address: invoice.business.address }, customer: { name: invoice.customer.name, phone: invoice.customer.phone, email: invoice.customer.email }, items: invoice.items.map(item => ({ description: item.description, quantity: item.quantity.toString(), unit: item.unit, unitPrice: item.unitPrice.toString(), lineTotal: item.lineTotal.toString() })) } } }); res.json({ invoice: issued }) } catch (error) { next(error) } })
-app.post('/api/invoices/:id/payments', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = z.object({ amount: z.coerce.number().positive(), paymentDate: z.coerce.date().default(new Date()), method: z.enum(['CASH', 'BANK_TRANSFER', 'MPESA', 'OTHER']), reference: z.string().trim().max(120).optional(), notes: z.string().trim().max(500).optional() }).strict().parse(req.body); const result = await prisma.$transaction(async tx => { const invoice = await tx.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { in: ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'] } } }); if (!invoice) throw Object.assign(new Error('Invoice is not eligible for payment'), { status: 409 }); const remaining = Number(invoice.grandTotal) - Number(invoice.amountPaid); if (input.amount > remaining + 0.0001) throw Object.assign(new Error('Payment exceeds the outstanding balance'), { status: 400 }); const payment = await tx.payment.create({ data: { businessId: membership.businessId, invoiceId: invoice.id, amount: input.amount.toFixed(2), paymentDate: input.paymentDate, method: input.method, reference: input.reference, notes: input.notes, recordedById: req.user!.id } }); const amountPaid = Number(invoice.amountPaid) + input.amount; const updated = await tx.invoice.update({ where: { id: invoice.id }, data: { amountPaid: amountPaid.toFixed(2), status: amountPaid >= Number(invoice.grandTotal) ? 'PAID' : 'PARTIALLY_PAID' } }); return { payment, invoice: updated } }); res.status(201).json(result) } catch (error) { next(error) } })
-app.get('/api/payments', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const payments = await prisma.payment.findMany({ where: { businessId: membership.businessId }, orderBy: { paymentDate: 'desc' }, include: { invoice: { select: { invoiceNumber: true, customer: { select: { name: true } } } } } }); res.json({ payments }) } catch (error) { next(error) } })
-const expenseInput = z.object({ jobId: z.string().uuid().optional(), category: z.enum(['MATERIALS', 'TRANSPORT', 'LABOUR', 'TOOLS', 'UTILITIES', 'RENT', 'MAINTENANCE', 'OTHER']), description: z.string().trim().min(2).max(240), amount: z.coerce.number().positive(), expenseDate: z.coerce.date().default(new Date()), method: z.enum(['CASH', 'BANK_TRANSFER', 'MPESA', 'OTHER']).optional(), supplier: z.string().trim().max(160).optional(), reference: z.string().trim().max(120).optional(), notes: z.string().trim().max(1000).optional() }).strict()
-app.get('/api/expenses', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const expenses = await prisma.expense.findMany({ where: { businessId: membership.businessId }, orderBy: { expenseDate: 'desc' }, include: { job: { select: { jobNumber: true, title: true } } } }); res.json({ expenses }) } catch (error) { next(error) } })
-app.post('/api/expenses', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const input = expenseInput.parse(req.body); if (input.jobId && !(await prisma.job.findFirst({ where: { id: input.jobId, businessId: membership.businessId } }))) return res.status(404).json({ error: 'Job not found' }); const expense = await prisma.expense.create({ data: { ...input, businessId: membership.businessId, recordedById: req.user!.id } }); res.status(201).json({ expense }) } catch (error) { next(error) } })
-app.get('/api/reports/overview', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const end = req.query.to ? new Date(String(req.query.to)) : new Date(); const start = req.query.from ? new Date(String(req.query.from)) : new Date(end.getFullYear(), end.getMonth(), 1); const [jobs, invoices, payments, expenses, lowStock] = await prisma.$transaction([prisma.job.groupBy({ by: ['status'], where: { businessId: membership.businessId, createdAt: { gte: start, lte: end } }, _count: true }), prisma.invoice.aggregate({ where: { businessId: membership.businessId, issueDate: { gte: start, lte: end }, status: { not: 'CANCELLED' } }, _sum: { grandTotal: true, amountPaid: true } }), prisma.payment.aggregate({ where: { businessId: membership.businessId, paymentDate: { gte: start, lte: end } }, _sum: { amount: true } }), prisma.expense.aggregate({ where: { businessId: membership.businessId, expenseDate: { gte: start, lte: end } }, _sum: { amount: true } }), prisma.material.findMany({ where: { businessId: membership.businessId, isActive: true }, select: { id: true, name: true, stockQuantity: true, reorderLevel: true } })]); res.json({ period: { start, end }, jobs, invoicedAmount: invoices._sum.grandTotal ?? 0, paymentsReceived: payments._sum.amount ?? 0, recordedExpenses: expenses._sum.amount ?? 0, outstandingBalance: Number(invoices._sum.grandTotal ?? 0) - Number(invoices._sum.amountPaid ?? 0), lowStock: lowStock.filter((material) => Number(material.stockQuantity) <= Number(material.reorderLevel)) }) } catch (error) { next(error) } })
-const pdfBuffer = (draw: (document: PDFKit.PDFDocument) => void) => new Promise<Buffer>((resolve) => { const document = new PDFDocument({ margin: 48 }); const chunks: Buffer[] = []; document.on('data', (chunk: Buffer) => chunks.push(chunk)); document.on('end', () => resolve(Buffer.concat(chunks))); draw(document); document.end() })
-app.get('/api/invoices/:id/pdf', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { not: 'DRAFT' } }, include: { business: true, customer: true, items: true, payments: true, job: true } }); if (!invoice) return res.status(404).json({ error: 'Issued invoice not found' }); const buffer = await pdfBuffer(document => { document.fontSize(22).fillColor('#13212b').text(invoice.business.name); document.fontSize(10).fillColor('#596a65').text(`${invoice.business.phone}${invoice.business.email ? ` · ${invoice.business.email}` : ''}`); document.moveDown().fontSize(18).fillColor('#13212b').text(`Invoice ${invoice.invoiceNumber}`); document.fontSize(11).fillColor('#13212b').text(`Customer: ${invoice.customer.name}`).text(`Issue date: ${invoice.issueDate?.toISOString().slice(0, 10) ?? '—'}`).text(`Due date: ${invoice.dueDate?.toISOString().slice(0, 10) ?? '—'}`); if (invoice.job) document.text(`Job: ${invoice.job.jobNumber} · ${invoice.job.title}`); document.moveDown(); invoice.items.forEach((item, index) => document.fontSize(10).text(`${index + 1}. ${item.description} — ${item.quantity} ${item.unit} × KES ${item.unitPrice} = KES ${item.lineTotal}`)); document.moveDown().text(`Subtotal: KES ${invoice.subtotal}`).text(`Discount: KES ${invoice.discount}`).text(`Tax: KES ${invoice.tax}`).fontSize(14).text(`Total: KES ${invoice.grandTotal}`).fontSize(11).text(`Paid: KES ${invoice.amountPaid}`).text(`Balance: KES ${(Number(invoice.grandTotal) - Number(invoice.amountPaid)).toFixed(2)}`); if (invoice.paymentTerms) document.moveDown().fontSize(10).text(`Payment terms: ${invoice.paymentTerms}`); if (invoice.notes) document.moveDown().text(`Notes: ${invoice.notes}`) }); res.type('application/pdf').setHeader('Content-Disposition', `attachment; filename="${invoice.invoiceNumber}.pdf"`).send(buffer) } catch (error) { next(error) } })
-app.get('/api/payments/:id/receipt.pdf', auth, role('PROVIDER'), async (req: AuthedRequest, res, next) => { try { const membership = await phase3Membership(req.user!.id); if (!membership) return res.status(403).json({ error: 'Business membership required' }); const payment = await prisma.payment.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { business: true, invoice: { include: { customer: true } } } }); if (!payment) return res.status(404).json({ error: 'Payment not found' }); const buffer = await pdfBuffer(document => { document.fontSize(22).fillColor('#13212b').text(payment.business.name); document.fontSize(18).text(`Payment receipt`); document.fontSize(11).text(`Receipt: RCPT-${payment.id.slice(0, 8).toUpperCase()}`).text(`Invoice: ${payment.invoice.invoiceNumber}`).text(`Customer: ${payment.invoice.customer.name}`).text(`Date: ${payment.paymentDate.toISOString().slice(0, 10)}`).text(`Method: ${payment.method}`).text(`Reference: ${payment.reference ?? 'Not provided'}`).moveDown().fontSize(16).text(`Amount received: KES ${payment.amount}`).fontSize(10).text('Manual business payment record; not independently verified by a payment provider.').text(`Remaining balance: KES ${(Number(payment.invoice.grandTotal) - Number(payment.invoice.amountPaid)).toFixed(2)}`) }); res.type('application/pdf').setHeader('Content-Disposition', `attachment; filename="receipt-${payment.id}.pdf"`).send(buffer) } catch (error) { next(error) } })
-
-app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => { const status = typeof error === 'object' && error && 'status' in error && typeof error.status === 'number' ? error.status : 500; if (error instanceof z.ZodError) return res.status(400).json({ error: 'Please correct the highlighted fields', fields: error.flatten().fieldErrors }); console.error('[api] request failed:', error instanceof Error ? error.message : 'Unknown error'); res.status(status).json({ error: status === 500 ? 'Something went wrong. Please try again.' : error instanceof Error ? error.message : 'Request failed' }) })
+app.get("/api/marketplace/categories", async (_req, res, next) => {
+  try {
+    const categories = await prisma.serviceCategory.findMany({
+      where: { isActive: true },
+      orderBy: { name: "asc" },
+      select: { id: true, slug: true, name: true, description: true },
+    });
+    res.json({ categories });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/marketplace/providers", async (req, res, next) => {
+  try {
+    const query = z
+      .object({
+        search: z.string().trim().max(80).optional(),
+        category: z.string().trim().max(80).optional(),
+        page: z.coerce.number().int().min(1).default(1),
+        pageSize: z.coerce.number().int().min(1).max(30).default(12),
+      })
+      .parse(req.query);
+    const where = {
+      providerProfiles: { some: {} },
+      ...(query.search
+        ? {
+            OR: [
+              {
+                name: { contains: query.search, mode: "insensitive" as const },
+              },
+              {
+                slogan: {
+                  contains: query.search,
+                  mode: "insensitive" as const,
+                },
+              },
+            ],
+          }
+        : {}),
+      ...(query.category
+        ? {
+            providerProfiles: {
+              some: {
+                tradeCategory: {
+                  equals: query.category,
+                  mode: "insensitive" as const,
+                },
+              },
+            },
+          }
+        : {}),
+    };
+    const [businesses, total] = await prisma.$transaction([
+      prisma.business.findMany({
+        where,
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+        orderBy: { name: "asc" },
+        select: {
+          id: true,
+          name: true,
+          slogan: true,
+          address: true,
+          currency: true,
+          providerProfiles: {
+            select: { tradeCategory: true, serviceDescription: true },
+          },
+          serviceListings: {
+            where: { status: "PUBLISHED" },
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              startingPrice: true,
+              category: { select: { slug: true, name: true } },
+            },
+          },
+        },
+      }),
+      prisma.business.count({ where }),
+    ]);
+    res.json({
+      providers: businesses,
+      page: query.page,
+      pageSize: query.pageSize,
+      total,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/marketplace/providers/:id", async (req, res, next) => {
+  try {
+    const business = await prisma.business.findFirst({
+      where: { id: String(req.params.id), providerProfiles: { some: {} } },
+      select: {
+        id: true,
+        name: true,
+        slogan: true,
+        address: true,
+        phone: true,
+        providerProfiles: {
+          select: {
+            tradeCategory: true,
+            serviceDescription: true,
+            location: true,
+          },
+        },
+        serviceListings: {
+          where: { status: "PUBLISHED" },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            startingPrice: true,
+            category: { select: { slug: true, name: true } },
+          },
+        },
+      },
+    });
+    if (!business) return res.status(404).json({ error: "Provider not found" });
+    res.json({ provider: business });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get(
+  "/api/provider/listings",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await prisma.businessMember.findFirst({
+        where: {
+          userId: req.user!.id,
+          status: "ACTIVE",
+          role: { in: ["OWNER", "ADMIN", "MEMBER"] },
+        },
+      });
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const listings = await prisma.serviceListing.findMany({
+        where: { businessId: membership.businessId },
+        include: { category: { select: { id: true, slug: true, name: true } } },
+        orderBy: { createdAt: "desc" },
+      });
+      res.json({ listings });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/provider/listings",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = z
+        .object({
+          categoryId: z.string().uuid(),
+          title: z.string().trim().min(2).max(120),
+          description: z.string().trim().min(10).max(2000),
+          startingPrice: z.coerce.number().nonnegative().optional(),
+          status: z.enum(["DRAFT", "PUBLISHED"]).default("DRAFT"),
+        })
+        .parse(req.body);
+      const membership = await prisma.businessMember.findFirst({
+        where: { userId: req.user!.id, status: "ACTIVE" },
+      });
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const listing = await prisma.serviceListing.create({
+        data: {
+          businessId: membership.businessId,
+          categoryId: input.categoryId,
+          title: input.title,
+          description: input.description,
+          startingPrice: input.startingPrice,
+          status: input.status,
+        },
+      });
+      res.status(201).json({ listing });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.patch(
+  "/api/provider/listings/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = z
+        .object({
+          title: z.string().trim().min(2).max(120).optional(),
+          description: z.string().trim().min(10).max(2000).optional(),
+          startingPrice: z.coerce.number().nonnegative().nullable().optional(),
+          status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+        })
+        .strict()
+        .parse(req.body);
+      const membership = await prisma.businessMember.findFirst({
+        where: { userId: req.user!.id, status: "ACTIVE" },
+      });
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const listing = await prisma.serviceListing.updateMany({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+        data: input,
+      });
+      if (!listing.count)
+        return res.status(404).json({ error: "Listing not found" });
+      res.json({ updated: true });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const requestInput = z
+  .object({
+    categoryId: z.string().uuid(),
+    title: z.string().trim().min(3).max(120),
+    description: z.string().trim().min(10).max(3000),
+    location: z.string().trim().min(2).max(160),
+    budgetMin: z.coerce.number().nonnegative().optional(),
+    budgetMax: z.coerce.number().nonnegative().optional(),
+    preferredDate: z.coerce.date().optional(),
+  })
+  .refine(
+    (value) =>
+      value.budgetMin === undefined ||
+      value.budgetMax === undefined ||
+      value.budgetMax >= value.budgetMin,
+    {
+      path: ["budgetMax"],
+      message: "Maximum budget must be greater than minimum budget",
+    },
+  );
+app.post(
+  "/api/requests",
+  auth,
+  role("CUSTOMER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = requestInput.parse(req.body);
+      const request = await prisma.serviceRequest.create({
+        data: { ...input, customerId: req.user!.id },
+      });
+      res.status(201).json({ request });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/requests",
+  auth,
+  role("CUSTOMER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const query = z
+        .object({
+          page: z.coerce.number().int().min(1).default(1),
+          pageSize: z.coerce.number().int().min(1).max(30).default(20),
+          status: z
+            .enum(["OPEN", "IN_PROGRESS", "FULFILLED", "CANCELLED"])
+            .optional(),
+        })
+        .parse(req.query);
+      const where = {
+        customerId: req.user!.id,
+        ...(query.status ? { status: query.status } : {}),
+      };
+      const [requests, total] = await prisma.$transaction([
+        prisma.serviceRequest.findMany({
+          where,
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+          orderBy: { createdAt: "desc" },
+          include: {
+            category: { select: { slug: true, name: true } },
+            quotations: {
+              select: {
+                id: true,
+                quotationNumber: true,
+                status: true,
+                grandTotal: true,
+              },
+            },
+          },
+        }),
+        prisma.serviceRequest.count({ where }),
+      ]);
+      res.json({ requests, page: query.page, pageSize: query.pageSize, total });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get("/api/requests/:id", auth, async (req: AuthedRequest, res, next) => {
+  try {
+    const id = String(req.params.id);
+    const request = await prisma.serviceRequest.findFirst({
+      where:
+        req.user!.role === "CUSTOMER"
+          ? { id, customerId: req.user!.id }
+          : { id, status: { in: ["OPEN", "IN_PROGRESS"] } },
+      include: {
+        category: true,
+        quotations: {
+          select: {
+            id: true,
+            quotationNumber: true,
+            status: true,
+            grandTotal: true,
+            currency: true,
+          },
+        },
+      },
+    });
+    if (!request)
+      return res.status(404).json({ error: "Service request not found" });
+    res.json({ request });
+  } catch (error) {
+    next(error);
+  }
+});
+app.patch(
+  "/api/requests/:id",
+  auth,
+  role("CUSTOMER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = requestInput
+        .partial()
+        .extend({ status: z.enum(["OPEN", "CANCELLED"]).optional() })
+        .strict()
+        .parse(req.body);
+      const current = await prisma.serviceRequest.findFirst({
+        where: { id: String(req.params.id), customerId: req.user!.id },
+      });
+      if (!current)
+        return res.status(404).json({ error: "Service request not found" });
+      if (current.status !== "OPEN")
+        return res
+          .status(409)
+          .json({ error: "Only open requests can be changed" });
+      const request = await prisma.serviceRequest.update({
+        where: { id: current.id },
+        data: input,
+      });
+      res.json({ request });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/provider/requests",
+  auth,
+  role("PROVIDER"),
+  async (_req, res, next) => {
+    try {
+      const requests = await prisma.serviceRequest.findMany({
+        where: { status: "OPEN" },
+        orderBy: { createdAt: "asc" },
+        take: 50,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          location: true,
+          budgetMin: true,
+          budgetMax: true,
+          preferredDate: true,
+          createdAt: true,
+          category: { select: { slug: true, name: true } },
+        },
+      });
+      res.json({ requests });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const customerInput = z
+  .object({
+    name: z.string().trim().min(2).max(120),
+    phone: z
+      .string()
+      .trim()
+      .regex(/^(?:\+?254|0)7\d{8}$/)
+      .transform((value) =>
+        value.replace(/[\s-]/g, "").replace(/^\+?254/, "0"),
+      ),
+    email: z.string().trim().email().optional().or(z.literal("")),
+    billingAddress: z.string().trim().max(240).optional(),
+    projectLocation: z.string().trim().max(240).optional(),
+    notes: z.string().trim().max(1000).optional(),
+  })
+  .strict();
+const providerMembership = async (userId: string) =>
+  prisma.businessMember.findFirst({ where: { userId, status: "ACTIVE" } });
+app.get(
+  "/api/customers",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const query = z
+        .object({
+          search: z.string().trim().max(80).optional(),
+          page: z.coerce.number().int().min(1).default(1),
+          pageSize: z.coerce.number().int().min(1).max(50).default(20),
+        })
+        .parse(req.query);
+      const where = {
+        businessId: membership.businessId,
+        ...(query.search
+          ? {
+              OR: [
+                {
+                  name: {
+                    contains: query.search,
+                    mode: "insensitive" as const,
+                  },
+                },
+                { phone: { contains: query.search } },
+              ],
+            }
+          : {}),
+      };
+      const [customers, total] = await prisma.$transaction([
+        prisma.customerRecord.findMany({
+          where,
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+          orderBy: { name: "asc" },
+        }),
+        prisma.customerRecord.count({ where }),
+      ]);
+      res.json({
+        customers,
+        page: query.page,
+        pageSize: query.pageSize,
+        total,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/customers",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const input = customerInput.parse(req.body);
+      const customer = await prisma.customerRecord.create({
+        data: {
+          ...input,
+          email: input.email || null,
+          businessId: membership.businessId,
+        },
+      });
+      res.status(201).json({ customer });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/customers/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const customer = await prisma.customerRecord.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      if (!customer)
+        return res.status(404).json({ error: "Customer not found" });
+      res.json({ customer });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.patch(
+  "/api/customers/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const input = customerInput.partial().parse(req.body);
+      const result = await prisma.customerRecord.updateMany({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+        data: {
+          ...input,
+          ...(input.email !== undefined ? { email: input.email || null } : {}),
+        },
+      });
+      if (!result.count)
+        return res.status(404).json({ error: "Customer not found" });
+      const customer = await prisma.customerRecord.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      res.json({ customer });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const moneyCents = (value: number) => Math.round(value * 100);
+const centsMoney = (value: number) => (value / 100).toFixed(2);
+const quotationItemInput = z
+  .object({
+    description: z.string().trim().min(1).max(240),
+    quantity: z.coerce.number().positive().max(100000),
+    unit: z.string().trim().min(1).max(30),
+    unitPrice: z.coerce.number().nonnegative().max(100000000),
+  })
+  .strict();
+const quotationInput = z
+  .object({
+    customerId: z.string().uuid(),
+    serviceRequestId: z.string().uuid().optional(),
+    title: z.string().trim().min(3).max(160),
+    description: z.string().trim().max(3000).optional(),
+    location: z.string().trim().max(240).optional(),
+    expiryDate: z.coerce.date().optional(),
+    discount: z.coerce.number().nonnegative().default(0),
+    tax: z.coerce.number().nonnegative().default(0),
+    terms: z.string().trim().max(4000).optional(),
+    paymentTerms: z.string().trim().max(1000).optional(),
+    items: z.array(quotationItemInput).min(1).max(100),
+  })
+  .strict();
+const calculateQuotation = (
+  items: Array<z.infer<typeof quotationItemInput>>,
+  discount: number,
+  tax: number,
+) => {
+  const lineItems = items.map((item) => ({
+    ...item,
+    lineTotal: centsMoney(moneyCents(item.quantity * item.unitPrice)),
+  }));
+  const subtotal = lineItems.reduce(
+    (sum, item) => sum + moneyCents(Number(item.lineTotal)),
+    0,
+  );
+  const grandTotal = subtotal - moneyCents(discount) + moneyCents(tax);
+  if (grandTotal < 0) throw new Error("Quotation total cannot be negative");
+  return {
+    lineItems,
+    subtotal: centsMoney(subtotal),
+    discount: centsMoney(moneyCents(discount)),
+    tax: centsMoney(moneyCents(tax)),
+    grandTotal: centsMoney(grandTotal),
+  };
+};
+app.get(
+  "/api/quotations",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const quotations = await prisma.quotation.findMany({
+        where: { businessId: membership.businessId },
+        orderBy: { createdAt: "desc" },
+        take: 100,
+        include: {
+          customer: {
+            select: { id: true, name: true, phone: true, email: true },
+          },
+          items: true,
+        },
+      });
+      res.json({ quotations });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/quotations",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      if (
+        process.env.NODE_ENV === "production" &&
+        process.env.QUOTATION_ENTITLEMENT !== "enabled"
+      )
+        return res
+          .status(402)
+          .json({ error: "An active subscription is required for quotations" });
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const input = quotationInput.parse(req.body);
+      const customer = await prisma.customerRecord.findFirst({
+        where: { id: input.customerId, businessId: membership.businessId },
+      });
+      if (!customer)
+        return res.status(404).json({ error: "Customer not found" });
+      const totals = calculateQuotation(input.items, input.discount, input.tax);
+      const year = new Date().getFullYear();
+      const count = await prisma.quotation.count({
+        where: { businessId: membership.businessId },
+      });
+      const quotation = await prisma.quotation.create({
+        data: {
+          businessId: membership.businessId,
+          customerId: customer.id,
+          serviceRequestId: input.serviceRequestId,
+          quotationNumber: `QT-${year}-${String(count + 1).padStart(5, "0")}`,
+          title: input.title,
+          description: input.description,
+          location: input.location,
+          expiryDate: input.expiryDate,
+          subtotal: totals.subtotal,
+          discount: totals.discount,
+          tax: totals.tax,
+          grandTotal: totals.grandTotal,
+          terms: input.terms,
+          paymentTerms: input.paymentTerms,
+          items: {
+            create: totals.lineItems.map((item, index) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unit: item.unit,
+              unitPrice: item.unitPrice,
+              lineTotal: item.lineTotal,
+              sortOrder: index,
+            })),
+          },
+        },
+        include: { items: true, customer: true },
+      });
+      res.status(201).json({ quotation });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/quotations/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const quotation = await prisma.quotation.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+        include: {
+          items: { orderBy: { sortOrder: "asc" } },
+          customer: true,
+          request: true,
+          invoices: { select: { id: true, invoiceNumber: true, status: true } },
+        },
+      });
+      if (!quotation)
+        return res.status(404).json({ error: "Quotation not found" });
+      res.json({ quotation });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.patch(
+  "/api/quotations/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const current = await prisma.quotation.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      if (!current)
+        return res.status(404).json({ error: "Quotation not found" });
+      if (current.status !== "DRAFT")
+        return res
+          .status(409)
+          .json({ error: "Only draft quotations can be edited" });
+      const input = quotationInput.parse(req.body);
+      const customer = await prisma.customerRecord.findFirst({
+        where: { id: input.customerId, businessId: membership.businessId },
+      });
+      if (!customer)
+        return res.status(404).json({ error: "Customer not found" });
+      const totals = calculateQuotation(input.items, input.discount, input.tax);
+      const quotation = await prisma.$transaction(async (tx) => {
+        await tx.quotationItem.deleteMany({
+          where: { quotationId: current.id },
+        });
+        return tx.quotation.update({
+          where: { id: current.id },
+          data: {
+            customerId: input.customerId,
+            serviceRequestId: input.serviceRequestId,
+            title: input.title,
+            description: input.description,
+            location: input.location,
+            expiryDate: input.expiryDate,
+            subtotal: totals.subtotal,
+            discount: totals.discount,
+            tax: totals.tax,
+            grandTotal: totals.grandTotal,
+            terms: input.terms,
+            paymentTerms: input.paymentTerms,
+            items: {
+              create: totals.lineItems.map((item, index) => ({
+                description: item.description,
+                quantity: item.quantity,
+                unit: item.unit,
+                unitPrice: item.unitPrice,
+                lineTotal: item.lineTotal,
+                sortOrder: index,
+              })),
+            },
+          },
+          include: { items: true, customer: true },
+        });
+      });
+      res.json({ quotation });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/quotations/:id/issue",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership)
+        return res.status(403).json({ error: "Business membership required" });
+      const current = await prisma.quotation.findFirst({
+        where: {
+          id: String(req.params.id),
+          businessId: membership.businessId,
+          status: "DRAFT",
+        },
+        include: { business: true, customer: true, items: true },
+      });
+      if (!current)
+        return res.status(404).json({ error: "Draft quotation not found" });
+      const issued = await prisma.quotation.update({
+        where: { id: current.id },
+        data: {
+          status: "ISSUED",
+          issueDate: new Date(),
+          issuedSnapshot: {
+            business: {
+              name: current.business.name,
+              phone: current.business.phone,
+              email: current.business.email,
+              address: current.business.address,
+              slogan: current.business.slogan,
+            },
+            customer: {
+              name: current.customer.name,
+              phone: current.customer.phone,
+              email: current.customer.email,
+              billingAddress: current.customer.billingAddress,
+            },
+            totals: {
+              subtotal: current.subtotal.toString(),
+              discount: current.discount.toString(),
+              tax: current.tax.toString(),
+              grandTotal: current.grandTotal.toString(),
+            },
+          },
+        },
+      });
+      res.json({ quotation: issued });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const invoiceItemInput = z.object({
+  description: z.string().trim().min(1).max(240),
+  quantity: z.coerce.number().positive().max(100000),
+  unit: z.string().trim().min(1).max(30).default("unit"),
+  unitPrice: z.coerce.number().nonnegative().max(100000000),
+}).strict();
+const invoiceInput = z.object({
+  customerId: z.string().uuid(),
+  quotationId: z.string().uuid().optional(),
+  jobId: z.string().uuid().optional(),
+  issueDate: z.coerce.date().optional(),
+  dueDate: z.coerce.date().optional(),
+  discount: z.coerce.number().nonnegative().default(0),
+  tax: z.coerce.number().nonnegative().default(0),
+  paymentTerms: z.string().trim().max(1000).optional(),
+  notes: z.string().trim().max(3000).optional(),
+  items: z.array(invoiceItemInput).min(1).max(100),
+}).strict().refine(data => !data.issueDate || !data.dueDate || data.dueDate >= data.issueDate, { path: ["dueDate"], message: "Due date cannot be before the issue date" });
+const calculateInvoice = (items: Array<z.infer<typeof invoiceItemInput>>, discount: number, tax: number) => {
+  const lineItems = items.map(item => ({ ...item, lineTotal: centsMoney(moneyCents(item.quantity * item.unitPrice)) }));
+  const subtotalCents = lineItems.reduce((sum, item) => sum + moneyCents(Number(item.lineTotal)), 0);
+  const discountCents = moneyCents(discount);
+  const taxCents = moneyCents(tax);
+  if (discountCents > subtotalCents) throw Object.assign(new Error("Discount cannot exceed the subtotal"), { statusCode: 400 });
+  return { lineItems, subtotal: centsMoney(subtotalCents), discount: centsMoney(discountCents), tax: centsMoney(taxCents), grandTotal: centsMoney(subtotalCents - discountCents + taxCents) };
+};
+const invoiceInclude = { customer: true, business: true, items: { orderBy: { sortOrder: "asc" as const } }, payments: { orderBy: { paymentDate: "desc" as const } }, quotation: { select: { id: true, quotationNumber: true, title: true } }, job: { select: { id: true, jobNumber: true, title: true } } };
+const invoiceNumberFor = async (businessId: string) => {
+  const year = new Date().getFullYear();
+  const count = await prisma.invoice.count({ where: { businessId } });
+  return `INV-${year}-${String(count + 1).padStart(5, "0")}`;
+};
+app.get("/api/invoices", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const query = z.object({ search: z.string().trim().max(100).optional(), status: z.enum(["ALL", "DRAFT", "ISSUED", "PARTIALLY_PAID", "PAID", "OVERDUE", "CANCELLED"]).default("ALL"), source: z.enum(["ALL", "DIRECT", "QUOTATION"]).default("ALL"), page: z.coerce.number().int().min(1).default(1), pageSize: z.coerce.number().int().min(1).max(100).default(50), sort: z.enum(["issueDate", "dueDate", "grandTotal", "createdAt"]).default("createdAt"), direction: z.enum(["asc", "desc"]).default("desc") }).parse(req.query);
+    const isOverdueFilter = query.status === "OVERDUE";
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const where = { businessId: membership.businessId, ...(query.status !== "ALL" && !isOverdueFilter ? { status: query.status as InvoiceStatus } : isOverdueFilter ? { status: { in: [InvoiceStatus.ISSUED, InvoiceStatus.PARTIALLY_PAID, InvoiceStatus.OVERDUE] }, dueDate: { lt: today } } : {}), ...(query.source === "DIRECT" ? { quotationId: null } : query.source === "QUOTATION" ? { quotationId: { not: null } } : {}), ...(query.search ? { OR: [{ invoiceNumber: { contains: query.search, mode: "insensitive" as const } }, { customer: { name: { contains: query.search, mode: "insensitive" as const } } }] } : {}) };
+    let invoices = await prisma.invoice.findMany({ where, include: invoiceInclude, orderBy: { [query.sort]: query.direction } });
+    if (isOverdueFilter) invoices = invoices.filter(item => moneyCents(Number(item.grandTotal)) > moneyCents(Number(item.amountPaid)));
+    const total = invoices.length;
+    invoices = invoices.slice((query.page - 1) * query.pageSize, query.page * query.pageSize);
+    res.json({ invoices, page: query.page, pageSize: query.pageSize, total });
+  } catch (error) { next(error); }
+});
+app.get("/api/invoices/stats", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const invoices = await prisma.invoice.findMany({ where: { businessId: membership.businessId } });
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const valid = invoices.filter(item => item.status !== "CANCELLED");
+    const open = valid.filter(item => item.status !== "DRAFT" && Number(item.grandTotal) > Number(item.amountPaid));
+    const overdue = open.filter(item => item.dueDate && item.dueDate < today);
+    res.json({ total: invoices.length, awaitingPayment: open.reduce((sum, item) => sum + Math.max(0, moneyCents(Number(item.grandTotal) - Number(item.amountPaid))), 0) / 100, paid: valid.filter(item => Number(item.grandTotal) <= Number(item.amountPaid) && Number(item.grandTotal) > 0).length, overdue: overdue.length, overdueAmount: overdue.reduce((sum, item) => sum + Math.max(0, moneyCents(Number(item.grandTotal) - Number(item.amountPaid))), 0) / 100 });
+  } catch (error) { next(error); }
+});
+app.post("/api/invoices", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = invoiceInput.parse(req.body);
+    const [customer, business] = await Promise.all([prisma.customerRecord.findFirst({ where: { id: input.customerId, businessId: membership.businessId } }), prisma.business.findUnique({ where: { id: membership.businessId } })]);
+    if (!customer || !business) return res.status(404).json({ error: "Customer not found" });
+    const quote = input.quotationId ? await prisma.quotation.findFirst({ where: { id: input.quotationId, businessId: membership.businessId }, include: { items: true, jobs: true } }) : null;
+    if (input.quotationId) {
+      if (!quote) return res.status(404).json({ error: "Quotation not found" });
+      if (quote.status !== "ACCEPTED") return res.status(409).json({ error: "Only accepted quotations can be invoiced" });
+      if (quote.customerId !== customer.id) return res.status(400).json({ error: "Invoice customer must match the quotation" });
+      if (await prisma.invoice.findFirst({ where: { quotationId: quote.id } })) return res.status(409).json({ error: "This quotation already has an invoice" });
+    }
+    let jobId: string | undefined;
+    if (input.jobId) {
+      const job = await prisma.job.findFirst({ where: { id: input.jobId, businessId: membership.businessId, customerId: customer.id } });
+      if (!job) return res.status(404).json({ error: "Job not found" });
+      jobId = job.id;
+    } else if (quote?.jobs[0]) jobId = quote.jobs[0].id;
+    const items = quote ? quote.items.map(item => ({ description: item.description, quantity: Number(item.quantity), unit: item.unit, unitPrice: Number(item.unitPrice) })) : input.items;
+    const totals = calculateInvoice(items, quote ? Number(quote.discount) : input.discount, quote ? Number(quote.tax) : input.tax);
+    const invoiceNumber = await invoiceNumberFor(membership.businessId);
+    const invoice = await prisma.invoice.create({ data: { businessId: membership.businessId, customerId: customer.id, jobId, quotationId: quote?.id, invoiceNumber, issueDate: input.issueDate, dueDate: input.dueDate, currency: business.currency, subtotal: totals.subtotal, discount: totals.discount, tax: totals.tax, grandTotal: totals.grandTotal, paymentTerms: input.paymentTerms ?? quote?.paymentTerms, notes: input.notes ?? quote?.terms ?? quote?.description, items: { create: totals.lineItems.map((item, index) => ({ ...item, sortOrder: index })) } }, include: invoiceInclude });
+    res.status(201).json({ invoice });
+  } catch (error) {
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "P2002") return res.status(409).json({ error: "This quotation already has an invoice" });
+    next(error);
+  }
+});
+app.get("/api/invoices/:id", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: invoiceInclude });
+    if (!invoice) return res.status(404).json({ error: "Invoice not found" });
+    res.json({ invoice });
+  } catch (error) { next(error); }
+});
+app.patch("/api/invoices/:id", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const current = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } });
+    if (!current) return res.status(404).json({ error: "Invoice not found" });
+    if (current.status !== "DRAFT") return res.status(409).json({ error: "Only draft invoices can be edited" });
+    const input = invoiceInput.parse(req.body);
+    const customer = await prisma.customerRecord.findFirst({ where: { id: input.customerId, businessId: membership.businessId } });
+    if (!customer) return res.status(404).json({ error: "Customer not found" });
+    const totals = calculateInvoice(input.items, input.discount, input.tax);
+    const invoice = await prisma.$transaction(async tx => {
+      await tx.invoiceItem.deleteMany({ where: { invoiceId: current.id } });
+      return tx.invoice.update({ where: { id: current.id }, data: { customerId: customer.id, issueDate: input.issueDate, dueDate: input.dueDate, subtotal: totals.subtotal, discount: totals.discount, tax: totals.tax, grandTotal: totals.grandTotal, paymentTerms: input.paymentTerms, notes: input.notes, items: { create: totals.lineItems.map((item, index) => ({ ...item, sortOrder: index })) } }, include: invoiceInclude });
+    });
+    res.json({ invoice });
+  } catch (error) { next(error); }
+});
+app.post("/api/invoices/:id/issue", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const current = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } });
+    if (!current) return res.status(404).json({ error: "Invoice not found" });
+    if (current.status !== "DRAFT") return res.status(409).json({ error: "Only draft invoices can be issued" });
+    const [business, customer] = await Promise.all([prisma.business.findUniqueOrThrow({ where: { id: membership.businessId } }), prisma.customerRecord.findUniqueOrThrow({ where: { id: current.customerId } })]);
+    const issued = await prisma.invoice.update({ where: { id: current.id }, data: { status: "ISSUED", issueDate: current.issueDate ?? new Date(), issuedSnapshot: { business: { name: business.name, phone: business.phone, email: business.email, address: business.address, paymentInstructions: business.paymentInstructions }, customer: { name: customer.name, phone: customer.phone, email: customer.email, billingAddress: customer.billingAddress }, totals: { subtotal: current.subtotal.toString(), discount: current.discount.toString(), tax: current.tax.toString(), grandTotal: current.grandTotal.toString() } } }, include: invoiceInclude });
+    res.json({ invoice: issued });
+  } catch (error) { next(error); }
+});
+app.post("/api/invoices/:id/cancel", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const current = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId }, include: { payments: true } });
+    if (!current) return res.status(404).json({ error: "Invoice not found" });
+    if (current.status === "PAID" || current.payments.length) return res.status(409).json({ error: "Invoices with recorded payments cannot be cancelled" });
+    if (current.status === "CANCELLED") return res.status(409).json({ error: "Invoice is already cancelled" });
+    const invoice = await prisma.invoice.update({ where: { id: current.id }, data: { status: "CANCELLED" }, include: invoiceInclude });
+    res.json({ invoice });
+  } catch (error) { next(error); }
+});
+app.post("/api/invoices/:id/payments", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = z.object({ amount: z.coerce.number().positive().max(100000000), method: z.enum(["CASH", "BANK_TRANSFER", "OTHER"]), paymentDate: z.coerce.date().optional(), reference: z.string().trim().max(120).optional(), notes: z.string().trim().max(1000).optional() }).strict().parse(req.body);
+    const amountCents = moneyCents(input.amount);
+    const result = await prisma.$transaction(async tx => {
+      const invoice = await tx.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } });
+      if (!invoice) throw Object.assign(new Error("Invoice not found"), { statusCode: 404 });
+      if (["DRAFT", "CANCELLED"].includes(invoice.status)) throw Object.assign(new Error("Payments can only be recorded against issued invoices"), { statusCode: 409 });
+      const existingPaid = await tx.payment.aggregate({ where: { invoiceId: invoice.id }, _sum: { amount: true } });
+      const paidCents = moneyCents(Number(existingPaid._sum.amount ?? 0));
+      const totalCents = moneyCents(Number(invoice.grandTotal));
+      if (amountCents <= 0 || paidCents + amountCents > totalCents) throw Object.assign(new Error("Payment cannot exceed the outstanding balance"), { statusCode: 400 });
+      const payment = await tx.payment.create({ data: { businessId: membership.businessId, invoiceId: invoice.id, amount: centsMoney(amountCents), paymentDate: input.paymentDate ?? new Date(), method: input.method, reference: input.reference, notes: input.notes, recordedById: req.user!.id } });
+      const newPaid = paidCents + amountCents;
+      const status = newPaid >= totalCents ? "PAID" : "PARTIALLY_PAID";
+      await tx.invoice.update({ where: { id: invoice.id }, data: { amountPaid: centsMoney(newPaid), status } });
+      return payment;
+    }, { isolationLevel: "Serializable" });
+    res.status(201).json({ payment: result });
+  } catch (error) { next(error); }
+});
+app.get("/api/invoices/:id/pdf", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId, status: { not: "DRAFT" } }, include: invoiceInclude });
+    if (!invoice) return res.status(404).json({ error: "Issued invoice not found" });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${invoice.invoiceNumber}.pdf"`);
+    const doc = new PDFDocument({ size: "A4", margin: 48, bufferPages: true });
+    doc.pipe(res);
+    const color = invoice.currency === "KES" ? "KES" : invoice.currency;
+    const fmt = (amount: unknown) => `${color} ${Number(amount).toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const snapshot = z.object({ business: z.object({ name: z.string(), phone: z.string(), email: z.string().nullable().optional(), address: z.string().nullable().optional(), paymentInstructions: z.string().nullable().optional() }), customer: z.object({ name: z.string(), phone: z.string(), email: z.string().nullable().optional(), billingAddress: z.string().nullable().optional() }) }).passthrough().safeParse(invoice.issuedSnapshot);
+    const business = snapshot.success ? snapshot.data.business : invoice.business;
+    const customer = snapshot.success ? snapshot.data.customer : invoice.customer;
+    doc.fontSize(20).fillColor("#163d52").text(business.name, { continued: true }).fontSize(11).text("INVOICE", { align: "right" });
+    doc.moveDown(0.3).fontSize(9).fillColor("#52616b").text([business.phone, business.email, business.address].filter(Boolean).join(" · "));
+    doc.moveDown(1).fontSize(17).fillColor("#163d52").text(invoice.invoiceNumber);
+    doc.fontSize(10).fillColor("#293943").text(`Issued: ${invoice.issueDate?.toLocaleDateString() ?? "—"}     Due: ${invoice.dueDate?.toLocaleDateString() ?? "—"}`);
+    doc.moveDown().fontSize(9).text("BILL TO", { continued: false }).fontSize(12).text(customer.name).fontSize(10).text([customer.phone, customer.email, customer.billingAddress].filter(Boolean).join(" · "));
+    if (invoice.quotation) doc.moveDown(0.5).text(`Source quotation: ${invoice.quotation.quotationNumber}`);
+    doc.moveDown(1.4);
+    const columns = [48, 315, 375, 435, 510];
+    const heading = () => { const y = doc.y; doc.fontSize(9).fillColor("#52616b").text("DESCRIPTION", columns[0], y, { width: 250 }).text("QTY", columns[1], y, { width: 45, align: "right" }).text("UNIT", columns[2], y, { width: 50, align: "right" }).text("PRICE", columns[3], y, { width: 68, align: "right" }).text("TOTAL", columns[4], y, { width: 48, align: "right" }); doc.moveDown(0.7); doc.moveTo(48, doc.y).lineTo(547, doc.y).strokeColor("#d9e1e5").stroke(); doc.moveDown(0.5); };
+    heading();
+    for (const item of invoice.items) {
+      if (doc.y > 710) { doc.addPage(); heading(); }
+      const y = doc.y; doc.fontSize(9).fillColor("#293943").text(item.description, columns[0], y, { width: 250 }).text(String(item.quantity), columns[1], y, { width: 45, align: "right" }).text(item.unit, columns[2], y, { width: 50, align: "right" }).text(fmt(item.unitPrice), columns[3], y, { width: 68, align: "right" }).text(fmt(item.lineTotal), columns[4], y, { width: 48, align: "right" }); doc.moveDown(Math.max(0.65, Math.ceil(doc.heightOfString(item.description, { width: 250 }) / 12) * 0.7));
+    }
+    if (doc.y > 650) doc.addPage();
+    doc.moveDown().fontSize(10).fillColor("#293943");
+    for (const [label, amount] of [["Subtotal", invoice.subtotal], ["Discount", invoice.discount], ["Tax", invoice.tax], ["Total", invoice.grandTotal], ["Paid", invoice.amountPaid], ["Balance due", Number(invoice.grandTotal) - Number(invoice.amountPaid)]] as const) doc.text(label, 350, doc.y, { continued: true }).text(fmt(amount), { align: "right" });
+    if (business.paymentInstructions || invoice.paymentTerms || invoice.notes) { doc.moveDown().fontSize(9).fillColor("#52616b"); if (business.paymentInstructions) doc.text(`Payment instructions: ${business.paymentInstructions}`); if (invoice.paymentTerms) doc.text(`Payment terms: ${invoice.paymentTerms}`); if (invoice.notes) doc.text(`Notes: ${invoice.notes}`); }
+    doc.end();
+  } catch (error) { next(error); }
+});
+app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  const statusCode =
+    typeof error === "object" &&
+    error !== null &&
+    "statusCode" in error &&
+    typeof error.statusCode === "number"
+      ? error.statusCode
+      : 500;
+  if (statusCode !== 500)
+    return res
+      .status(statusCode)
+      .json({ error: error instanceof Error ? error.message : "Request failed" });
+  if (error instanceof z.ZodError)
+    return res.status(400).json({
+      error: "Please correct the highlighted fields",
+      fields: error.flatten().fieldErrors,
+    });
+  console.error(
+    "[api] request failed:",
+    error instanceof Error ? error.message : "Unknown error",
+  );
+  res.status(500).json({ error: "Something went wrong. Please try again." });
+});
 
 if (require.main === module) {
-  const server = app.listen(port, () => console.log(`FundiQuote API listening on ${port}`))
+  const server = app.listen(port, () =>
+    console.log(`FundiQuote API listening on ${port}`),
+  );
   const shutdown = async () => {
-    server.close()
-    await prisma.$disconnect()
-    await pool.end()
-    process.exit(0)
-  }
-  process.once('SIGINT', shutdown)
-  process.once('SIGTERM', shutdown)
+    server.close();
+    await prisma.$disconnect();
+    await pool.end();
+    process.exit(0);
+  };
+  process.once("SIGINT", shutdown);
+  process.once("SIGTERM", shutdown);
 }
-export const closeDatabase = async () => { await prisma.$disconnect(); await pool.end() }
-export { app, registrationSchema, prisma }
+export const closeDatabase = async () => {
+  await prisma.$disconnect();
+  await pool.end();
+};
+export { app, registrationSchema };

@@ -6,8 +6,8 @@ const numeric = (value: number | string | null | undefined) => {
 export const formatKES = (value: number | string | null | undefined) =>
   `KES ${new Intl.NumberFormat('en-KE', { maximumFractionDigits: 0 }).format(numeric(value))}`
 
-export const formatKESPrecise = (value: number | string | null | undefined) =>
-  `KES ${new Intl.NumberFormat('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numeric(value))}`
+export const formatKESPrecise = (value: number | string | null | undefined, currency = 'KES') =>
+  `${currency} ${new Intl.NumberFormat('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numeric(value))}`
 
 export const formatNumber = (value: number | string | null | undefined) =>
   new Intl.NumberFormat('en-KE', { maximumFractionDigits: 2 }).format(numeric(value))

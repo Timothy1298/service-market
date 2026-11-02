@@ -94,10 +94,10 @@ export default function DashboardPage({ user }: Props) {
     </header>
     {error && <div className="dashboard-v2__error" role="alert">{error}<button type="button" onClick={() => void reload()}>Try again</button></div>}
     <section className="dashboard-v2__stats" aria-label="Business summary">
-      <StatCard label="Invoiced" value={loading ? '—' : formatKES(data?.report.invoicedAmount)} footnote="Issued this period" href="/app/invoices" Icon={Receipt} loading={loading} />
-      <StatCard label="Payments received" value={loading ? '—' : formatKES(data?.report.paymentsReceived)} footnote={`${data?.payments.length ?? 0} payments recorded`} href="/app/payments" Icon={Wallet} loading={loading} />
-      <StatCard label="Outstanding" value={loading ? '—' : formatKES(outstandingTotal)} footnote={`${outstandingInvoices.length} unpaid · ${overdueInvoices.length} overdue`} href="/app/invoices?status=OUTSTANDING" Icon={Clock3} tone={outstandingTotal > 0 ? 'warning' : 'green'} loading={loading} />
-      <StatCard label="Active jobs" value={loading ? '—' : String(currentJobs.length)} footnote={`${startingJobs.length} starting this week`} href="/app/jobs" Icon={Wrench} loading={loading} />
+      <StatCard label="Invoiced" value={formatKES(data?.report.invoicedAmount)} footnote="Issued this period" href="/app/invoices" Icon={Receipt} loading={loading} />
+      <StatCard label="Payments received" value={formatKES(data?.report.paymentsReceived)} footnote={`${data?.payments.length ?? 0} payments recorded`} href="/app/payments" Icon={Wallet} loading={loading} />
+      <StatCard label="Outstanding" value={formatKES(outstandingTotal)} footnote={`${outstandingInvoices.length} unpaid · ${overdueInvoices.length} overdue`} href="/app/invoices?status=OUTSTANDING" Icon={Clock3} tone={outstandingTotal > 0 ? 'warning' : 'green'} loading={loading} />
+      <StatCard label="Active jobs" value={String(currentJobs.length)} footnote={`${startingJobs.length} starting this week`} href="/app/jobs" Icon={Wrench} loading={loading} />
     </section>
     <section className="dashboard-v2__grid dashboard-v2__grid--main">
       <article className="dashboard-v2__card dashboard-v2__cashflow">
@@ -110,8 +110,8 @@ export default function DashboardPage({ user }: Props) {
             <Tooltip formatter={value => formatKES(Number(value))} />
             <Legend />
             <Bar dataKey="invoiced" name="Invoiced" fill="var(--green-600)" radius={[5, 5, 0, 0]} />
-            <Bar dataKey="received" name="Received" fill="#67B59B" radius={[5, 5, 0, 0]} />
-            <Line dataKey="expenses" name="Expenses" stroke="#E5B75E" strokeWidth={2} dot={{ r: 4 }} />
+            <Bar dataKey="received" name="Received" fill="var(--green-500)" radius={[5, 5, 0, 0]} />
+            <Line dataKey="expenses" name="Expenses" stroke="var(--warning-fg)" strokeWidth={2} dot={{ r: 4 }} />
           </ComposedChart></ResponsiveContainer>
         </div> : <div className="dashboard-v2__empty-chart"><BarChart3 size={28} /><b>No activity in this period</b><span>Recorded income and expenses will appear here.</span></div>}
       </article>
