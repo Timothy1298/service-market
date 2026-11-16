@@ -17,3 +17,11 @@ test('registration schema rejects a password without a letter', () => {
 test('registration schema accepts formatted Kenyan phone numbers', () => {
   assert.equal(registrationSchema.parse(provider).phone, '0712345678')
 })
+
+test('registration schema rejects a provider without business details', () => {
+  assert.throws(() => registrationSchema.parse({
+    ...provider,
+    businessName: '',
+    tradeCategory: '',
+  }))
+})

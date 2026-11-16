@@ -997,6 +997,47 @@ app.post(
     }
   },
 );
+// ── RESTORED: customers stats (must stay above /api/customers/:id) ──
+app.get("/api/customers/stats", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await providerMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+    const [total, newThisMonth, invoices] = await prisma.$transaction([
+      prisma.customerRecord.count({ where: { businessId: membership.businessId } }),
+      prisma.customerRecord.count({
+        where: { businessId: membership.businessId, createdAt: { gte: monthStart } },
+      }),
+      prisma.invoice.findMany({
+        where: {
+          businessId: membership.businessId,
+          status: { notIn: ["DRAFT", "CANCELLED", "PAID"] },
+        },
+        select: { customerId: true, grandTotal: true, amountPaid: true },
+      }),
+    ]);
+    const balanceByCustomer = new Map<string, number>();
+    for (const invoice of invoices) {
+      const balance = Math.max(0, Number(invoice.grandTotal) - Number(invoice.amountPaid));
+      balanceByCustomer.set(
+        invoice.customerId,
+        (balanceByCustomer.get(invoice.customerId) ?? 0) + balance,
+      );
+    }
+    const balances = [...balanceByCustomer.values()].filter((balance) => balance > 0);
+    res.json({
+      total,
+      newThisMonth,
+      withBalance: balances.length,
+      outstandingTotal: balances.reduce((sum, balance) => sum + balance, 0),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get(
   "/api/customers/:id",
   auth,
@@ -1045,8 +1086,91 @@ app.patch(
     }
   },
 );
+// ── RESTORED: subscription paywall (402 for unpaid quotation/invoice features) ──
+const paidFeaturePath = (path: string) =>
+  path === "/api/quotations" ||
+  (path.startsWith("/api/quotations/") && !path.startsWith("/api/quotations/share/")) ||
+  path === "/api/invoices" ||
+  path.startsWith("/api/invoices/");
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== "production" || !paidFeaturePath(req.path)) return next();
+  auth(req as AuthedRequest, res, async () => {
+    const authed = req as AuthedRequest;
+    const membership = await providerMembership(authed.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    if (!(await activeSubscription(membership.businessId)))
+      return res
+        .status(402)
+        .json({ error: "An active subscription is required for this paid feature" });
+    next();
+  });
+});
+const monthlyPrice = () => Number(process.env.SUBSCRIPTION_MONTHLY_PRICE ?? 299);
+const subscriptionForBusiness = async (businessId: string) => {
+  const subscription = await prisma.subscription.findFirst({
+    where: { businessId, status: { in: ["ACTIVE", "PENDING"] } },
+    orderBy: { createdAt: "desc" },
+  });
+  if (
+    subscription?.status === "ACTIVE" &&
+    subscription.expiresAt &&
+    subscription.expiresAt <= new Date()
+  )
+    return prisma.subscription.update({
+      where: { id: subscription.id },
+      data: { status: "EXPIRED" },
+    });
+  return subscription;
+};
+const activeSubscription = async (businessId: string) => {
+  const subscription = await subscriptionForBusiness(businessId);
+  return subscription?.status === "ACTIVE" &&
+    !!subscription.expiresAt &&
+    subscription.expiresAt > new Date()
+    ? subscription
+    : null;
+};
+
 const moneyCents = (value: number) => Math.round(value * 100);
 const centsMoney = (value: number) => (value / 100).toFixed(2);
+const paymentReceiptNumber = (paymentId: string) =>
+  `RCPT-${paymentId.slice(0, 8).toUpperCase()}`;
+const paymentMethodEnum = z.enum(["CASH", "BANK_TRANSFER", "MPESA", "OTHER"]);
+const paymentSortEnum = z.enum(["newest", "oldest", "amount"]);
+const toNairobiDateParts = (value: Date) => {
+  const formatted = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Nairobi",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(value);
+  const parts = Object.fromEntries(
+    formatted
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    hour: Number(parts.hour),
+    minute: Number(parts.minute),
+    second: Number(parts.second),
+  };
+};
+export const getNairobiDayMonthBounds = (value: Date) => {
+  const parts = toNairobiDateParts(value);
+  const pad = (digit: number) => String(digit).padStart(2, "0");
+  const monthStart = new Date(`${parts.year}-${pad(parts.month)}-01T00:00:00+03:00`);
+  const monthEnd = new Date(`${parts.year}-${pad(parts.month)}-${new Date(parts.year, parts.month, 0).getDate()}T23:59:59.999+03:00`);
+  const dayStart = new Date(`${parts.year}-${pad(parts.month)}-${pad(parts.day)}T00:00:00+03:00`);
+  const dayEnd = new Date(`${parts.year}-${pad(parts.month)}-${pad(parts.day)}T23:59:59.999+03:00`);
+  return { monthStart, monthEnd, dayStart, dayEnd };
+};
 const quotationItemInput = z
   .object({
     description: z.string().trim().min(1).max(240),
@@ -1466,25 +1590,31 @@ app.post("/api/invoices/:id/cancel", auth, role("PROVIDER"), async (req: AuthedR
 });
 app.post("/api/invoices/:id/payments", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
   try {
-    const membership = await providerMembership(req.user!.id);
+    const membership = await phase3Membership(req.user!.id);
     if (!membership) return res.status(403).json({ error: "Business membership required" });
-    const input = z.object({ amount: z.coerce.number().positive().max(100000000), method: z.enum(["CASH", "BANK_TRANSFER", "OTHER"]), paymentDate: z.coerce.date().optional(), reference: z.string().trim().max(120).optional(), notes: z.string().trim().max(1000).optional() }).strict().parse(req.body);
+    const input = z.object({ amount: z.coerce.number().positive().max(100000000), method: paymentMethodEnum, paymentDate: z.coerce.date().optional(), reference: z.string().trim().max(120).optional(), notes: z.string().trim().max(1000).optional() }).strict().parse(req.body);
     const amountCents = moneyCents(input.amount);
-    const result = await prisma.$transaction(async tx => {
-      const invoice = await tx.invoice.findFirst({ where: { id: String(req.params.id), businessId: membership.businessId } });
+    const invoiceId = String(req.params.id);
+    const result = await prisma.$transaction(async (tx) => {
+      const invoiceRows = await tx.$queryRaw<Array<{ id: string; businessId: string; grandTotal: string; amountPaid: string; status: string }>>`
+        SELECT id, "businessId", "grandTotal", "amountPaid", status FROM "Invoice"
+        WHERE id = ${invoiceId} AND "businessId" = ${membership.businessId}
+        FOR UPDATE
+      `;
+      const invoice = invoiceRows[0];
       if (!invoice) throw Object.assign(new Error("Invoice not found"), { statusCode: 404 });
       if (["DRAFT", "CANCELLED"].includes(invoice.status)) throw Object.assign(new Error("Payments can only be recorded against issued invoices"), { statusCode: 409 });
-      const existingPaid = await tx.payment.aggregate({ where: { invoiceId: invoice.id }, _sum: { amount: true } });
-      const paidCents = moneyCents(Number(existingPaid._sum.amount ?? 0));
+      const existingPaid = Number(invoice.amountPaid ?? 0);
       const totalCents = moneyCents(Number(invoice.grandTotal));
+      const paidCents = moneyCents(existingPaid);
       if (amountCents <= 0 || paidCents + amountCents > totalCents) throw Object.assign(new Error("Payment cannot exceed the outstanding balance"), { statusCode: 400 });
       const payment = await tx.payment.create({ data: { businessId: membership.businessId, invoiceId: invoice.id, amount: centsMoney(amountCents), paymentDate: input.paymentDate ?? new Date(), method: input.method, reference: input.reference, notes: input.notes, recordedById: req.user!.id } });
       const newPaid = paidCents + amountCents;
       const status = newPaid >= totalCents ? "PAID" : "PARTIALLY_PAID";
-      await tx.invoice.update({ where: { id: invoice.id }, data: { amountPaid: centsMoney(newPaid), status } });
-      return payment;
+      const updatedInvoice = await tx.invoice.update({ where: { id: invoice.id }, data: { amountPaid: centsMoney(newPaid), status } });
+      return { payment, invoice: updatedInvoice };
     }, { isolationLevel: "Serializable" });
-    res.status(201).json({ payment: result });
+    res.status(201).json(result);
   } catch (error) { next(error); }
 });
 app.get("/api/invoices/:id/pdf", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
@@ -1523,6 +1653,1389 @@ app.get("/api/invoices/:id/pdf", auth, role("PROVIDER"), async (req: AuthedReque
     doc.end();
   } catch (error) { next(error); }
 });
+// ── RESTORED: quotation sharing/PDF, billing, jobs, inventory, payments, expenses, reports ──
+const pdfBuffer = (draw: (document: PDFKit.PDFDocument) => void) =>
+  new Promise<Buffer>((resolve) => {
+    const document = new PDFDocument({ margin: 48 });
+    const chunks: Buffer[] = [];
+    document.on("data", (chunk: Buffer) => chunks.push(chunk));
+    document.on("end", () => resolve(Buffer.concat(chunks)));
+    draw(document);
+    document.end();
+  });
+const shareTokenHash = (token: string) => crypto.createHash("sha256").update(token).digest("hex");
+app.post(
+  "/api/quotations/:id/share",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const quotation = await prisma.quotation.findFirst({
+        where: {
+          id: String(req.params.id),
+          businessId: membership.businessId,
+          status: { in: ["ISSUED", "ACCEPTED", "REJECTED"] },
+        },
+      });
+      if (!quotation) return res.status(404).json({ error: "Issued quotation not found" });
+      const token = crypto.randomBytes(32).toString("hex");
+      await prisma.quotationShare.create({
+        data: {
+          quotationId: quotation.id,
+          tokenHash: shareTokenHash(token),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+      res
+        .status(201)
+        .json({
+          shareUrl: `${process.env.PUBLIC_APP_URL ?? "http://localhost:5173"}/#/quotation/share/${token}`,
+          message:
+            "Share link created. Download the PDF separately and attach it manually in WhatsApp.",
+        });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const sharedQuotation = async (token: string) =>
+  prisma.quotationShare.findFirst({
+    where: { tokenHash: shareTokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } },
+    include: {
+      quotation: {
+        include: { items: { orderBy: { sortOrder: "asc" } }, business: true, customer: true },
+      },
+    },
+  });
+app.get(
+  "/api/quotations/share/:token",
+  rateLimit("share", 30, 15 * 60 * 1000),
+  async (req, res, next) => {
+    try {
+      const share = await sharedQuotation(String(req.params.token));
+      if (!share) return res.status(404).json({ error: "Share link is invalid or expired" });
+      const { quotation } = share;
+      res.json({
+        quotation: {
+          id: quotation.id,
+          quotationNumber: quotation.quotationNumber,
+          revision: quotation.revision,
+          title: quotation.title,
+          description: quotation.description,
+          location: quotation.location,
+          currency: quotation.currency,
+          issueDate: quotation.issueDate,
+          expiryDate: quotation.expiryDate,
+          subtotal: quotation.subtotal,
+          discount: quotation.discount,
+          tax: quotation.tax,
+          grandTotal: quotation.grandTotal,
+          terms: quotation.terms,
+          paymentTerms: quotation.paymentTerms,
+          status: quotation.status,
+          items: quotation.items,
+          business: {
+            name: quotation.business.name,
+            phone: quotation.business.phone,
+            email: quotation.business.email,
+            address: quotation.business.address,
+          },
+          customer: { name: quotation.customer.name },
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/quotations/share/:token/respond",
+  rateLimit("share-response", 10, 15 * 60 * 1000),
+  async (req, res, next) => {
+    try {
+      const input = z.object({ decision: z.enum(["ACCEPTED", "REJECTED"]) }).parse(req.body);
+      const share = await sharedQuotation(String(req.params.token));
+      if (!share) return res.status(404).json({ error: "Share link is invalid or expired" });
+      const result = await prisma.quotation.updateMany({
+        where: { id: share.quotation.id, status: "ISSUED" },
+        data: { status: input.decision },
+      });
+      if (!result.count) {
+        const current = await prisma.quotation.findUnique({
+          where: { id: share.quotation.id },
+          select: { status: true },
+        });
+        return res.json({ status: current?.status ?? "UNKNOWN", alreadyResponded: true });
+      }
+      res.json({ status: input.decision, alreadyResponded: false });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/quotations/:id/pdf",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const quotation = await prisma.quotation.findFirst({
+        where: {
+          id: String(req.params.id),
+          businessId: membership.businessId,
+          status: { not: "DRAFT" },
+        },
+        include: { items: { orderBy: { sortOrder: "asc" } }, business: true, customer: true },
+      });
+      if (!quotation) return res.status(404).json({ error: "Issued quotation not found" });
+      const document = new PDFDocument({ margin: 48 });
+      const chunks: Buffer[] = [];
+      document.on("data", (chunk: Buffer) => chunks.push(chunk));
+      document.on("end", () => {
+        res
+          .type("application/pdf")
+          .setHeader(
+            "Content-Disposition",
+            `attachment; filename="${quotation.quotationNumber}.pdf"`,
+          )
+          .send(Buffer.concat(chunks));
+      });
+      document.fontSize(22).fillColor("#13212b").text(quotation.business.name);
+      document
+        .fontSize(10)
+        .fillColor("#596a65")
+        .text(
+          `${quotation.business.phone}${quotation.business.email ? ` · ${quotation.business.email}` : ""}`,
+        );
+      document.moveDown();
+      document.fontSize(18).fillColor("#13212b").text(`Quotation ${quotation.quotationNumber}`);
+      document.fontSize(11).text(`Customer: ${quotation.customer.name}`);
+      document.text(`Title: ${quotation.title}`);
+      if (quotation.location) document.text(`Location: ${quotation.location}`);
+      document.moveDown();
+      quotation.items.forEach((item, index) =>
+        document
+          .fontSize(10)
+          .text(
+            `${index + 1}. ${item.description} — ${item.quantity} ${item.unit} × KES ${item.unitPrice} = KES ${item.lineTotal}`,
+          ),
+      );
+      document.moveDown();
+      document
+        .fontSize(11)
+        .text(`Subtotal: KES ${quotation.subtotal}`)
+        .text(`Discount: KES ${quotation.discount}`)
+        .text(`Tax: KES ${quotation.tax}`)
+        .fontSize(14)
+        .text(`Total: KES ${quotation.grandTotal}`);
+      if (quotation.terms) document.moveDown().fontSize(10).text(`Terms: ${quotation.terms}`);
+      document.end();
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+const normalizeMpesaPhone = (value: string) => {
+  const compact = value.replace(/[\s-]/g, "");
+  if (/^07\d{8}$/.test(compact)) return `254${compact.slice(1)}`;
+  if (/^2547\d{8}$/.test(compact)) return compact;
+  if (/^\+2547\d{8}$/.test(compact)) return compact.slice(1);
+  throw new Error("Use a valid Kenyan M-Pesa number");
+};
+const darajaBase = () =>
+  process.env.MPESA_ENVIRONMENT === "production"
+    ? "https://api.safaricom.co.ke"
+    : "https://sandbox.safaricom.co.ke";
+const billingMembership = async (userId: string) => providerMembership(userId);
+const currentPlan = async () =>
+  prisma.subscriptionPlan.upsert({
+    where: { code: "PRO_MONTHLY" },
+    create: {
+      code: "PRO_MONTHLY",
+      name: "Pro monthly",
+      price: monthlyPrice(),
+      currency: "KES",
+      durationMonths: 1,
+    },
+    update: {},
+  });
+app.get("/api/billing/plans", async (_req, res, next) => {
+  try {
+    const plan = await currentPlan();
+    res.json({ plans: [plan] });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/admin/subscription-plan", auth, role("ADMIN"), async (_req, res, next) => {
+  try {
+    res.json({ plan: await currentPlan() });
+  } catch (error) {
+    next(error);
+  }
+});
+app.patch(
+  "/api/admin/subscription-plan",
+  auth,
+  role("ADMIN"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const input = z
+        .object({ price: z.coerce.number().positive().max(100000), currency: z.literal("KES") })
+        .strict()
+        .parse(req.body);
+      const plan = await currentPlan();
+      const updated = await prisma.$transaction(async (tx) => {
+        const saved = await tx.subscriptionPlan.update({
+          where: { id: plan.id },
+          data: { price: input.price, currency: input.currency },
+        });
+        await tx.subscriptionPlanAudit.create({
+          data: {
+            planId: plan.id,
+            userId: req.user!.id,
+            oldPrice: plan.price,
+            newPrice: input.price,
+            currency: input.currency,
+          },
+        });
+        return saved;
+      });
+      res.json({ plan: updated });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get("/api/billing", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await billingMembership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const subscription = await subscriptionForBusiness(membership.businessId);
+    const transactions = await prisma.paymentTransaction.findMany({
+      where: { businessId: membership.businessId },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      select: {
+        id: true,
+        amount: true,
+        currency: true,
+        provider: true,
+        status: true,
+        phoneNumber: true,
+        mpesaReceipt: true,
+        failureReason: true,
+        requestedAt: true,
+        completedAt: true,
+      },
+    });
+    res.json({
+      subscription: subscription ?? { status: "FREE", price: monthlyPrice(), currency: "KES" },
+      entitlements: {
+        quotations: !!(await activeSubscription(membership.businessId)),
+        invoices: !!(await activeSubscription(membership.businessId)),
+      },
+      transactions,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post(
+  "/api/billing/mpesa/initiate",
+  auth,
+  role("PROVIDER"),
+  rateLimit("mpesa-initiate", 3, 15 * 60 * 1000),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await billingMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = z
+        .object({ phoneNumber: z.string().min(10) })
+        .strict()
+        .parse(req.body);
+      const phoneNumber = normalizeMpesaPhone(input.phoneNumber);
+      const existing = await prisma.paymentTransaction.findFirst({
+        where: {
+          businessId: membership.businessId,
+          status: "PENDING",
+          createdAt: { gt: new Date(Date.now() - 10 * 60 * 1000) },
+        },
+      });
+      if (existing)
+        return res
+          .status(409)
+          .json({ error: "A payment is already pending", transactionId: existing.id });
+      const subscription = await prisma.subscription.create({
+        data: {
+          businessId: membership.businessId,
+          status: "PENDING",
+          price: monthlyPrice(),
+          currency: "KES",
+        },
+      });
+      const transaction = await prisma.paymentTransaction.create({
+        data: {
+          businessId: membership.businessId,
+          subscriptionId: subscription.id,
+          provider: "MPESA",
+          amount: monthlyPrice().toFixed(2),
+          currency: "KES",
+          phoneNumber,
+          idempotencyKey: crypto.randomUUID(),
+        },
+      });
+      const consumerKey = process.env.MPESA_CONSUMER_KEY;
+      const consumerSecret = process.env.MPESA_CONSUMER_SECRET;
+      const shortcode = process.env.MPESA_SHORTCODE;
+      const passkey = process.env.MPESA_PASSKEY;
+      const callbackUrl = process.env.MPESA_CALLBACK_URL;
+      if (!consumerKey || !consumerSecret || !shortcode || !passkey || !callbackUrl) {
+        await prisma.paymentTransaction.update({
+          where: { id: transaction.id },
+          data: { status: "UNKNOWN", failureReason: "M-Pesa is not configured on the server" },
+        });
+        return res.status(503).json({ error: "M-Pesa payments are not configured yet" });
+      }
+      const tokenResponse = await fetch(
+        `${darajaBase()}/oauth/v1/generate?grant_type=client_credentials`,
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64")}`,
+          },
+        },
+      );
+      if (!tokenResponse.ok) throw new Error("M-Pesa authentication failed");
+      const tokenBody = (await tokenResponse.json()) as { access_token?: string };
+      if (!tokenBody.access_token) throw new Error("M-Pesa authentication response was invalid");
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:TZ.]/g, "")
+        .slice(0, 14);
+      const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString("base64");
+      const stkResponse = await fetch(`${darajaBase()}/mpesa/stkpush/v1/processrequest`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokenBody.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          BusinessShortCode: shortcode,
+          Password: password,
+          Timestamp: timestamp,
+          TransactionType: "CustomerPayBillOnline",
+          Amount: monthlyPrice(),
+          PartyA: phoneNumber,
+          PartyB: shortcode,
+          PhoneNumber: phoneNumber,
+          CallBackURL: callbackUrl,
+          AccountReference: `FundiQuote-${transaction.id.slice(0, 8)}`,
+          TransactionDesc: "FundiQuote Pro monthly subscription",
+        }),
+      });
+      const stkBody = (await stkResponse.json()) as {
+        ResponseCode?: string;
+        ResponseDescription?: string;
+        CheckoutRequestID?: string;
+        MerchantRequestID?: string;
+      };
+      if (!stkResponse.ok || stkBody.ResponseCode !== "0" || !stkBody.CheckoutRequestID) {
+        await prisma.paymentTransaction.update({
+          where: { id: transaction.id },
+          data: {
+            status: "FAILED",
+            failureReason: stkBody.ResponseDescription ?? "M-Pesa payment request failed",
+          },
+        });
+        return res.status(502).json({ error: "M-Pesa could not start the payment request" });
+      }
+      await prisma.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: {
+          checkoutRequestId: stkBody.CheckoutRequestID,
+          merchantRequestId: stkBody.MerchantRequestID,
+        },
+      });
+      res
+        .status(202)
+        .json({
+          transactionId: transaction.id,
+          status: "PENDING",
+          message: "Check your phone and enter your M-Pesa PIN to continue.",
+        });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get(
+  "/api/billing/transactions/:id",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await billingMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const transaction = await prisma.paymentTransaction.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+        select: {
+          id: true,
+          status: true,
+          amount: true,
+          currency: true,
+          mpesaReceipt: true,
+          failureReason: true,
+          requestedAt: true,
+          completedAt: true,
+        },
+      });
+      if (!transaction) return res.status(404).json({ error: "Payment transaction not found" });
+      res.json({ transaction });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post("/api/billing/mpesa/callback", async (req, res, next) => {
+  try {
+    const callback = req.body?.Body?.stkCallback;
+    if (!callback?.CheckoutRequestID)
+      return res.status(400).json({ ResultCode: 1, ResultDesc: "Invalid callback" });
+    const transaction = await prisma.paymentTransaction.findFirst({
+      where: { checkoutRequestId: callback.CheckoutRequestID },
+      include: { subscription: true },
+    });
+    if (!transaction) return res.json({ ResultCode: 0, ResultDesc: "Accepted" });
+    if (transaction.status !== "PENDING")
+      return res.json({ ResultCode: 0, ResultDesc: "Already processed" });
+    const items = Array.isArray(callback.CallbackMetadata?.Item)
+      ? callback.CallbackMetadata.Item
+      : [];
+    const value = (name: string) =>
+      items.find((item: { Name?: string }) => item.Name === name)?.Value;
+    const resultCode = Number(callback.ResultCode);
+    const receipt = value("MpesaReceiptNumber") ? String(value("MpesaReceiptNumber")) : undefined;
+    const amount = Number(value("Amount"));
+    await prisma.$transaction(async (tx) => {
+      await tx.paymentEvent.create({
+        data: {
+          transactionId: transaction.id,
+          eventType: resultCode === 0 ? "SUCCESS" : "FAILURE",
+          resultCode,
+          payload: {
+            resultCode,
+            receipt: receipt ?? null,
+            amount: Number.isFinite(amount) ? amount : null,
+          },
+        },
+      });
+      if (resultCode !== 0) {
+        await tx.paymentTransaction.update({
+          where: { id: transaction.id },
+          data: {
+            status: "FAILED",
+            failureReason: String(callback.ResultDesc ?? "Payment failed"),
+            callbackAt: new Date(),
+          },
+        });
+        return;
+      }
+      if (amount !== Number(transaction.amount) || !receipt) {
+        await tx.paymentTransaction.update({
+          where: { id: transaction.id },
+          data: {
+            status: "UNKNOWN",
+            failureReason: "Payment amount or receipt did not match the pending transaction",
+            callbackAt: new Date(),
+          },
+        });
+        return;
+      }
+      const duplicateReceipt = await tx.paymentTransaction.findFirst({
+        where: { mpesaReceipt: receipt, NOT: { id: transaction.id } },
+      });
+      if (duplicateReceipt) {
+        await tx.paymentTransaction.update({
+          where: { id: transaction.id },
+          data: {
+            status: "UNKNOWN",
+            failureReason: "Receipt already belongs to another transaction",
+            callbackAt: new Date(),
+          },
+        });
+        return;
+      }
+      const startsAt = new Date();
+      const expiresAt = new Date(startsAt);
+      expiresAt.setMonth(expiresAt.getMonth() + 1);
+      await tx.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: "COMPLETED",
+          mpesaReceipt: receipt,
+          callbackAt: new Date(),
+          completedAt: new Date(),
+        },
+      });
+      await tx.subscription.update({
+        where: { id: transaction.subscriptionId },
+        data: { status: "ACTIVE", startsAt, expiresAt },
+      });
+    });
+    res.json({ ResultCode: 0, ResultDesc: "Accepted" });
+  } catch (error) {
+    next(error);
+  }
+});
+const phase3Membership = async (userId: string) => providerMembership(userId);
+app.get("/api/jobs/stats", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const [grouped, startingThisWeek, completedThisMonth] = await prisma.$transaction([
+      prisma.job.groupBy({
+        by: ["status"],
+        where: { businessId: membership.businessId },
+        _count: { _all: true },
+      }),
+      prisma.job.count({
+        where: {
+          businessId: membership.businessId,
+          status: "SCHEDULED",
+          scheduledStart: { gte: weekStart, lt: weekEnd },
+        },
+      }),
+      prisma.job.count({
+        where: {
+          businessId: membership.businessId,
+          status: "COMPLETED",
+          completedAt: { gte: monthStart, lt: nextMonth },
+        },
+      }),
+    ]);
+    const byStatus = Object.fromEntries(grouped.map((row) => [row.status, row._count._all]));
+    const total = grouped.reduce((sum, row) => sum + row._count._all, 0);
+    res.json({
+      total,
+      byStatus,
+      active: (byStatus.SCHEDULED ?? 0) + (byStatus.IN_PROGRESS ?? 0) + (byStatus.ON_HOLD ?? 0),
+      startingThisWeek,
+      inProgress: byStatus.IN_PROGRESS ?? 0,
+      completedThisMonth,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+const jobStatusTransitions: Record<string, string[]> = {
+  SCHEDULED: ["IN_PROGRESS", "CANCELLED"],
+  IN_PROGRESS: ["ON_HOLD", "COMPLETED", "CANCELLED"],
+  ON_HOLD: ["IN_PROGRESS", "CANCELLED"],
+  COMPLETED: [],
+  CANCELLED: [],
+};
+const phase3JobInput = z
+  .object({
+    title: z.string().trim().min(2).max(160),
+    description: z.string().trim().max(3000).optional(),
+    location: z.string().trim().max(240).optional(),
+    scheduledStart: z.coerce.date().optional(),
+    expectedCompletion: z.coerce.date().optional(),
+    priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]).default("NORMAL"),
+    internalNotes: z.string().trim().max(3000).optional(),
+  })
+  .strict();
+app.get("/api/jobs", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const query = z
+      .object({
+        status: z
+          .enum(["SCHEDULED", "IN_PROGRESS", "ON_HOLD", "COMPLETED", "CANCELLED"])
+          .optional(),
+        search: z.string().trim().max(80).optional(),
+        page: z.coerce.number().int().min(1).default(1),
+        pageSize: z.coerce.number().int().min(1).max(50).default(20),
+      })
+      .parse(req.query);
+    const where = {
+      businessId: membership.businessId,
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.search
+        ? {
+            OR: [
+              { title: { contains: query.search, mode: "insensitive" as const } },
+              { jobNumber: { contains: query.search, mode: "insensitive" as const } },
+            ],
+          }
+        : {}),
+    };
+    const [jobs, total] = await prisma.$transaction([
+      prisma.job.findMany({
+        where,
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+        orderBy: { createdAt: "desc" },
+        include: {
+          customer: true,
+          quotation: { select: { quotationNumber: true, grandTotal: true } },
+        },
+      }),
+      prisma.job.count({ where }),
+    ]);
+    res.json({ jobs, page: query.page, pageSize: query.pageSize, total });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post(
+  "/api/quotations/:id/convert-to-job",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = phase3JobInput.parse(req.body);
+      const result = await prisma.$transaction(async (tx) => {
+        const quotation = await tx.quotation.findFirst({
+          where: {
+            id: String(req.params.id),
+            businessId: membership.businessId,
+            status: "ACCEPTED",
+          },
+          include: { customer: true },
+        });
+        if (!quotation)
+          throw Object.assign(new Error("Only accepted quotations can become jobs"), {
+            status: 409,
+          });
+        const existing = await tx.job.findUnique({ where: { quotationId: quotation.id } });
+        if (existing) return existing;
+        const count = await tx.job.count({ where: { businessId: membership.businessId } });
+        const job = await tx.job.create({
+          data: {
+            businessId: membership.businessId,
+            customerId: quotation.customerId,
+            quotationId: quotation.id,
+            jobNumber: `JOB-${new Date().getFullYear()}-${String(count + 1).padStart(5, "0")}`,
+            ...input,
+            activities: {
+              create: {
+                userId: req.user!.id,
+                type: "CREATED",
+                message: "Job created from accepted quotation",
+              },
+            },
+          },
+          include: { customer: true, quotation: true },
+        });
+        return job;
+      });
+      res.status(201).json({ job: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get("/api/jobs/:id", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const job = await prisma.job.findFirst({
+      where: { id: String(req.params.id), businessId: membership.businessId },
+      include: {
+        customer: true,
+        quotation: { include: { items: true } },
+        activities: {
+          orderBy: { createdAt: "desc" },
+          include: { user: { select: { fullName: true } } },
+        },
+        materialsUsed: { include: { material: true } },
+        invoices: { include: { payments: true } },
+        expenses: true,
+      },
+    });
+    if (!job) return res.status(404).json({ error: "Job not found" });
+    res.json({ job });
+  } catch (error) {
+    next(error);
+  }
+});
+app.patch("/api/jobs/:id/status", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = z
+      .object({ status: z.enum(["SCHEDULED", "IN_PROGRESS", "ON_HOLD", "COMPLETED", "CANCELLED"]) })
+      .parse(req.body);
+    const job = await prisma.job.findFirst({
+      where: { id: String(req.params.id), businessId: membership.businessId },
+    });
+    if (!job) return res.status(404).json({ error: "Job not found" });
+    if (!jobStatusTransitions[job.status].includes(input.status))
+      return res
+        .status(409)
+        .json({
+          error: `Cannot change a ${job.status.toLowerCase()} job to ${input.status.toLowerCase()}`,
+        });
+    const updated = await prisma.$transaction(async (tx) => {
+      const saved = await tx.job.update({
+        where: { id: job.id },
+        data: {
+          status: input.status,
+          ...(input.status === "IN_PROGRESS" && !job.actualStart
+            ? { actualStart: new Date() }
+            : {}),
+          ...(input.status === "COMPLETED" ? { completedAt: new Date() } : {}),
+        },
+      });
+      await tx.jobActivity.create({
+        data: {
+          jobId: job.id,
+          userId: req.user!.id,
+          type: "STATUS_CHANGED",
+          message: `${job.status} → ${input.status}`,
+        },
+      });
+      return saved;
+    });
+    res.json({ job: updated });
+  } catch (error) {
+    next(error);
+  }
+});
+const materialInput = z
+  .object({
+    sku: z.string().trim().max(40).optional(),
+    name: z.string().trim().min(2).max(160),
+    description: z.string().trim().max(1000).optional(),
+    category: z.string().trim().max(80).optional(),
+    unit: z.string().trim().min(1).max(30),
+    costPerUnit: z.coerce.number().nonnegative(),
+    sellingPrice: z.coerce.number().nonnegative().optional(),
+    reorderLevel: z.coerce.number().nonnegative().default(0),
+    supplier: z.string().trim().max(160).optional(),
+  })
+  .strict();
+app.get("/api/materials", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const materials = await prisma.material.findMany({
+      where: {
+        businessId: membership.businessId,
+        ...(req.query.search
+          ? { name: { contains: String(req.query.search), mode: "insensitive" as const } }
+          : {}),
+      },
+      orderBy: { name: "asc" },
+    });
+    res.json({ materials });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post("/api/materials", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = materialInput.parse(req.body);
+    const material = await prisma.material.create({
+      data: { ...input, businessId: membership.businessId },
+    });
+    res.status(201).json({ material });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/materials/:id", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const material = await prisma.material.findFirst({
+      where: { id: String(req.params.id), businessId: membership.businessId },
+      include: {
+        movements: {
+          orderBy: { createdAt: "desc" },
+          take: 20,
+          include: {
+            job: { select: { id: true, jobNumber: true, title: true } },
+            createdBy: { select: { fullName: true } },
+          },
+        },
+        jobUsages: {
+          orderBy: { createdAt: "desc" },
+          take: 20,
+          include: { job: { select: { id: true, jobNumber: true, title: true, status: true } } },
+        },
+      },
+    });
+    if (!material) return res.status(404).json({ error: "Inventory item not found" });
+    res.json({ material });
+  } catch (error) {
+    next(error);
+  }
+});
+app.patch("/api/materials/:id", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = materialInput.partial().parse(req.body);
+    const result = await prisma.material.updateMany({
+      where: { id: String(req.params.id), businessId: membership.businessId },
+      data: input,
+    });
+    if (!result.count) return res.status(404).json({ error: "Inventory item not found" });
+    const material = await prisma.material.findFirst({
+      where: { id: String(req.params.id), businessId: membership.businessId },
+    });
+    res.json({ material });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post(
+  "/api/materials/:id/restock",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = z
+        .object({
+          quantity: z.coerce.number().positive(),
+          reason: z.string().trim().max(300).optional(),
+          reference: z.string().trim().max(120).optional(),
+          costPerUnit: z.coerce.number().nonnegative().optional(),
+        })
+        .strict()
+        .parse(req.body);
+      const material = await prisma.material.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      if (!material) return res.status(404).json({ error: "Material not found" });
+      const updated = await prisma.$transaction(async (tx) => {
+        const movement = await tx.stockMovement.create({
+          data: {
+            businessId: membership.businessId,
+            materialId: material.id,
+            type: "PURCHASE",
+            quantity: input.quantity,
+            costPerUnit: input.costPerUnit ?? material.costPerUnit,
+            reason: input.reason,
+            reference: input.reference,
+            createdById: req.user!.id,
+          },
+        });
+        return tx.material
+          .update({
+            where: { id: material.id },
+            data: {
+              stockQuantity: { increment: input.quantity },
+              ...(input.costPerUnit !== undefined ? { costPerUnit: input.costPerUnit } : {}),
+            },
+          })
+          .then((value) => ({ material: value, movement }));
+      });
+      res.status(201).json(updated);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get("/api/stock-movements", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const query = z
+      .object({
+        page: z.coerce.number().int().min(1).default(1),
+        pageSize: z.coerce.number().int().min(1).max(100).default(20),
+        materialId: z.string().uuid().optional(),
+      })
+      .parse(req.query);
+    const where = {
+      businessId: membership.businessId,
+      ...(query.materialId ? { materialId: query.materialId } : {}),
+    };
+    const [movements, total] = await prisma.$transaction([
+      prisma.stockMovement.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+        include: {
+          material: { select: { id: true, name: true, unit: true } },
+          job: { select: { id: true, jobNumber: true } },
+          createdBy: { select: { fullName: true } },
+        },
+      }),
+      prisma.stockMovement.count({ where }),
+    ]);
+    res.json({
+      movements,
+      page: query.page,
+      pageSize: query.pageSize,
+      total,
+      pageCount: Math.ceil(total / query.pageSize),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+const stockChangeInput = z
+  .object({
+    quantity: z.coerce.number().positive(),
+    reason: z.string().trim().min(2).max(300),
+    reference: z.string().trim().max(120).optional(),
+  })
+  .strict();
+app.post(
+  "/api/materials/:id/adjustments",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = z
+        .object({
+          delta: z.coerce.number().refine((value) => value !== 0),
+          reason: z.string().trim().min(2).max(300),
+          reference: z.string().trim().max(120).optional(),
+        })
+        .strict()
+        .parse(req.body);
+      const material = await prisma.material.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      if (!material) return res.status(404).json({ error: "Inventory item not found" });
+      const amount = Math.abs(input.delta);
+      const result = await prisma.$transaction(async (tx) => {
+        const changed = await tx.material.updateMany({
+          where: {
+            id: material.id,
+            businessId: membership.businessId,
+            ...(input.delta < 0 ? { stockQuantity: { gte: amount } } : {}),
+          },
+          data: { stockQuantity: input.delta < 0 ? { decrement: amount } : { increment: amount } },
+        });
+        if (!changed.count)
+          throw Object.assign(new Error("Adjustment would make stock negative"), { status: 409 });
+        const movement = await tx.stockMovement.create({
+          data: {
+            businessId: membership.businessId,
+            materialId: material.id,
+            type: "ADJUSTMENT",
+            quantity: amount,
+            costPerUnit: material.costPerUnit,
+            reason: `${input.delta < 0 ? "Stock decrease" : "Stock increase"}: ${input.reason}`,
+            reference: input.reference,
+            createdById: req.user!.id,
+          },
+        });
+        const updated = await tx.material.findUniqueOrThrow({ where: { id: material.id } });
+        return { material: updated, movement };
+      });
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/materials/:id/returns",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = stockChangeInput.parse(req.body);
+      const material = await prisma.material.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+      });
+      if (!material) return res.status(404).json({ error: "Inventory item not found" });
+      const result = await prisma.$transaction(async (tx) => {
+        const movement = await tx.stockMovement.create({
+          data: {
+            businessId: membership.businessId,
+            materialId: material.id,
+            type: "RETURN",
+            quantity: input.quantity,
+            costPerUnit: material.costPerUnit,
+            reason: input.reason,
+            reference: input.reference,
+            createdById: req.user!.id,
+          },
+        });
+        const updated = await tx.material.update({
+          where: { id: material.id },
+          data: { stockQuantity: { increment: input.quantity } },
+        });
+        return { material: updated, movement };
+      });
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.post(
+  "/api/jobs/:id/materials",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const input = z
+        .object({
+          materialId: z.string().uuid(),
+          quantity: z.coerce.number().positive(),
+          reason: z.string().trim().max(300).optional(),
+        })
+        .strict()
+        .parse(req.body);
+      const result = await prisma.$transaction(async (tx) => {
+        const job = await tx.job.findFirst({
+          where: {
+            id: String(req.params.id),
+            businessId: membership.businessId,
+            status: { not: "CANCELLED" },
+          },
+        });
+        const material = await tx.material.findFirst({
+          where: { id: input.materialId, businessId: membership.businessId },
+        });
+        if (!job || !material)
+          throw Object.assign(new Error("Job or material not found"), { status: 404 });
+        if (Number(material.stockQuantity) < input.quantity)
+          throw Object.assign(new Error("Insufficient stock"), { status: 409 });
+        const movement = await tx.stockMovement.create({
+          data: {
+            businessId: membership.businessId,
+            materialId: material.id,
+            jobId: job.id,
+            type: "CONSUMPTION",
+            quantity: input.quantity,
+            costPerUnit: material.costPerUnit,
+            reason: input.reason,
+            createdById: req.user!.id,
+          },
+        });
+        await tx.material.update({
+          where: { id: material.id },
+          data: { stockQuantity: { decrement: input.quantity } },
+        });
+        return tx.jobMaterialUsage.create({
+          data: {
+            jobId: job.id,
+            materialId: material.id,
+            movementId: movement.id,
+            quantity: input.quantity,
+            costPerUnit: material.costPerUnit,
+          },
+          include: { material: true },
+        });
+      });
+      res.status(201).json({ usage: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+app.get("/api/payments/stats", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const now = new Date();
+    const today = getNairobiDayMonthBounds(now);
+    const thisMonth = getNairobiDayMonthBounds(now);
+    const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonth = getNairobiDayMonthBounds(lastMonthDate);
+    const [receivedToday, receivedThisMonth, paymentsThisMonth, receivedLastMonth, byMethodThisMonth, countByMethod] = await prisma.$transaction([
+      prisma.payment.aggregate({
+        where: { businessId: membership.businessId, paymentDate: { gte: today.dayStart, lte: today.dayEnd } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.aggregate({
+        where: { businessId: membership.businessId, paymentDate: { gte: thisMonth.monthStart, lte: thisMonth.monthEnd } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.count({
+        where: { businessId: membership.businessId, paymentDate: { gte: thisMonth.monthStart, lte: thisMonth.monthEnd } },
+      }),
+      prisma.payment.aggregate({
+        where: { businessId: membership.businessId, paymentDate: { gte: lastMonth.monthStart, lte: lastMonth.monthEnd } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.groupBy({
+        by: ["method"],
+        where: { businessId: membership.businessId, paymentDate: { gte: thisMonth.monthStart, lte: thisMonth.monthEnd } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.groupBy({
+        by: ["method"],
+        where: { businessId: membership.businessId },
+        _count: { _all: true },
+      }),
+    ]);
+    const byMethodThisMonth: Record<string, number> = { MPESA: 0, CASH: 0, BANK_TRANSFER: 0, OTHER: 0 };
+    for (const item of byMethodThisMonthRows ?? []) {
+      byMethodThisMonth[item.method] = Number(item._sum.amount ?? 0);
+    }
+    const countByMethodObj: Record<string, number> = { ALL: 0, MPESA: 0, CASH: 0, BANK_TRANSFER: 0, OTHER: 0 };
+    countByMethodObj.ALL = await prisma.payment.count({ where: { businessId: membership.businessId } });
+    for (const item of countByMethod ?? []) countByMethodObj[item.method] = item._count._all ?? 0;
+    const receivedThisMonthTotal = Number(receivedThisMonth._sum.amount ?? 0);
+    res.json({
+      receivedToday: Number(receivedToday._sum.amount ?? 0),
+      receivedThisMonth: receivedThisMonthTotal,
+      paymentsThisMonth: paymentsThisMonth,
+      receivedLastMonth: Number(receivedLastMonth._sum.amount ?? 0),
+      averagePaymentThisMonth: paymentsThisMonth > 0 ? receivedThisMonthTotal / paymentsThisMonth : 0,
+      byMethodThisMonth: {
+        MPESA: byMethodThisMonth.MPESA,
+        CASH: byMethodThisMonth.CASH,
+        BANK_TRANSFER: byMethodThisMonth.BANK_TRANSFER,
+        OTHER: byMethodThisMonth.OTHER,
+      },
+      countByMethod: {
+        ALL: countByMethodObj.ALL,
+        MPESA: countByMethodObj.MPESA,
+        CASH: countByMethodObj.CASH,
+        BANK_TRANSFER: countByMethodObj.BANK_TRANSFER,
+        OTHER: countByMethodObj.OTHER,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/payments", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const query = z.object({
+      search: z.string().trim().max(80).optional(),
+      method: paymentMethodEnum.optional(),
+      from: z.string().optional(),
+      to: z.string().optional(),
+      invoiceId: z.string().uuid().optional(),
+      customerId: z.string().uuid().optional(),
+      sort: paymentSortEnum.default("newest"),
+      page: z.coerce.number().int().min(1).default(1),
+      pageSize: z.coerce.number().int().min(1).max(50).default(20),
+    }).parse(req.query);
+    const where: any = { businessId: membership.businessId };
+    if (query.search) {
+      where.OR = [
+        { reference: { contains: query.search, mode: "insensitive" } },
+        { invoice: { invoiceNumber: { contains: query.search, mode: "insensitive" } } },
+        { invoice: { customer: { name: { contains: query.search, mode: "insensitive" } } } },
+      ];
+    }
+    if (query.method) where.method = query.method;
+    if (query.invoiceId) where.invoiceId = query.invoiceId;
+    if (query.customerId) where.invoice = { customerId: query.customerId };
+    if (query.from || query.to) {
+      where.paymentDate = {};
+      if (query.from) where.paymentDate.gte = new Date(`${query.from}T00:00:00+03:00`);
+      if (query.to) where.paymentDate.lte = new Date(`${query.to}T23:59:59.999+03:00`);
+    }
+    const orderBy = query.sort === "oldest" ? { paymentDate: "asc" as const } : query.sort === "amount" ? { amount: "desc" as const } : { paymentDate: "desc" as const };
+    const [payments, total, summary] = await prisma.$transaction([
+      prisma.payment.findMany({
+        where,
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+        orderBy,
+        include: {
+          recordedBy: { select: { fullName: true } },
+          invoice: { select: { id: true, invoiceNumber: true, grandTotal: true, amountPaid: true, status: true, customer: { select: { id: true, name: true, phone: true } } } },
+        },
+      }),
+      prisma.payment.count({ where }),
+      prisma.payment.aggregate({ where, _sum: { amount: true } }),
+    ]);
+    const serialised = payments.map((payment) => ({
+      ...payment,
+      amount: Number(payment.amount),
+      receiptNumber: paymentReceiptNumber(payment.id),
+      invoice: payment.invoice ? { ...payment.invoice, grandTotal: Number(payment.invoice.grandTotal), amountPaid: Number(payment.invoice.amountPaid) } : null,
+      recordedBy: payment.recordedBy ? { fullName: payment.recordedBy.fullName } : null,
+    }));
+    res.json({ payments: serialised, page: query.page, pageSize: query.pageSize, total, filteredTotal: Number(summary._sum.amount ?? 0) });
+  } catch (error) {
+    next(error);
+  }
+});
+const expenseInput = z
+  .object({
+    jobId: z.string().uuid().optional(),
+    category: z.enum([
+      "MATERIALS",
+      "TRANSPORT",
+      "LABOUR",
+      "TOOLS",
+      "UTILITIES",
+      "RENT",
+      "MAINTENANCE",
+      "OTHER",
+    ]),
+    description: z.string().trim().min(2).max(240),
+    amount: z.coerce.number().positive(),
+    expenseDate: z.coerce.date().default(new Date()),
+    method: z.enum(["CASH", "BANK_TRANSFER", "MPESA", "OTHER"]).optional(),
+    supplier: z.string().trim().max(160).optional(),
+    reference: z.string().trim().max(120).optional(),
+    notes: z.string().trim().max(1000).optional(),
+  })
+  .strict();
+app.get("/api/expenses", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const expenses = await prisma.expense.findMany({
+      where: { businessId: membership.businessId },
+      orderBy: { expenseDate: "desc" },
+      include: { job: { select: { jobNumber: true, title: true } } },
+    });
+    res.json({ expenses });
+  } catch (error) {
+    next(error);
+  }
+});
+app.post("/api/expenses", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const input = expenseInput.parse(req.body);
+    if (
+      input.jobId &&
+      !(await prisma.job.findFirst({
+        where: { id: input.jobId, businessId: membership.businessId },
+      }))
+    )
+      return res.status(404).json({ error: "Job not found" });
+    const expense = await prisma.expense.create({
+      data: { ...input, businessId: membership.businessId, recordedById: req.user!.id },
+    });
+    res.status(201).json({ expense });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/api/reports/overview", auth, role("PROVIDER"), async (req: AuthedRequest, res, next) => {
+  try {
+    const membership = await phase3Membership(req.user!.id);
+    if (!membership) return res.status(403).json({ error: "Business membership required" });
+    const end = req.query.to ? new Date(String(req.query.to)) : new Date();
+    const start = req.query.from
+      ? new Date(String(req.query.from))
+      : new Date(end.getFullYear(), end.getMonth(), 1);
+    const [jobs, invoices, payments, expenses, lowStock] = await prisma.$transaction([
+      prisma.job.groupBy({
+        by: ["status"],
+        where: { businessId: membership.businessId, createdAt: { gte: start, lte: end } },
+        _count: true,
+      }),
+      prisma.invoice.aggregate({
+        where: {
+          businessId: membership.businessId,
+          issueDate: { gte: start, lte: end },
+          status: { not: "CANCELLED" },
+        },
+        _sum: { grandTotal: true, amountPaid: true },
+      }),
+      prisma.payment.aggregate({
+        where: { businessId: membership.businessId, paymentDate: { gte: start, lte: end } },
+        _sum: { amount: true },
+      }),
+      prisma.expense.aggregate({
+        where: { businessId: membership.businessId, expenseDate: { gte: start, lte: end } },
+        _sum: { amount: true },
+      }),
+      prisma.material.findMany({
+        where: { businessId: membership.businessId, isActive: true },
+        select: { id: true, name: true, stockQuantity: true, reorderLevel: true },
+      }),
+    ]);
+    res.json({
+      period: { start, end },
+      jobs,
+      invoicedAmount: invoices._sum.grandTotal ?? 0,
+      paymentsReceived: payments._sum.amount ?? 0,
+      recordedExpenses: expenses._sum.amount ?? 0,
+      outstandingBalance:
+        Number(invoices._sum.grandTotal ?? 0) - Number(invoices._sum.amountPaid ?? 0),
+      lowStock: lowStock.filter(
+        (material) => Number(material.stockQuantity) <= Number(material.reorderLevel),
+      ),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+app.get(
+  "/api/payments/:id/receipt.pdf",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await phase3Membership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const payment = await prisma.payment.findFirst({
+        where: { id: String(req.params.id), businessId: membership.businessId },
+        include: { business: true, invoice: { include: { customer: true } } },
+      });
+      if (!payment) return res.status(404).json({ error: "Payment not found" });
+      const buffer = await pdfBuffer((document) => {
+        document.fontSize(22).fillColor("#13212b").text(payment.business.name);
+        document.fontSize(18).text(`Payment receipt`);
+        document
+          .fontSize(11)
+          .text(`Receipt: RCPT-${payment.id.slice(0, 8).toUpperCase()}`)
+          .text(`Invoice: ${payment.invoice.invoiceNumber}`)
+          .text(`Customer: ${payment.invoice.customer.name}`)
+          .text(`Date: ${payment.paymentDate.toISOString().slice(0, 10)}`)
+          .text(`Method: ${payment.method}`)
+          .text(`Reference: ${payment.reference ?? "Not provided"}`)
+          .moveDown()
+          .fontSize(16)
+          .text(`Amount received: KES ${payment.amount}`)
+          .fontSize(10)
+          .text("Manual business payment record; not independently verified by a payment provider.")
+          .text(
+            `Remaining balance: KES ${(Number(payment.invoice.grandTotal) - Number(payment.invoice.amountPaid)).toFixed(2)}`,
+          );
+      });
+      res
+        .type("application/pdf")
+        .setHeader("Content-Disposition", `attachment; filename="receipt-${payment.id}.pdf"`)
+        .send(buffer);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   const statusCode =
     typeof error === "object" &&
@@ -1564,4 +3077,4 @@ export const closeDatabase = async () => {
   await prisma.$disconnect();
   await pool.end();
 };
-export { app, registrationSchema };
+export { app, registrationSchema, prisma };

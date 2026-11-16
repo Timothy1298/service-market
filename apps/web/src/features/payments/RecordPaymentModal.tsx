@@ -1,8 +1,8 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 type PaymentDraft = {
   amount: string
-  method: 'CASH' | 'BANK_TRANSFER' | 'OTHER'
+  method: 'CASH' | 'BANK_TRANSFER' | 'MPESA' | 'OTHER'
   reference: string
   paymentDate: string
 }
@@ -27,7 +27,7 @@ export default function RecordPaymentModal({ open, onClose, invoiceNumber, maxAm
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
-  useMemo(() => {
+  useEffect(() => {
     setDraft(emptyDraft(maxAmount))
     setError('')
   }, [maxAmount, open])
@@ -87,6 +87,7 @@ export default function RecordPaymentModal({ open, onClose, invoiceNumber, maxAm
               >
                 <option value="CASH">Cash</option>
                 <option value="BANK_TRANSFER">Bank transfer</option>
+                <option value="MPESA">M-Pesa</option>
                 <option value="OTHER">Other</option>
               </select>
             </label>
