@@ -1694,6 +1694,42 @@ const pdfBuffer = (draw: (document: PDFKit.PDFDocument) => void) =>
     document.end();
   });
 
+app.post(
+  "/api/quotations/:id/share",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const quotation = await prisma.quotation.findFirst({
+        where: {
+          id: String(req.params.id),
+          businessId: membership.businessId,
+          status: { in: ["ISSUED", "ACCEPTED", "REJECTED"] },
+        },
+      });
+      if (!quotation) return res.status(404).json({ error: "Issued quotation not found" });
+      const token = crypto.randomBytes(32).toString("hex");
+      await prisma.quotationShare.create({
+        data: {
+          quotationId: quotation.id,
+          tokenHash: tokenHash(token),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+      res
+        .status(201)
+        .json({
+          shareUrl: `${process.env.PUBLIC_APP_URL ?? "http://localhost:5173"}/#/quotation/share/${token}`,
+          message:
+            "Share link created. Download the PDF separately and attach it manually in WhatsApp.",
+        });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 const sharedQuotation = async (token: string) =>
   prisma.quotationShare.findFirst({
     where: { tokenHash: tokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } },
