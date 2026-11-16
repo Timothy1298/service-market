@@ -1572,7 +1572,34 @@ app.post("/api/invoices/:id/issue", auth, role("PROVIDER"), async (req: AuthedRe
     if (!current) return res.status(404).json({ error: "Invoice not found" });
     if (current.status !== "DRAFT") return res.status(409).json({ error: "Only draft invoices can be issued" });
     const [business, customer] = await Promise.all([prisma.business.findUniqueOrThrow({ where: { id: membership.businessId } }), prisma.customerRecord.findUniqueOrThrow({ where: { id: current.customerId } })]);
-    const issued = await prisma.invoice.update({ where: { id: current.id }, data: { status: "ISSUED", issueDate: current.issueDate ?? new Date(), issuedSnapshot: { business: { name: business.name, phone: business.phone, email: business.email, address: business.address, paymentInstructions: business.paymentInstructions }, customer: { name: customer.name, phone: customer.phone, email: customer.email, billingAddress: customer.billingAddress }, totals: { subtotal: current.subtotal.toString(), discount: current.discount.toString(), tax: current.tax.toString(), grandTotal: current.grandTotal.toString() } } }, include: invoiceInclude });
+    const issued = await prisma.invoice.update({
+      where: { id: current.id },
+      data: {
+        status: "ISSUED",
+        issueDate: current.issueDate ?? new Date(),
+        issuedSnapshot: {
+          business: {
+            name: business.name,
+            phone: business.phone,
+            email: business.email,
+            address: business.address,
+            paymentInstructions: business.paymentInstructions,
+          },
+          customer: {
+            name: customer.name,
+            phone: customer.phone,
+            email: customer.email,
+            billingAddress: customer.billingAddress,
+          },
+          totals: {
+            subtotal: current.subtotal.toString(),
+            discount: current.discount.toString(),
+            tax: current.tax.toString(),
+            grandTotal: current.grandTotal.toString(),
+          },
+        },
+      },
+    });
     res.json({ invoice: issued });
   } catch (error) { next(error); }
 });
@@ -1651,58 +1678,25 @@ app.get("/api/invoices/:id/pdf", auth, role("PROVIDER"), async (req: AuthedReque
     for (const [label, amount] of [["Subtotal", invoice.subtotal], ["Discount", invoice.discount], ["Tax", invoice.tax], ["Total", invoice.grandTotal], ["Paid", invoice.amountPaid], ["Balance due", Number(invoice.grandTotal) - Number(invoice.amountPaid)]] as const) doc.text(label, 350, doc.y, { continued: true }).text(fmt(amount), { align: "right" });
     if (business.paymentInstructions || invoice.paymentTerms || invoice.notes) { doc.moveDown().fontSize(9).fillColor("#52616b"); if (business.paymentInstructions) doc.text(`Payment instructions: ${business.paymentInstructions}`); if (invoice.paymentTerms) doc.text(`Payment terms: ${invoice.paymentTerms}`); if (invoice.notes) doc.text(`Notes: ${invoice.notes}`); }
     doc.end();
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 // ── RESTORED: quotation sharing/PDF, billing, jobs, inventory, payments, expenses, reports ──
 const pdfBuffer = (draw: (document: PDFKit.PDFDocument) => void) =>
-  new Promise<Buffer>((resolve) => {
+  new Promise<Buffer>((resolve, reject) => {
     const document = new PDFDocument({ margin: 48 });
     const chunks: Buffer[] = [];
     document.on("data", (chunk: Buffer) => chunks.push(chunk));
     document.on("end", () => resolve(Buffer.concat(chunks)));
+    document.on("error", reject);
     draw(document);
     document.end();
   });
-const shareTokenHash = (token: string) => crypto.createHash("sha256").update(token).digest("hex");
-app.post(
-  "/api/quotations/:id/share",
-  auth,
-  role("PROVIDER"),
-  async (req: AuthedRequest, res, next) => {
-    try {
-      const membership = await providerMembership(req.user!.id);
-      if (!membership) return res.status(403).json({ error: "Business membership required" });
-      const quotation = await prisma.quotation.findFirst({
-        where: {
-          id: String(req.params.id),
-          businessId: membership.businessId,
-          status: { in: ["ISSUED", "ACCEPTED", "REJECTED"] },
-        },
-      });
-      if (!quotation) return res.status(404).json({ error: "Issued quotation not found" });
-      const token = crypto.randomBytes(32).toString("hex");
-      await prisma.quotationShare.create({
-        data: {
-          quotationId: quotation.id,
-          tokenHash: shareTokenHash(token),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        },
-      });
-      res
-        .status(201)
-        .json({
-          shareUrl: `${process.env.PUBLIC_APP_URL ?? "http://localhost:5173"}/#/quotation/share/${token}`,
-          message:
-            "Share link created. Download the PDF separately and attach it manually in WhatsApp.",
-        });
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+
 const sharedQuotation = async (token: string) =>
   prisma.quotationShare.findFirst({
-    where: { tokenHash: shareTokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } },
+    where: { tokenHash: tokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } },
     include: {
       quotation: {
         include: { items: { orderBy: { sortOrder: "asc" } }, business: true, customer: true },
@@ -2207,6 +2201,7 @@ app.get("/api/jobs/stats", auth, role("PROVIDER"), async (req: AuthedRequest, re
     const [grouped, startingThisWeek, completedThisMonth] = await prisma.$transaction([
       prisma.job.groupBy({
         by: ["status"],
+        orderBy: { status: "asc" },
         where: { businessId: membership.businessId },
         _count: { _all: true },
       }),
@@ -2225,8 +2220,13 @@ app.get("/api/jobs/stats", auth, role("PROVIDER"), async (req: AuthedRequest, re
         },
       }),
     ]);
-    const byStatus = Object.fromEntries(grouped.map((row) => [row.status, row._count._all]));
-    const total = grouped.reduce((sum, row) => sum + row._count._all, 0);
+    const byStatus = Object.fromEntries(
+      grouped.map((row) => [row.status, typeof row._count === "object" ? Number(row._count._all ?? 0) : 0]),
+    );
+    const total = grouped.reduce(
+      (sum, row) => sum + (typeof row._count === "object" ? Number(row._count._all ?? 0) : 0),
+      0,
+    );
     res.json({
       total,
       byStatus,
@@ -2769,7 +2769,7 @@ app.get("/api/payments/stats", auth, role("PROVIDER"), async (req: AuthedRequest
     const thisMonth = getNairobiDayMonthBounds(now);
     const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const lastMonth = getNairobiDayMonthBounds(lastMonthDate);
-    const [receivedToday, receivedThisMonth, paymentsThisMonth, receivedLastMonth, byMethodThisMonth, countByMethod] = await prisma.$transaction([
+    const [receivedToday, receivedThisMonth, paymentsThisMonth, receivedLastMonth, byMethodThisMonthRows, countByMethod] = await prisma.$transaction([
       prisma.payment.aggregate({
         where: { businessId: membership.businessId, paymentDate: { gte: today.dayStart, lte: today.dayEnd } },
         _sum: { amount: true },
@@ -2787,22 +2787,33 @@ app.get("/api/payments/stats", auth, role("PROVIDER"), async (req: AuthedRequest
       }),
       prisma.payment.groupBy({
         by: ["method"],
+        orderBy: { method: "asc" },
         where: { businessId: membership.businessId, paymentDate: { gte: thisMonth.monthStart, lte: thisMonth.monthEnd } },
         _sum: { amount: true },
       }),
       prisma.payment.groupBy({
         by: ["method"],
+        orderBy: { method: "asc" },
         where: { businessId: membership.businessId },
         _count: { _all: true },
       }),
     ]);
     const byMethodThisMonth: Record<string, number> = { MPESA: 0, CASH: 0, BANK_TRANSFER: 0, OTHER: 0 };
     for (const item of byMethodThisMonthRows ?? []) {
-      byMethodThisMonth[item.method] = Number(item._sum.amount ?? 0);
+      const method = String(item.method);
+      if (method in byMethodThisMonth) {
+        byMethodThisMonth[method] = Number(item._sum?.amount ?? 0);
+      }
     }
     const countByMethodObj: Record<string, number> = { ALL: 0, MPESA: 0, CASH: 0, BANK_TRANSFER: 0, OTHER: 0 };
     countByMethodObj.ALL = await prisma.payment.count({ where: { businessId: membership.businessId } });
-    for (const item of countByMethod ?? []) countByMethodObj[item.method] = item._count._all ?? 0;
+    for (const item of countByMethod ?? []) {
+      const method = String(item.method);
+      if (method in countByMethodObj) {
+        const count = typeof item._count === "object" ? Number(item._count._all ?? 0) : 0;
+        countByMethodObj[method] = count;
+      }
+    }
     const receivedThisMonthTotal = Number(receivedThisMonth._sum.amount ?? 0);
     res.json({
       receivedToday: Number(receivedToday._sum.amount ?? 0),
@@ -2953,6 +2964,7 @@ app.get("/api/reports/overview", auth, role("PROVIDER"), async (req: AuthedReque
     const [jobs, invoices, payments, expenses, lowStock] = await prisma.$transaction([
       prisma.job.groupBy({
         by: ["status"],
+        orderBy: { status: "asc" },
         where: { businessId: membership.businessId, createdAt: { gte: start, lte: end } },
         _count: true,
       }),
