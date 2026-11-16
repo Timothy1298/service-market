@@ -19,6 +19,7 @@ import PublicQuotationSharePage from './features/quotations/pages/PublicQuotatio
 import InvoiceListPage from './features/invoices/InvoiceListPage'
 import InvoiceFormPage from './features/invoices/InvoiceFormPage'
 import InvoiceDetailPage from './features/invoices/InvoiceDetailPage'
+import PaymentsPage from './features/payments/pages/PaymentsPage'
 
 type Role = 'PROVIDER' | 'CUSTOMER' | 'ADMIN'
 type User = { id: string; fullName: string; phone: string; email?: string | null; role: Role; createdAt?: string }
@@ -170,7 +171,7 @@ function App() {
         : path.includes('jobs') ? <JobsPage />
           : path.includes('materials') || path.startsWith('/app/inventory') ? <InventoryPage />
             : path.includes('invoices') ? <Operations section="invoices" />
-              : path.includes('payments') ? <Operations section="payments" />
+              : path.includes('payments') ? <PaymentsPage />
                 : path.includes('expenses') ? <Operations section="expenses" />
                   : path.includes('reports') ? <Operations section="reports" />
                     : path.includes('billing') ? <Billing user={user!} />

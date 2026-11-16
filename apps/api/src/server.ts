@@ -1166,7 +1166,7 @@ export const getNairobiDayMonthBounds = (value: Date) => {
   const parts = toNairobiDateParts(value);
   const pad = (digit: number) => String(digit).padStart(2, "0");
   const monthStart = new Date(`${parts.year}-${pad(parts.month)}-01T00:00:00+03:00`);
-  const monthEnd = new Date(`${parts.year}-${pad(parts.month)}-${new Date(parts.year, parts.month, 0).getDate()}T23:59:59.999+03:00`);
+  const monthEnd = new Date(`${parts.year}-${pad(parts.month)}-${new Date(Date.UTC(parts.year, parts.month, 0)).getUTCDate()}T23:59:59.999+03:00`);
   const dayStart = new Date(`${parts.year}-${pad(parts.month)}-${pad(parts.day)}T00:00:00+03:00`);
   const dayEnd = new Date(`${parts.year}-${pad(parts.month)}-${pad(parts.day)}T23:59:59.999+03:00`);
   return { monthStart, monthEnd, dayStart, dayEnd };
@@ -1694,6 +1694,42 @@ const pdfBuffer = (draw: (document: PDFKit.PDFDocument) => void) =>
     document.end();
   });
 
+app.post(
+  "/api/quotations/:id/share",
+  auth,
+  role("PROVIDER"),
+  async (req: AuthedRequest, res, next) => {
+    try {
+      const membership = await providerMembership(req.user!.id);
+      if (!membership) return res.status(403).json({ error: "Business membership required" });
+      const quotation = await prisma.quotation.findFirst({
+        where: {
+          id: String(req.params.id),
+          businessId: membership.businessId,
+          status: { in: ["ISSUED", "ACCEPTED", "REJECTED"] },
+        },
+      });
+      if (!quotation) return res.status(404).json({ error: "Issued quotation not found" });
+      const token = crypto.randomBytes(32).toString("hex");
+      await prisma.quotationShare.create({
+        data: {
+          quotationId: quotation.id,
+          tokenHash: tokenHash(token),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+      res
+        .status(201)
+        .json({
+          shareUrl: `${process.env.PUBLIC_APP_URL ?? "http://localhost:5173"}/#/quotation/share/${token}`,
+          message:
+            "Share link created. Download the PDF separately and attach it manually in WhatsApp.",
+        });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 const sharedQuotation = async (token: string) =>
   prisma.quotationShare.findFirst({
     where: { tokenHash: tokenHash(token), revokedAt: null, expiresAt: { gt: new Date() } },
@@ -3015,17 +3051,30 @@ app.get(
       if (!membership) return res.status(403).json({ error: "Business membership required" });
       const payment = await prisma.payment.findFirst({
         where: { id: String(req.params.id), businessId: membership.businessId },
-        include: { business: true, invoice: { include: { customer: true } } },
+        include: { business: true, recordedBy: true, invoice: { include: { customer: true } } },
       });
       if (!payment) return res.status(404).json({ error: "Payment not found" });
+      const paidThroughPayment = await prisma.payment.aggregate({
+        where: {
+          invoiceId: payment.invoiceId,
+          OR: [
+            { paymentDate: { lt: payment.paymentDate } },
+            { paymentDate: payment.paymentDate, createdAt: { lte: payment.createdAt } },
+          ],
+        },
+        _sum: { amount: true },
+      });
+      const balanceAfterPayment = Number(payment.invoice.grandTotal) - Number(paidThroughPayment._sum.amount ?? 0);
       const buffer = await pdfBuffer((document) => {
         document.fontSize(22).fillColor("#13212b").text(payment.business.name);
         document.fontSize(18).text(`Payment receipt`);
         document
           .fontSize(11)
-          .text(`Receipt: RCPT-${payment.id.slice(0, 8).toUpperCase()}`)
+          .text(`Receipt: ${paymentReceiptNumber(payment.id)}`)
           .text(`Invoice: ${payment.invoice.invoiceNumber}`)
           .text(`Customer: ${payment.invoice.customer.name}`)
+          .text(`Customer phone: ${payment.invoice.customer.phone}`)
+          .text(`Recorded by: ${payment.recordedBy.fullName}`)
           .text(`Date: ${payment.paymentDate.toISOString().slice(0, 10)}`)
           .text(`Method: ${payment.method}`)
           .text(`Reference: ${payment.reference ?? "Not provided"}`)
@@ -3035,7 +3084,7 @@ app.get(
           .fontSize(10)
           .text("Manual business payment record; not independently verified by a payment provider.")
           .text(
-            `Remaining balance: KES ${(Number(payment.invoice.grandTotal) - Number(payment.invoice.amountPaid)).toFixed(2)}`,
+            `Balance after this payment: KES ${balanceAfterPayment.toFixed(2)}`,
           );
       });
       res
