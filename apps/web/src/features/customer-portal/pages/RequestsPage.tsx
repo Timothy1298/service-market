@@ -1,0 +1,5 @@
+import { Link } from 'react-router-dom'
+import { customerPortalApi } from '../services/customerPortalApi'
+import { usePortalData } from '../hooks'
+import { PortalPage, PortalPanel, PortalState } from '../components/PortalPage'
+export default function RequestsPage() { const {data,loading,error}=usePortalData(()=>customerPortalApi.requests()); return <PortalPage title="My requests" subtitle="Keep track of what you have asked providers to do." action={<Link className="button" to="/customer/requests/new">Request a quote</Link>}><PortalPanel><PortalState loading={loading} error={error} empty={!data?.requests?.length?'No service requests yet. Start by telling us what you need.':undefined}><div className="customer-record-list">{data?.requests?.map((r:any)=><Link className="customer-record" to={`/customer/requests/${r.id}`} key={r.id}><span><b>{r.title}</b><small>{r.category?.name} · {r.location} · {new Date(r.createdAt).toLocaleDateString()}</small></span><strong>{r.status.replace('_',' ')}</strong></Link>)}</div></PortalState></PortalPanel></PortalPage> }

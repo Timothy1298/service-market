@@ -18,3 +18,10 @@
   .quotations-page__modal-actions { flex-wrap: wrap; }
   .quotations-page__modal-actions button { flex: 1 1 120px; }
 }
+.quotations-page { padding: 30px 32px 48px; }
+.quotations-page__header { margin-bottom: 24px; }
+.quotations-page__summary { margin-bottom: 20px; }
+.quotations-page__workspace { margin-top: 20px; }
+
+/* Shared workspace spacing aligned with Invoices. */
+.quotations-page{padding:30px 32px 48px}.quotations-page__header{margin-bottom:24px}.quotations-page__summary{margin-bottom:20px}.quotations-page__workspace{margin-top:20px}

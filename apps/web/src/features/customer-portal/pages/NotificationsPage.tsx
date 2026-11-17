@@ -1,0 +1,5 @@
+import { Link } from 'react-router-dom'
+import { apiRequest } from '../../../services/apiClient'
+import { usePortalData } from '../hooks'
+import { PortalPage, PortalPanel, PortalState } from '../components/PortalPage'
+export default function NotificationsPage(){const{data,loading,error,refresh}=usePortalData(()=>apiRequest<any>('/notifications'));return <PortalPage title="Notifications" subtitle="Updates about your requests, quotations, jobs and invoices."><PortalPanel><PortalState loading={loading} error={error} empty={!data?.notifications?.length?'You are all caught up. New updates will appear here.':undefined}><div className="customer-record-list">{data?.notifications?.map((n:any)=><article className="customer-record" key={n.id}><span><b>{n.title}</b><small>{n.body}</small><small>{new Date(n.createdAt).toLocaleString()}</small></span>{n.actionUrl&&<Link to={n.actionUrl.startsWith('/customer')?n.actionUrl:'/customer'}>View</Link>}</article>)}</div><button className="secondary" onClick={async()=>{await apiRequest('/notifications/read-all',{method:'POST'});refresh()}}>Mark all as read</button></PortalState></PortalPanel></PortalPage>}

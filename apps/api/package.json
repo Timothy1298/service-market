@@ -11,7 +11,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "db:seed": "tsx src/seed.ts",
-    "test": "node --import tsx --test test/api.test.ts test/phase3.integration.test.ts"
+    "test": "node --import tsx --test test/api.test.ts test/auth.passwordResetEmail.test.ts test/auth.validation.test.ts test/notifications.unit.test.ts test/phase3.integration.test.ts test/customerPortal.integration.test.ts"
   },
   "keywords": [],
   "author": "",

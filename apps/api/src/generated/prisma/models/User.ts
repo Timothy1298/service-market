@@ -58,6 +58,7 @@ export type UserCountAggregateOutputType = {
   isActive: number
   createdAt: number
   updatedAt: number
+  preferences: number
   _all: number
 }
 
@@ -96,6 +97,7 @@ export type UserCountAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  preferences?: true
   _all?: true
 }
 
@@ -181,6 +183,7 @@ export type UserGroupByOutputType = {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  preferences: runtime.JsonValue
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -214,6 +217,7 @@ export type UserWhereInput = {
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  preferences?: Prisma.JsonFilter<"User">
   customerProfile?: Prisma.XOR<Prisma.CustomerProfileNullableScalarRelationFilter, Prisma.CustomerProfileWhereInput> | null
   providerProfile?: Prisma.XOR<Prisma.ProviderProfileNullableScalarRelationFilter, Prisma.ProviderProfileWhereInput> | null
   memberships?: Prisma.BusinessMemberListRelationFilter
@@ -224,8 +228,18 @@ export type UserWhereInput = {
   assignedJobs?: Prisma.JobListRelationFilter
   stockMovements?: Prisma.StockMovementListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   planAudits?: Prisma.SubscriptionPlanAuditListRelationFilter
+  savedReports?: Prisma.SavedReportListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
+  notificationEvents?: Prisma.NotificationEventListRelationFilter
+  customerRecords?: Prisma.CustomerRecordListRelationFilter
+  customerConversations?: Prisma.CustomerConversationListRelationFilter
+  customerMessages?: Prisma.CustomerMessageListRelationFilter
+  favoriteProviders?: Prisma.FavoriteProviderListRelationFilter
+  customerReviews?: Prisma.CustomerReviewListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,6 +252,7 @@ export type UserOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preferences?: Prisma.SortOrder
   customerProfile?: Prisma.CustomerProfileOrderByWithRelationInput
   providerProfile?: Prisma.ProviderProfileOrderByWithRelationInput
   memberships?: Prisma.BusinessMemberOrderByRelationAggregateInput
@@ -248,8 +263,18 @@ export type UserOrderByWithRelationInput = {
   assignedJobs?: Prisma.JobOrderByRelationAggregateInput
   stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptOrderByRelationAggregateInput
   expenses?: Prisma.ExpenseOrderByRelationAggregateInput
   planAudits?: Prisma.SubscriptionPlanAuditOrderByRelationAggregateInput
+  savedReports?: Prisma.SavedReportOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  notificationPreference?: Prisma.NotificationPreferenceOrderByWithRelationInput
+  notificationEvents?: Prisma.NotificationEventOrderByRelationAggregateInput
+  customerRecords?: Prisma.CustomerRecordOrderByRelationAggregateInput
+  customerConversations?: Prisma.CustomerConversationOrderByRelationAggregateInput
+  customerMessages?: Prisma.CustomerMessageOrderByRelationAggregateInput
+  favoriteProviders?: Prisma.FavoriteProviderOrderByRelationAggregateInput
+  customerReviews?: Prisma.CustomerReviewOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +290,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  preferences?: Prisma.JsonFilter<"User">
   customerProfile?: Prisma.XOR<Prisma.CustomerProfileNullableScalarRelationFilter, Prisma.CustomerProfileWhereInput> | null
   providerProfile?: Prisma.XOR<Prisma.ProviderProfileNullableScalarRelationFilter, Prisma.ProviderProfileWhereInput> | null
   memberships?: Prisma.BusinessMemberListRelationFilter
@@ -275,8 +301,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   assignedJobs?: Prisma.JobListRelationFilter
   stockMovements?: Prisma.StockMovementListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   planAudits?: Prisma.SubscriptionPlanAuditListRelationFilter
+  savedReports?: Prisma.SavedReportListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
+  notificationEvents?: Prisma.NotificationEventListRelationFilter
+  customerRecords?: Prisma.CustomerRecordListRelationFilter
+  customerConversations?: Prisma.CustomerConversationListRelationFilter
+  customerMessages?: Prisma.CustomerMessageListRelationFilter
+  favoriteProviders?: Prisma.FavoriteProviderListRelationFilter
+  customerReviews?: Prisma.CustomerReviewListRelationFilter
 }, "id" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -289,6 +325,7 @@ export type UserOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preferences?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -307,6 +344,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  preferences?: Prisma.JsonWithAggregatesFilter<"User">
 }
 
 export type UserCreateInput = {
@@ -319,6 +357,7 @@ export type UserCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -329,8 +368,18 @@ export type UserCreateInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -343,6 +392,7 @@ export type UserUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -353,8 +403,18 @@ export type UserUncheckedCreateInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUpdateInput = {
@@ -367,6 +427,7 @@ export type UserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -377,8 +438,18 @@ export type UserUpdateInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -391,6 +462,7 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -401,8 +473,18 @@ export type UserUncheckedUpdateInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -415,6 +497,7 @@ export type UserCreateManyInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type UserUpdateManyMutationInput = {
@@ -427,6 +510,7 @@ export type UserUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -439,6 +523,7 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -451,6 +536,7 @@ export type UserCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preferences?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -519,6 +605,64 @@ export type UserUpdateOneRequiredWithoutCustomerProfileNestedInput = {
   upsert?: Prisma.UserUpsertWithoutCustomerProfileInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerProfileInput, Prisma.UserUpdateWithoutCustomerProfileInput>, Prisma.UserUncheckedUpdateWithoutCustomerProfileInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationPreferenceInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationPreferenceInput, Prisma.UserUncheckedCreateWithoutNotificationPreferenceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationPreferenceInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationPreferenceNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationPreferenceInput, Prisma.UserUncheckedCreateWithoutNotificationPreferenceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationPreferenceInput
+  upsert?: Prisma.UserUpsertWithoutNotificationPreferenceInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationPreferenceInput, Prisma.UserUpdateWithoutNotificationPreferenceInput>, Prisma.UserUncheckedUpdateWithoutNotificationPreferenceInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationEventsInput, Prisma.UserUncheckedCreateWithoutNotificationEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutNotificationEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationEventsInput, Prisma.UserUncheckedCreateWithoutNotificationEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationEventsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationEventsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationEventsInput, Prisma.UserUpdateWithoutNotificationEventsInput>, Prisma.UserUncheckedUpdateWithoutNotificationEventsInput>
+}
+
+export type UserCreateNestedOneWithoutSavedReportsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedReportsInput, Prisma.UserUncheckedCreateWithoutSavedReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedReportsInput, Prisma.UserUncheckedCreateWithoutSavedReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedReportsInput
+  upsert?: Prisma.UserUpsertWithoutSavedReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedReportsInput, Prisma.UserUpdateWithoutSavedReportsInput>, Prisma.UserUncheckedUpdateWithoutSavedReportsInput>
 }
 
 export type UserCreateNestedOneWithoutMembershipsInput = {
@@ -591,6 +735,78 @@ export type UserUpdateOneRequiredWithoutServiceRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutServiceRequestsInput, Prisma.UserUpdateWithoutServiceRequestsInput>, Prisma.UserUncheckedUpdateWithoutServiceRequestsInput>
 }
 
+export type UserCreateNestedOneWithoutCustomerRecordsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerRecordsInput, Prisma.UserUncheckedCreateWithoutCustomerRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerRecordsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCustomerRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerRecordsInput, Prisma.UserUncheckedCreateWithoutCustomerRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerRecordsInput
+  upsert?: Prisma.UserUpsertWithoutCustomerRecordsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerRecordsInput, Prisma.UserUpdateWithoutCustomerRecordsInput>, Prisma.UserUncheckedUpdateWithoutCustomerRecordsInput>
+}
+
+export type UserCreateNestedOneWithoutCustomerConversationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerConversationsInput, Prisma.UserUncheckedCreateWithoutCustomerConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCustomerConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerConversationsInput, Prisma.UserUncheckedCreateWithoutCustomerConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerConversationsInput
+  upsert?: Prisma.UserUpsertWithoutCustomerConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerConversationsInput, Prisma.UserUpdateWithoutCustomerConversationsInput>, Prisma.UserUncheckedUpdateWithoutCustomerConversationsInput>
+}
+
+export type UserCreateNestedOneWithoutCustomerMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerMessagesInput, Prisma.UserUncheckedCreateWithoutCustomerMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCustomerMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerMessagesInput, Prisma.UserUncheckedCreateWithoutCustomerMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerMessagesInput
+  upsert?: Prisma.UserUpsertWithoutCustomerMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerMessagesInput, Prisma.UserUpdateWithoutCustomerMessagesInput>, Prisma.UserUncheckedUpdateWithoutCustomerMessagesInput>
+}
+
+export type UserCreateNestedOneWithoutFavoriteProvidersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoriteProvidersInput, Prisma.UserUncheckedCreateWithoutFavoriteProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoriteProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFavoriteProvidersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoriteProvidersInput, Prisma.UserUncheckedCreateWithoutFavoriteProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoriteProvidersInput
+  upsert?: Prisma.UserUpsertWithoutFavoriteProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoriteProvidersInput, Prisma.UserUpdateWithoutFavoriteProvidersInput>, Prisma.UserUncheckedUpdateWithoutFavoriteProvidersInput>
+}
+
+export type UserCreateNestedOneWithoutCustomerReviewsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerReviewsInput, Prisma.UserUncheckedCreateWithoutCustomerReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerReviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCustomerReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerReviewsInput, Prisma.UserUncheckedCreateWithoutCustomerReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerReviewsInput
+  upsert?: Prisma.UserUpsertWithoutCustomerReviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerReviewsInput, Prisma.UserUpdateWithoutCustomerReviewsInput>, Prisma.UserUncheckedUpdateWithoutCustomerReviewsInput>
+}
+
 export type UserCreateNestedOneWithoutAssignedJobsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedJobsInput, Prisma.UserUncheckedCreateWithoutAssignedJobsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedJobsInput
@@ -649,6 +865,20 @@ export type UserUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput, Prisma.UserUpdateWithoutPaymentsInput>, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type UserCreateNestedOneWithoutInvoiceMpesaAttemptsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoiceMpesaAttemptsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvoiceMpesaAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoiceMpesaAttemptsInput
+  upsert?: Prisma.UserUpsertWithoutInvoiceMpesaAttemptsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoiceMpesaAttemptsInput, Prisma.UserUpdateWithoutInvoiceMpesaAttemptsInput>, Prisma.UserUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+}
+
 export type UserCreateNestedOneWithoutExpensesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutExpensesInput
@@ -687,6 +917,7 @@ export type UserCreateWithoutCustomerProfileInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -696,8 +927,18 @@ export type UserCreateWithoutCustomerProfileInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutCustomerProfileInput = {
@@ -710,6 +951,7 @@ export type UserUncheckedCreateWithoutCustomerProfileInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -719,8 +961,18 @@ export type UserUncheckedCreateWithoutCustomerProfileInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutCustomerProfileInput = {
@@ -749,6 +1001,7 @@ export type UserUpdateWithoutCustomerProfileInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -758,8 +1011,18 @@ export type UserUpdateWithoutCustomerProfileInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomerProfileInput = {
@@ -772,6 +1035,7 @@ export type UserUncheckedUpdateWithoutCustomerProfileInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -781,8 +1045,626 @@ export type UserUncheckedUpdateWithoutCustomerProfileInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutNotificationPreferenceInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutNotificationPreferenceInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationPreferenceInput, Prisma.UserUncheckedCreateWithoutNotificationPreferenceInput>
+}
+
+export type UserUpsertWithoutNotificationPreferenceInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationPreferenceInput, Prisma.UserUncheckedUpdateWithoutNotificationPreferenceInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationPreferenceInput, Prisma.UserUncheckedCreateWithoutNotificationPreferenceInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationPreferenceInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationPreferenceInput, Prisma.UserUncheckedUpdateWithoutNotificationPreferenceInput>
+}
+
+export type UserUpdateWithoutNotificationPreferenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutNotificationEventsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutNotificationEventsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutNotificationEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationEventsInput, Prisma.UserUncheckedCreateWithoutNotificationEventsInput>
+}
+
+export type UserUpsertWithoutNotificationEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationEventsInput, Prisma.UserUncheckedUpdateWithoutNotificationEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationEventsInput, Prisma.UserUncheckedCreateWithoutNotificationEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationEventsInput, Prisma.UserUncheckedUpdateWithoutNotificationEventsInput>
+}
+
+export type UserUpdateWithoutNotificationEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutSavedReportsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutSavedReportsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutSavedReportsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedReportsInput, Prisma.UserUncheckedCreateWithoutSavedReportsInput>
+}
+
+export type UserUpsertWithoutSavedReportsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedReportsInput, Prisma.UserUncheckedUpdateWithoutSavedReportsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedReportsInput, Prisma.UserUncheckedCreateWithoutSavedReportsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedReportsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedReportsInput, Prisma.UserUncheckedUpdateWithoutSavedReportsInput>
+}
+
+export type UserUpdateWithoutSavedReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -795,6 +1677,7 @@ export type UserCreateWithoutMembershipsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -804,8 +1687,18 @@ export type UserCreateWithoutMembershipsInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -818,6 +1711,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -827,8 +1721,18 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -857,6 +1761,7 @@ export type UserUpdateWithoutMembershipsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -866,8 +1771,18 @@ export type UserUpdateWithoutMembershipsInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -880,6 +1795,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -889,8 +1805,18 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutProviderProfileInput = {
@@ -903,6 +1829,7 @@ export type UserCreateWithoutProviderProfileInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -912,8 +1839,18 @@ export type UserCreateWithoutProviderProfileInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutProviderProfileInput = {
@@ -926,6 +1863,7 @@ export type UserUncheckedCreateWithoutProviderProfileInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -935,8 +1873,18 @@ export type UserUncheckedCreateWithoutProviderProfileInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutProviderProfileInput = {
@@ -965,6 +1913,7 @@ export type UserUpdateWithoutProviderProfileInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -974,8 +1923,18 @@ export type UserUpdateWithoutProviderProfileInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProviderProfileInput = {
@@ -988,6 +1947,7 @@ export type UserUncheckedUpdateWithoutProviderProfileInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
   resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -997,8 +1957,18 @@ export type UserUncheckedUpdateWithoutProviderProfileInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutResetTokensInput = {
@@ -1011,6 +1981,7 @@ export type UserCreateWithoutResetTokensInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1020,8 +1991,18 @@ export type UserCreateWithoutResetTokensInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutResetTokensInput = {
@@ -1034,6 +2015,7 @@ export type UserUncheckedCreateWithoutResetTokensInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1043,8 +2025,18 @@ export type UserUncheckedCreateWithoutResetTokensInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutResetTokensInput = {
@@ -1073,6 +2065,7 @@ export type UserUpdateWithoutResetTokensInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1082,8 +2075,18 @@ export type UserUpdateWithoutResetTokensInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResetTokensInput = {
@@ -1096,6 +2099,7 @@ export type UserUncheckedUpdateWithoutResetTokensInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1105,8 +2109,18 @@ export type UserUncheckedUpdateWithoutResetTokensInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1119,6 +2133,7 @@ export type UserCreateWithoutSessionsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1128,8 +2143,18 @@ export type UserCreateWithoutSessionsInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1142,6 +2167,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1151,8 +2177,18 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1181,6 +2217,7 @@ export type UserUpdateWithoutSessionsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1190,8 +2227,18 @@ export type UserUpdateWithoutSessionsInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1204,6 +2251,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1213,8 +2261,18 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutServiceRequestsInput = {
@@ -1227,6 +2285,7 @@ export type UserCreateWithoutServiceRequestsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1236,8 +2295,18 @@ export type UserCreateWithoutServiceRequestsInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutServiceRequestsInput = {
@@ -1250,6 +2319,7 @@ export type UserUncheckedCreateWithoutServiceRequestsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1259,8 +2329,18 @@ export type UserUncheckedCreateWithoutServiceRequestsInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutServiceRequestsInput = {
@@ -1289,6 +2369,7 @@ export type UserUpdateWithoutServiceRequestsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1298,8 +2379,18 @@ export type UserUpdateWithoutServiceRequestsInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutServiceRequestsInput = {
@@ -1312,6 +2403,7 @@ export type UserUncheckedUpdateWithoutServiceRequestsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1321,8 +2413,778 @@ export type UserUncheckedUpdateWithoutServiceRequestsInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutCustomerRecordsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutCustomerRecordsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutCustomerRecordsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerRecordsInput, Prisma.UserUncheckedCreateWithoutCustomerRecordsInput>
+}
+
+export type UserUpsertWithoutCustomerRecordsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCustomerRecordsInput, Prisma.UserUncheckedUpdateWithoutCustomerRecordsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerRecordsInput, Prisma.UserUncheckedCreateWithoutCustomerRecordsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCustomerRecordsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCustomerRecordsInput, Prisma.UserUncheckedUpdateWithoutCustomerRecordsInput>
+}
+
+export type UserUpdateWithoutCustomerRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCustomerRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutCustomerConversationsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutCustomerConversationsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutCustomerConversationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerConversationsInput, Prisma.UserUncheckedCreateWithoutCustomerConversationsInput>
+}
+
+export type UserUpsertWithoutCustomerConversationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCustomerConversationsInput, Prisma.UserUncheckedUpdateWithoutCustomerConversationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerConversationsInput, Prisma.UserUncheckedCreateWithoutCustomerConversationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCustomerConversationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCustomerConversationsInput, Prisma.UserUncheckedUpdateWithoutCustomerConversationsInput>
+}
+
+export type UserUpdateWithoutCustomerConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCustomerConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutCustomerMessagesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutCustomerMessagesInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutCustomerMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerMessagesInput, Prisma.UserUncheckedCreateWithoutCustomerMessagesInput>
+}
+
+export type UserUpsertWithoutCustomerMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCustomerMessagesInput, Prisma.UserUncheckedUpdateWithoutCustomerMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerMessagesInput, Prisma.UserUncheckedCreateWithoutCustomerMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCustomerMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCustomerMessagesInput, Prisma.UserUncheckedUpdateWithoutCustomerMessagesInput>
+}
+
+export type UserUpdateWithoutCustomerMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCustomerMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutFavoriteProvidersInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutFavoriteProvidersInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutFavoriteProvidersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoriteProvidersInput, Prisma.UserUncheckedCreateWithoutFavoriteProvidersInput>
+}
+
+export type UserUpsertWithoutFavoriteProvidersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFavoriteProvidersInput, Prisma.UserUncheckedUpdateWithoutFavoriteProvidersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoriteProvidersInput, Prisma.UserUncheckedCreateWithoutFavoriteProvidersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFavoriteProvidersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFavoriteProvidersInput, Prisma.UserUncheckedUpdateWithoutFavoriteProvidersInput>
+}
+
+export type UserUpdateWithoutFavoriteProvidersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFavoriteProvidersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutCustomerReviewsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutCustomerReviewsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutCustomerReviewsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerReviewsInput, Prisma.UserUncheckedCreateWithoutCustomerReviewsInput>
+}
+
+export type UserUpsertWithoutCustomerReviewsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCustomerReviewsInput, Prisma.UserUncheckedUpdateWithoutCustomerReviewsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerReviewsInput, Prisma.UserUncheckedCreateWithoutCustomerReviewsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCustomerReviewsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCustomerReviewsInput, Prisma.UserUncheckedUpdateWithoutCustomerReviewsInput>
+}
+
+export type UserUpdateWithoutCustomerReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCustomerReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutAssignedJobsInput = {
@@ -1335,6 +3197,7 @@ export type UserCreateWithoutAssignedJobsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1344,8 +3207,18 @@ export type UserCreateWithoutAssignedJobsInput = {
   jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutAssignedJobsInput = {
@@ -1358,6 +3231,7 @@ export type UserUncheckedCreateWithoutAssignedJobsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1367,8 +3241,18 @@ export type UserUncheckedCreateWithoutAssignedJobsInput = {
   jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutAssignedJobsInput = {
@@ -1397,6 +3281,7 @@ export type UserUpdateWithoutAssignedJobsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1406,8 +3291,18 @@ export type UserUpdateWithoutAssignedJobsInput = {
   jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedJobsInput = {
@@ -1420,6 +3315,7 @@ export type UserUncheckedUpdateWithoutAssignedJobsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1429,8 +3325,18 @@ export type UserUncheckedUpdateWithoutAssignedJobsInput = {
   jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutJobActivitiesInput = {
@@ -1443,6 +3349,7 @@ export type UserCreateWithoutJobActivitiesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1452,8 +3359,18 @@ export type UserCreateWithoutJobActivitiesInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutJobActivitiesInput = {
@@ -1466,6 +3383,7 @@ export type UserUncheckedCreateWithoutJobActivitiesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1475,8 +3393,18 @@ export type UserUncheckedCreateWithoutJobActivitiesInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutJobActivitiesInput = {
@@ -1505,6 +3433,7 @@ export type UserUpdateWithoutJobActivitiesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1514,8 +3443,18 @@ export type UserUpdateWithoutJobActivitiesInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJobActivitiesInput = {
@@ -1528,6 +3467,7 @@ export type UserUncheckedUpdateWithoutJobActivitiesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1537,8 +3477,18 @@ export type UserUncheckedUpdateWithoutJobActivitiesInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutStockMovementsInput = {
@@ -1551,6 +3501,7 @@ export type UserCreateWithoutStockMovementsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1560,8 +3511,18 @@ export type UserCreateWithoutStockMovementsInput = {
   jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutStockMovementsInput = {
@@ -1574,6 +3535,7 @@ export type UserUncheckedCreateWithoutStockMovementsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1583,8 +3545,18 @@ export type UserUncheckedCreateWithoutStockMovementsInput = {
   jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutStockMovementsInput = {
@@ -1613,6 +3585,7 @@ export type UserUpdateWithoutStockMovementsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1622,8 +3595,18 @@ export type UserUpdateWithoutStockMovementsInput = {
   jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStockMovementsInput = {
@@ -1636,6 +3619,7 @@ export type UserUncheckedUpdateWithoutStockMovementsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1645,8 +3629,18 @@ export type UserUncheckedUpdateWithoutStockMovementsInput = {
   jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -1659,6 +3653,7 @@ export type UserCreateWithoutPaymentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1668,8 +3663,18 @@ export type UserCreateWithoutPaymentsInput = {
   jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -1682,6 +3687,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1691,8 +3697,18 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -1721,6 +3737,7 @@ export type UserUpdateWithoutPaymentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1730,8 +3747,18 @@ export type UserUpdateWithoutPaymentsInput = {
   jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -1744,6 +3771,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1753,8 +3781,170 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserCreateWithoutInvoiceMpesaAttemptsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
+}
+
+export type UserUncheckedCreateWithoutInvoiceMpesaAttemptsInput = {
+  id?: string
+  fullName: string
+  phone: string
+  email?: string | null
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
+  memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutCustomerInput
+  jobActivities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutUserInput
+  assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type UserCreateOrConnectWithoutInvoiceMpesaAttemptsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+}
+
+export type UserUpsertWithoutInvoiceMpesaAttemptsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvoiceMpesaAttemptsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoiceMpesaAttemptsInput, Prisma.UserUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+}
+
+export type UserUpdateWithoutInvoiceMpesaAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvoiceMpesaAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
+  memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
+  resetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  serviceRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  jobActivities?: Prisma.JobActivityUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutExpensesInput = {
@@ -1767,6 +3957,7 @@ export type UserCreateWithoutExpensesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1777,7 +3968,17 @@ export type UserCreateWithoutExpensesInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutExpensesInput = {
@@ -1790,6 +3991,7 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1800,7 +4002,17 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedCreateNestedManyWithoutUserInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutExpensesInput = {
@@ -1829,6 +4041,7 @@ export type UserUpdateWithoutExpensesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1839,7 +4052,17 @@ export type UserUpdateWithoutExpensesInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExpensesInput = {
@@ -1852,6 +4075,7 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1862,7 +4086,17 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   planAudits?: Prisma.SubscriptionPlanAuditUncheckedUpdateManyWithoutUserNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserCreateWithoutPlanAuditsInput = {
@@ -1875,6 +4109,7 @@ export type UserCreateWithoutPlanAuditsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberCreateNestedManyWithoutUserInput
@@ -1885,7 +4120,17 @@ export type UserCreateWithoutPlanAuditsInput = {
   assignedJobs?: Prisma.JobCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutRecordedByInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutCustomerInput
 }
 
 export type UserUncheckedCreateWithoutPlanAuditsInput = {
@@ -1898,6 +4143,7 @@ export type UserUncheckedCreateWithoutPlanAuditsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   providerProfile?: Prisma.ProviderProfileUncheckedCreateNestedOneWithoutUserInput
   memberships?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1908,7 +4154,17 @@ export type UserUncheckedCreateWithoutPlanAuditsInput = {
   assignedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutAssignedUserInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutRecordedByInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutRecordedByInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutRecordedByInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutActorInput
+  customerRecords?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutUserInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutCustomerInput
+  customerMessages?: Prisma.CustomerMessageUncheckedCreateNestedManyWithoutSenderInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutCustomerInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type UserCreateOrConnectWithoutPlanAuditsInput = {
@@ -1937,6 +4193,7 @@ export type UserUpdateWithoutPlanAuditsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUpdateManyWithoutUserNestedInput
@@ -1947,7 +4204,17 @@ export type UserUpdateWithoutPlanAuditsInput = {
   assignedJobs?: Prisma.JobUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutRecordedByNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutCustomerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPlanAuditsInput = {
@@ -1960,6 +4227,7 @@ export type UserUncheckedUpdateWithoutPlanAuditsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   customerProfile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   providerProfile?: Prisma.ProviderProfileUncheckedUpdateOneWithoutUserNestedInput
   memberships?: Prisma.BusinessMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1970,7 +4238,17 @@ export type UserUncheckedUpdateWithoutPlanAuditsInput = {
   assignedJobs?: Prisma.JobUncheckedUpdateManyWithoutAssignedUserNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutRecordedByNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutRecordedByNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutActorNestedInput
+  customerRecords?: Prisma.CustomerRecordUncheckedUpdateManyWithoutUserNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutCustomerNestedInput
+  customerMessages?: Prisma.CustomerMessageUncheckedUpdateManyWithoutSenderNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutCustomerNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 
@@ -1987,8 +4265,17 @@ export type UserCountOutputType = {
   assignedJobs: number
   stockMovements: number
   payments: number
+  invoiceMpesaAttempts: number
   expenses: number
   planAudits: number
+  savedReports: number
+  notifications: number
+  notificationEvents: number
+  customerRecords: number
+  customerConversations: number
+  customerMessages: number
+  favoriteProviders: number
+  customerReviews: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2000,8 +4287,17 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   assignedJobs?: boolean | UserCountOutputTypeCountAssignedJobsArgs
   stockMovements?: boolean | UserCountOutputTypeCountStockMovementsArgs
   payments?: boolean | UserCountOutputTypeCountPaymentsArgs
+  invoiceMpesaAttempts?: boolean | UserCountOutputTypeCountInvoiceMpesaAttemptsArgs
   expenses?: boolean | UserCountOutputTypeCountExpensesArgs
   planAudits?: boolean | UserCountOutputTypeCountPlanAuditsArgs
+  savedReports?: boolean | UserCountOutputTypeCountSavedReportsArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  notificationEvents?: boolean | UserCountOutputTypeCountNotificationEventsArgs
+  customerRecords?: boolean | UserCountOutputTypeCountCustomerRecordsArgs
+  customerConversations?: boolean | UserCountOutputTypeCountCustomerConversationsArgs
+  customerMessages?: boolean | UserCountOutputTypeCountCustomerMessagesArgs
+  favoriteProviders?: boolean | UserCountOutputTypeCountFavoriteProvidersArgs
+  customerReviews?: boolean | UserCountOutputTypeCountCustomerReviewsArgs
 }
 
 /**
@@ -2073,6 +4369,13 @@ export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountInvoiceMpesaAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceMpesaAttemptWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ExpenseWhereInput
 }
@@ -2082,6 +4385,62 @@ export type UserCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountPlanAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubscriptionPlanAuditWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationEventWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCustomerRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerRecordWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCustomerConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerConversationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCustomerMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerMessageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFavoriteProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FavoriteProviderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCustomerReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerReviewWhereInput
 }
 
 
@@ -2095,6 +4454,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferences?: boolean
   customerProfile?: boolean | Prisma.User$customerProfileArgs<ExtArgs>
   providerProfile?: boolean | Prisma.User$providerProfileArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
@@ -2105,8 +4465,18 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   assignedJobs?: boolean | Prisma.User$assignedJobsArgs<ExtArgs>
   stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
+  invoiceMpesaAttempts?: boolean | Prisma.User$invoiceMpesaAttemptsArgs<ExtArgs>
   expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
   planAudits?: boolean | Prisma.User$planAuditsArgs<ExtArgs>
+  savedReports?: boolean | Prisma.User$savedReportsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
+  notificationEvents?: boolean | Prisma.User$notificationEventsArgs<ExtArgs>
+  customerRecords?: boolean | Prisma.User$customerRecordsArgs<ExtArgs>
+  customerConversations?: boolean | Prisma.User$customerConversationsArgs<ExtArgs>
+  customerMessages?: boolean | Prisma.User$customerMessagesArgs<ExtArgs>
+  favoriteProviders?: boolean | Prisma.User$favoriteProvidersArgs<ExtArgs>
+  customerReviews?: boolean | Prisma.User$customerReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2120,6 +4490,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferences?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2132,6 +4503,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferences?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2144,9 +4516,10 @@ export type UserSelectScalar = {
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferences?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "phone" | "email" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "phone" | "email" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt" | "preferences", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customerProfile?: boolean | Prisma.User$customerProfileArgs<ExtArgs>
   providerProfile?: boolean | Prisma.User$providerProfileArgs<ExtArgs>
@@ -2158,8 +4531,18 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assignedJobs?: boolean | Prisma.User$assignedJobsArgs<ExtArgs>
   stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
+  invoiceMpesaAttempts?: boolean | Prisma.User$invoiceMpesaAttemptsArgs<ExtArgs>
   expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
   planAudits?: boolean | Prisma.User$planAuditsArgs<ExtArgs>
+  savedReports?: boolean | Prisma.User$savedReportsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
+  notificationEvents?: boolean | Prisma.User$notificationEventsArgs<ExtArgs>
+  customerRecords?: boolean | Prisma.User$customerRecordsArgs<ExtArgs>
+  customerConversations?: boolean | Prisma.User$customerConversationsArgs<ExtArgs>
+  customerMessages?: boolean | Prisma.User$customerMessagesArgs<ExtArgs>
+  favoriteProviders?: boolean | Prisma.User$favoriteProvidersArgs<ExtArgs>
+  customerReviews?: boolean | Prisma.User$customerReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2178,8 +4561,18 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     assignedJobs: Prisma.$JobPayload<ExtArgs>[]
     stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
+    invoiceMpesaAttempts: Prisma.$InvoiceMpesaAttemptPayload<ExtArgs>[]
     expenses: Prisma.$ExpensePayload<ExtArgs>[]
     planAudits: Prisma.$SubscriptionPlanAuditPayload<ExtArgs>[]
+    savedReports: Prisma.$SavedReportPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    notificationPreference: Prisma.$NotificationPreferencePayload<ExtArgs> | null
+    notificationEvents: Prisma.$NotificationEventPayload<ExtArgs>[]
+    customerRecords: Prisma.$CustomerRecordPayload<ExtArgs>[]
+    customerConversations: Prisma.$CustomerConversationPayload<ExtArgs>[]
+    customerMessages: Prisma.$CustomerMessagePayload<ExtArgs>[]
+    favoriteProviders: Prisma.$FavoriteProviderPayload<ExtArgs>[]
+    customerReviews: Prisma.$CustomerReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2191,6 +4584,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    preferences: runtime.JsonValue
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2595,8 +4989,18 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   assignedJobs<T extends Prisma.User$assignedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockMovements<T extends Prisma.User$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoiceMpesaAttempts<T extends Prisma.User$invoiceMpesaAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoiceMpesaAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceMpesaAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.User$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   planAudits<T extends Prisma.User$planAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$planAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPlanAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedReports<T extends Prisma.User$savedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationPreference<T extends Prisma.User$notificationPreferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationPreferenceArgs<ExtArgs>>): Prisma.Prisma__NotificationPreferenceClient<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notificationEvents<T extends Prisma.User$notificationEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerRecords<T extends Prisma.User$customerRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerConversations<T extends Prisma.User$customerConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerMessages<T extends Prisma.User$customerMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  favoriteProviders<T extends Prisma.User$favoriteProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoriteProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoriteProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerReviews<T extends Prisma.User$customerReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2635,6 +5039,7 @@ export interface UserFieldRefs {
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly preferences: Prisma.FieldRef<"User", 'Json'>
 }
     
 
@@ -3258,6 +5663,30 @@ export type User$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * User.invoiceMpesaAttempts
+ */
+export type User$invoiceMpesaAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceMpesaAttempt
+   */
+  select?: Prisma.InvoiceMpesaAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceMpesaAttempt
+   */
+  omit?: Prisma.InvoiceMpesaAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceMpesaAttemptInclude<ExtArgs> | null
+  where?: Prisma.InvoiceMpesaAttemptWhereInput
+  orderBy?: Prisma.InvoiceMpesaAttemptOrderByWithRelationInput | Prisma.InvoiceMpesaAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceMpesaAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceMpesaAttemptScalarFieldEnum | Prisma.InvoiceMpesaAttemptScalarFieldEnum[]
+}
+
+/**
  * User.expenses
  */
 export type User$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3303,6 +5732,217 @@ export type User$planAuditsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionPlanAuditScalarFieldEnum | Prisma.SubscriptionPlanAuditScalarFieldEnum[]
+}
+
+/**
+ * User.savedReports
+ */
+export type User$savedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedReport
+   */
+  select?: Prisma.SavedReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedReport
+   */
+  omit?: Prisma.SavedReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedReportInclude<ExtArgs> | null
+  where?: Prisma.SavedReportWhereInput
+  orderBy?: Prisma.SavedReportOrderByWithRelationInput | Prisma.SavedReportOrderByWithRelationInput[]
+  cursor?: Prisma.SavedReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedReportScalarFieldEnum | Prisma.SavedReportScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.notificationPreference
+ */
+export type User$notificationPreferenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationPreference
+   */
+  select?: Prisma.NotificationPreferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationPreference
+   */
+  omit?: Prisma.NotificationPreferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationPreferenceInclude<ExtArgs> | null
+  where?: Prisma.NotificationPreferenceWhereInput
+}
+
+/**
+ * User.notificationEvents
+ */
+export type User$notificationEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationEvent
+   */
+  select?: Prisma.NotificationEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationEvent
+   */
+  omit?: Prisma.NotificationEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationEventInclude<ExtArgs> | null
+  where?: Prisma.NotificationEventWhereInput
+  orderBy?: Prisma.NotificationEventOrderByWithRelationInput | Prisma.NotificationEventOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationEventScalarFieldEnum | Prisma.NotificationEventScalarFieldEnum[]
+}
+
+/**
+ * User.customerRecords
+ */
+export type User$customerRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerRecord
+   */
+  select?: Prisma.CustomerRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerRecord
+   */
+  omit?: Prisma.CustomerRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerRecordInclude<ExtArgs> | null
+  where?: Prisma.CustomerRecordWhereInput
+  orderBy?: Prisma.CustomerRecordOrderByWithRelationInput | Prisma.CustomerRecordOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerRecordScalarFieldEnum | Prisma.CustomerRecordScalarFieldEnum[]
+}
+
+/**
+ * User.customerConversations
+ */
+export type User$customerConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerConversation
+   */
+  select?: Prisma.CustomerConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerConversation
+   */
+  omit?: Prisma.CustomerConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerConversationInclude<ExtArgs> | null
+  where?: Prisma.CustomerConversationWhereInput
+  orderBy?: Prisma.CustomerConversationOrderByWithRelationInput | Prisma.CustomerConversationOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerConversationScalarFieldEnum | Prisma.CustomerConversationScalarFieldEnum[]
+}
+
+/**
+ * User.customerMessages
+ */
+export type User$customerMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerMessage
+   */
+  select?: Prisma.CustomerMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerMessage
+   */
+  omit?: Prisma.CustomerMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerMessageInclude<ExtArgs> | null
+  where?: Prisma.CustomerMessageWhereInput
+  orderBy?: Prisma.CustomerMessageOrderByWithRelationInput | Prisma.CustomerMessageOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerMessageScalarFieldEnum | Prisma.CustomerMessageScalarFieldEnum[]
+}
+
+/**
+ * User.favoriteProviders
+ */
+export type User$favoriteProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FavoriteProvider
+   */
+  select?: Prisma.FavoriteProviderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FavoriteProvider
+   */
+  omit?: Prisma.FavoriteProviderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FavoriteProviderInclude<ExtArgs> | null
+  where?: Prisma.FavoriteProviderWhereInput
+  orderBy?: Prisma.FavoriteProviderOrderByWithRelationInput | Prisma.FavoriteProviderOrderByWithRelationInput[]
+  cursor?: Prisma.FavoriteProviderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FavoriteProviderScalarFieldEnum | Prisma.FavoriteProviderScalarFieldEnum[]
+}
+
+/**
+ * User.customerReviews
+ */
+export type User$customerReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerReview
+   */
+  select?: Prisma.CustomerReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerReview
+   */
+  omit?: Prisma.CustomerReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerReviewInclude<ExtArgs> | null
+  where?: Prisma.CustomerReviewWhereInput
+  orderBy?: Prisma.CustomerReviewOrderByWithRelationInput | Prisma.CustomerReviewOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerReviewScalarFieldEnum | Prisma.CustomerReviewScalarFieldEnum[]
 }
 
 /**

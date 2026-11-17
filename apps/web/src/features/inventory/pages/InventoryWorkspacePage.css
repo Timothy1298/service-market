@@ -208,3 +208,10 @@
   .inventory-workspace__dialog { padding: 17px; }
   .inventory-workspace__backdrop { padding: 12px; }
 }
+.inventory-workspace { padding: 30px 32px 48px; }
+.inventory-workspace__header { margin-bottom: 24px; }
+.inventory-workspace__metrics { margin-bottom: 20px; }
+.inventory-workspace__panel { margin-top: 20px; }
+
+/* Shared workspace spacing aligned with Invoices. */
+.inventory-workspace{padding:30px 32px 48px}.inventory-workspace__header{margin-bottom:24px}.inventory-workspace__metrics{margin-bottom:20px}.inventory-workspace__panel{margin-top:20px}

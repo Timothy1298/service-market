@@ -1,25 +1,49 @@
-import { useEffect, useRef, useState, type ButtonHTMLAttributes, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type ButtonHTMLAttributes, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
 import { ArrowRight, Check, Circle, Eye, EyeOff, FileText, UserRound, Wallet, Wrench } from 'lucide-react'
 import { Navigate, useLocation } from 'react-router-dom'
 import './App.css'
-import { API, apiRequest, errorMessage } from './services/apiClient'
+import './features/customer-portal/customer-portal.css'
+import { apiRequest, errorMessage } from './services/apiClient'
 import { AppLayout } from './layouts/AppLayout'
-import CustomersPage from './features/customers/pages/CustomersPage'
-import QuotationsPage from './features/quotations/pages/QuotationsPage'
-import JobsPage from './features/jobs/pages/JobsPage'
-import InventoryPage from './features/inventory/pages/InventoryWorkspacePage'
 import { RequireAuth } from './app/guards'
 import NotFoundPage from './features/errors/NotFoundPage'
 import { useDocumentTitle } from './lib/hooks/useDocumentTitle'
-import DashboardPage from './features/dashboard/pages/DashboardPage'
-import CustomerDetailPage from './features/customers/pages/CustomerDetailPage'
-import QuotationDetailPage from './features/quotations/pages/QuotationDetailPage'
-import JobDetailPage from './features/jobs/pages/JobDetailPage'
-import PublicQuotationSharePage from './features/quotations/pages/PublicQuotationSharePage'
-import InvoiceListPage from './features/invoices/InvoiceListPage'
-import InvoiceFormPage from './features/invoices/InvoiceFormPage'
-import InvoiceDetailPage from './features/invoices/InvoiceDetailPage'
-import PaymentsPage from './features/payments/pages/PaymentsPage'
+const CustomersPage = lazy(() => import('./features/customers/pages/CustomersPage'))
+const QuotationsPage = lazy(() => import('./features/quotations/pages/QuotationsPage'))
+const JobsPage = lazy(() => import('./features/jobs/pages/JobsPage'))
+const InventoryPage = lazy(() => import('./features/inventory/pages/InventoryWorkspacePage'))
+const DashboardPage = lazy(() => import('./features/dashboard/pages/DashboardPage'))
+const CustomerDetailPage = lazy(() => import('./features/customers/pages/CustomerDetailPage'))
+const QuotationDetailPage = lazy(() => import('./features/quotations/pages/QuotationDetailPage'))
+const JobDetailPage = lazy(() => import('./features/jobs/pages/JobDetailPage'))
+const PublicQuotationSharePage = lazy(() => import('./features/quotations/pages/PublicQuotationSharePage'))
+const InvoiceListPage = lazy(() => import('./features/invoices/InvoiceListPage'))
+const InvoiceFormPage = lazy(() => import('./features/invoices/InvoiceFormPage'))
+const InvoiceDetailPage = lazy(() => import('./features/invoices/InvoiceDetailPage'))
+const PaymentsPage = lazy(() => import('./features/payments/PaymentsPage'))
+const ExpensesPage = lazy(() => import('./features/expenses/pages/ExpensesPage'))
+const ReportsPage = lazy(() => import('./features/reports/pages/ReportsPage'))
+const SettingsPage = lazy(() => import('./features/settings/pages/SettingsPage'))
+const MyProfilePage = lazy(() => import('./features/profile/pages/MyProfilePage'))
+const NotificationsPage = lazy(() => import('./features/notifications/pages/NotificationsPage'))
+const NotificationPreferencesPage = lazy(() => import('./features/notifications/pages/NotificationPreferencesPage'))
+const SubscriptionPage = lazy(() => import('./features/subscriptions/SubscriptionPage'))
+const CustomerPortalLayout = lazy(() => import('./features/customer-portal/layout/CustomerPortalLayout').then(m => ({ default: m.CustomerPortalLayout })))
+const CustomerHomePage = lazy(() => import('./features/customer-portal/pages/CustomerHomePage'))
+const CustomerDiscoverPage = lazy(() => import('./features/customer-portal/pages/DiscoverPage'))
+const CustomerRequestsPage = lazy(() => import('./features/customer-portal/pages/RequestsPage'))
+const CustomerRequestFormPage = lazy(() => import('./features/customer-portal/pages/RequestFormPage'))
+const CustomerRequestDetailPage = lazy(() => import('./features/customer-portal/pages/RequestDetailPage'))
+const CustomerQuotationsPage = lazy(() => import('./features/customer-portal/pages/QuotationsPage'))
+const CustomerJobsPage = lazy(() => import('./features/customer-portal/pages/JobsPage'))
+const CustomerInvoicesPage = lazy(() => import('./features/customer-portal/pages/InvoicesPage'))
+const CustomerProfilePage = lazy(() => import('./features/customer-portal/pages/ProfilePage'))
+const CustomerFavoritesPage = lazy(() => import('./features/customer-portal/pages/FavoritesPage'))
+const CustomerMessagesPage = lazy(() => import('./features/customer-portal/pages/MessagesPage'))
+const CustomerProviderPage = lazy(() => import('./features/customer-portal/pages/ProviderPage'))
+const CustomerNotificationsPage = lazy(() => import('./features/customer-portal/pages/NotificationsPage'))
+const CustomerReviewsPage = lazy(() => import('./features/customer-portal/pages/ReviewsPage'))
+const ProviderMessagesPage = lazy(() => import('./features/customer-portal/pages/ProviderMessagesPage'))
 
 type Role = 'PROVIDER' | 'CUSTOMER' | 'ADMIN'
 type User = { id: string; fullName: string; phone: string; email?: string | null; role: Role; createdAt?: string }
@@ -64,7 +88,7 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
     try {
       const result = await request<{ user: User }>('/auth/login', { method: 'POST', body: JSON.stringify({ identifier, password }) })
       onLogin(result.user)
-      window.location.hash = '/app/dashboard'
+      window.location.hash = result.user.role === 'CUSTOMER' ? '/customer' : '/app/dashboard'
     } catch (cause) { setError(errorMessage(cause)); setLoading(false) }
   }
   return <AuthLayout title="Welcome back" subtitle="Sign in to keep your work moving.">
@@ -90,9 +114,13 @@ function Register({ onLogin }: { onLogin: (user: User) => void }) {
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError(''); setFieldErrors({}); setLoading(true)
     try {
-      const result = await request<{ user: User }>('/auth/register', { method: 'POST', body: JSON.stringify({ ...form, accountType: type }) })
+      const { businessName, tradeCategory, ...customerFields } = form
+      const payload = type === 'CUSTOMER'
+        ? { ...customerFields, accountType: type }
+        : { ...form, accountType: type }
+      const result = await request<{ user: User }>('/auth/register', { method: 'POST', body: JSON.stringify(payload) })
       onLogin(result.user)
-      window.location.hash = '/app/dashboard'
+      window.location.hash = result.user.role === 'CUSTOMER' ? '/customer' : '/app/dashboard'
     } catch (cause) {
       const typed = cause as Error & { fields?: Record<string, string[]> }
       setError(errorMessage(cause)); setLoading(false)
@@ -118,7 +146,7 @@ function Register({ onLogin }: { onLogin: (user: User) => void }) {
     </form>
   </AuthLayout>
 }
-function Dashboard({ user }: { user: User }) { const provider = user.role === 'PROVIDER'; const admin = user.role === 'ADMIN'; return <><div className="page-heading"><div><p className="eyebrow green">{admin ? 'ADMINISTRATION' : provider ? 'YOUR WORKSPACE' : 'YOUR SPACE'}</p><h1>Good morning, {user.fullName.split(' ')[0]}.</h1><p>{admin ? 'Manage the FundiQuote platform.' : provider ? 'Here’s what’s happening with your business.' : 'Find the right people for your next project.'}</p></div>{provider ? <LinkButton href="#/app/business-profile">Manage business <span>→</span></LinkButton> : null}</div>{provider ? <><div className="subscription"><div><span className="status-dot"></span><b>Free plan</b><span>Subscription management is coming soon.</span></div><a href="#/app/business-profile">Manage business →</a></div><div className="metrics">{['Quotations', 'Accepted', 'Active jobs', 'Outstanding'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div><section className="panel"><div className="panel-title"><div><h3>Recent activity</h3><p>Your latest business activity will appear here.</p></div></div><div className="empty"><div className="empty-icon">◷</div><b>No activity yet</b><p>Once you start sending quotations, your activity will show up here.</p></div></section></> : admin ? <section className="panel profile-panel"><div className="panel-title"><p className="eyebrow green">PLATFORM OVERVIEW</p><h2>Administrator dashboard</h2><p>Administration tools will be added in a future phase.</p></div></section> : <><section className="customer-hero"><div><p className="eyebrow green">COMING SOON</p><h2>What do you need help with?</h2><p>Discover trusted local fundis and get the right quote for your project.</p><LinkButton href="#/app/customer-dashboard">Explore services <span>→</span></LinkButton></div><div className="hero-shape">⌂</div></section><div className="metrics">{['Service requests', 'Received quotes', 'Completed jobs'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div></>}</> }
+function Dashboard({ user }: { user: User }) { const provider = user.role === 'PROVIDER'; const admin = user.role === 'ADMIN'; return <><div className="page-heading"><div><p className="eyebrow green">{admin ? 'ADMINISTRATION' : provider ? 'YOUR WORKSPACE' : 'YOUR SPACE'}</p><h1>Good morning, {user.fullName.split(' ')[0]}.</h1><p>{admin ? 'Manage the FundiQuote platform.' : provider ? 'Here’s what’s happening with your business.' : 'Find the right people for your next project.'}</p></div>{provider ? <LinkButton href="#/app/settings/business">Manage business <span>→</span></LinkButton> : null}</div>{provider ? <><div className="subscription"><div><span className="status-dot"></span><b>Free plan</b><span>Subscription management is coming soon.</span></div><a href="#/app/settings/business">Manage business →</a></div><div className="metrics">{['Quotations', 'Accepted', 'Active jobs', 'Outstanding'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div><section className="panel"><div className="panel-title"><div><h3>Recent activity</h3><p>Your latest business activity will appear here.</p></div></div><div className="empty"><div className="empty-icon">◷</div><b>No activity yet</b><p>Once you start sending quotations, your activity will show up here.</p></div></section></> : admin ? <section className="panel profile-panel"><div className="panel-title"><p className="eyebrow green">PLATFORM OVERVIEW</p><h2>Administrator dashboard</h2><p>Administration tools will be added in a future phase.</p></div></section> : <><section className="customer-hero"><div><p className="eyebrow green">COMING SOON</p><h2>What do you need help with?</h2><p>Discover trusted local fundis and get the right quote for your project.</p><LinkButton href="#/app/customer-dashboard">Explore services <span>→</span></LinkButton></div><div className="hero-shape">⌂</div></section><div className="metrics">{['Service requests', 'Received quotes', 'Completed jobs'].map(label => <div className="metric" key={label}><span>{label}</span><strong>—</strong><small>Coming soon</small></div>)}</div></>}</> }
 function App() {
   const [user, setUser] = useState<User | null>(null)
   const [checking, setChecking] = useState(true)
@@ -141,22 +169,42 @@ function App() {
     window.location.hash = '/login'
   }
   const titles: Record<string, string> = {
-    '/login': 'Sign in', '/register': 'Create account', '/forgot-password': 'Forgot password',
+    '/login': 'Sign in', '/register': 'Create account', '/forgot-password': 'Forgot password', '/app/messages': 'Customer messages',
     '/reset-password': 'Reset password', '/app/dashboard': 'Dashboard', '/app/customers': 'Customers',
     '/app/quotations': 'Quotations', '/app/jobs': 'Jobs', '/app/materials': 'Inventory',
     '/app/invoices': 'Invoices', '/app/payments': 'Payments', '/app/expenses': 'Expenses',
-    '/app/reports': 'Reports', '/app/billing': 'Subscription', '/app/profile': 'My profile',
-    '/app/business-profile': 'Business profile',
+    '/app/reports': 'Reports', '/app/billing': 'Subscription', '/app/profile': 'My profile', '/app/notifications': 'Notifications', '/app/notifications/preferences': 'Notification preferences',
+    '/app/business-profile': 'Settings', '/app/settings': 'Settings',
   }
   useDocumentTitle(path.startsWith('/quotation/share/') ? 'Shared quotation' : titles[path] ?? 'FundiQuote')
 
-  if (path.startsWith('/quotation/share/')) return <PublicQuotationSharePage token={path.split('/').pop() ?? ''} />
+  if (path.startsWith('/quotation/share/')) return <Suspense fallback={<div className="loading-screen">Loading…</div>}><PublicQuotationSharePage token={path.split('/').pop() ?? ''} /></Suspense>
   if (checking) return <div className="loading-screen"><Logo /><span>Loading your workspace…</span></div>
   if (path === '/login' || (!user && path === '/')) return <Login onLogin={setUser} />
   if (path === '/register') return <Register onLogin={setUser} />
   if (path === '/forgot-password') return <ForgotPassword />
   if (path === '/reset-password') return <ResetPassword />
-  if (path === '/' && user) return <Navigate to="/app/dashboard" replace />
+  if (path === '/' && user) return <DefaultLandingRedirect />
+  if (path.startsWith('/customer')) {
+    if (!user) return <Navigate to="/login" replace />
+    if (user.role !== 'CUSTOMER') return <Navigate to="/app/dashboard" replace />
+    const customerPage = path.match(/^\/customer\/providers\/[^/]+$/) ? <CustomerProviderPage />
+      : path === '/customer/discover' || path === '/customer/services' || path === '/customer/providers' ? <CustomerDiscoverPage />
+      : path === '/customer/requests/new' ? <CustomerRequestFormPage />
+      : path.match(/^\/customer\/requests\/[^/]+$/) ? <CustomerRequestDetailPage />
+      : path === '/customer/requests' ? <CustomerRequestsPage />
+      : path === '/customer/quotations' ? <CustomerQuotationsPage />
+      : path.startsWith('/customer/jobs') ? <CustomerJobsPage />
+      : path.startsWith('/customer/invoices') || path === '/customer/payments' ? <CustomerInvoicesPage />
+      : path === '/customer/favorites' ? <CustomerFavoritesPage />
+      : path === '/customer/messages' ? <CustomerMessagesPage />
+      : path === '/customer/notifications' ? <CustomerNotificationsPage />
+      : path === '/customer/reviews' ? <CustomerReviewsPage />
+      : path === '/customer/profile' || path === '/customer/settings' ? <CustomerProfilePage onUpdate={(updated: Partial<User>) => setUser(current => current ? { ...current, ...updated } : current)} />
+      : path === '/customer' ? <CustomerHomePage name={user.fullName} /> : <NotFoundPage />
+    return <Suspense fallback={<div className="loading-screen">Loading…</div>}><CustomerPortalLayout name={user.fullName} onLogout={logout}>{customerPage}</CustomerPortalLayout></Suspense>
+  }
+  if (path.startsWith('/app') && user?.role === 'CUSTOMER') return <Navigate to="/customer" replace />
   if (path.startsWith('/app')) {
     const page = path.match(/^\/app\/customers\/[^/]+$/) ? <CustomerDetailPage id={path.split('/').pop() ?? ''} />
       : path === '/app/customers' ? <CustomersPage />
@@ -167,23 +215,29 @@ function App() {
       : path.match(/^\/app\/quotations\/[^/]+\/edit$/) ? <QuotationsPage editId={path.split('/').at(-2) ?? ''} />
       : path.match(/^\/app\/quotations\/[^/]+$/) && path !== '/app/quotations/new' ? <QuotationDetailPage id={path.split('/').pop() ?? ''} />
         : path.match(/^\/app\/jobs\/[^/]+$/) ? <JobDetailPage id={path.split('/').pop() ?? ''} />
+      : path === '/app/messages' ? user!.role === 'PROVIDER' ? <ProviderMessagesPage /> : <NotFoundPage />
       : path.includes('quotations') ? <QuotationsPage />
         : path.includes('jobs') ? <JobsPage />
           : path.includes('materials') || path.startsWith('/app/inventory') ? <InventoryPage />
             : path.includes('invoices') ? <Operations section="invoices" />
               : path.includes('payments') ? <PaymentsPage />
-                : path.includes('expenses') ? <Operations section="expenses" />
-                  : path.includes('reports') ? <Operations section="reports" />
-                    : path.includes('billing') ? <Billing user={user!} />
-                      : path.includes('business-profile') ? <ConnectedProfile user={user!} business />
-                        : path.includes('/profile') ? <ConnectedProfile user={user!} />
+                : path.includes('expenses') ? <ExpensesPage />
+                  : path.includes('reports') ? <ReportsPage />
+                    : path.includes('billing') ? user!.role === 'ADMIN' ? <AdminPricing /> : <SubscriptionPage user={user!} />
+                      : path.startsWith('/app/settings') ? <SettingsPage />
+                        : path === '/app/business-profile' ? <Navigate to="/app/settings/business" replace />
+                        : path === '/app/profile' ? <MyProfilePage user={user!} onUpdate={setUser} />
+                        : path === '/app/notifications/preferences' ? <NotificationPreferencesPage />
+                        : path === '/app/notifications' ? <NotificationsPage />
                           : path === '/app' || path === '/app/dashboard' ? user!.role === 'PROVIDER' ? <DashboardPage user={user!} /> : <Dashboard user={user!} />
                             : <NotFoundPage />
-    return <RequireAuth user={user}><AppLayout user={user!} onLogout={logout}>{page}</AppLayout></RequireAuth>
+    return <RequireAuth user={user}><AppLayout user={user!} onLogout={logout}><Suspense fallback={<div className="loading-screen">Loading your workspace…</div>}>{page}</Suspense></AppLayout></RequireAuth>
   }
   return <NotFoundPage />
 }
 export default App
+
+function DefaultLandingRedirect(){const[target,setTarget]=useState<string|null>(null);useEffect(()=>{let active=true;apiRequest<{preferences:{defaultLandingPage:'dashboard'|'invoices'|'jobs'|'reports'}}>('/settings/preferences').then(({preferences})=>{if(!active)return;const destinations={dashboard:'/app/dashboard',invoices:'/app/invoices',jobs:'/app/jobs',reports:'/app/reports'};setTarget(destinations[preferences.defaultLandingPage]??'/app/dashboard')}).catch(()=>{if(active)setTarget('/app/dashboard')});return()=>{active=false}},[]);return target?<Navigate to={target} replace/>:<div className="loading-screen"><Logo/><span>Loading your workspace…</span></div>}
 
 function Customers() {
   const [customers, setCustomers] = useState<Array<{ id: string; name: string; phone: string; email?: string | null }>>([])
@@ -219,40 +273,13 @@ function Operations({ section }: { section: 'jobs' | 'materials' | 'invoices' | 
 function AdminPricing() {
   const [plan, setPlan] = useState<any>(null)
   const [price, setPrice] = useState('299')
+  const [limits, setLimits] = useState({ customers: '', quotationsPerMonth: '', teamMembers: '' })
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
-  useEffect(() => { request<any>('/admin/subscription-plan').then(result => { setPlan(result.plan); setPrice(String(result.plan.price)) }).catch(requestError => setError(errorMessage(requestError))) }, [])
-  const save = async (event: FormEvent) => { event.preventDefault(); setSaving(true); setError(''); setMessage(''); try { const result = await request<any>('/admin/subscription-plan', { method: 'PATCH', body: JSON.stringify({ price: Number(price), currency: 'KES' }) }); setPlan(result.plan); setMessage('Subscription price updated for new payments.') } catch (requestError) { setError(errorMessage(requestError)) } finally { setSaving(false) } }
-  return <><div className="page-heading"><div><p className="eyebrow green">ADMINISTRATION</p><h1>Subscription pricing</h1><p>Historical transactions keep their original price.</p></div></div><section className="panel profile-panel"><form onSubmit={save}>{error && <div className="message error">{error}</div>}{message && <div className="message success-message">{message}</div>}<Field label="Monthly price (KES)" type="number" min="1" value={price} onChange={event => setPrice(event.target.value)} required /><p className="hint">Current configured plan: {plan?.name ?? 'Loading…'}</p><Button disabled={saving}>{saving ? 'Saving…' : 'Save price'}</Button></form></section></>
-}
-
-function Billing({ user }: { user: User }) {
-  const [billing, setBilling] = useState<any>(null)
-  const [phone, setPhone] = useState(user.phone)
-  const [loading, setLoading] = useState(true)
-  const [working, setWorking] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  const load = async () => { try { setBilling(await request<any>('/billing')) } catch (requestError) { setError(errorMessage(requestError)) } finally { setLoading(false) } }
-  useEffect(() => { load() }, [])
-  useEffect(() => { const transactionId = billing?.transactions?.[0]?.status === 'PENDING' ? billing.transactions[0].id : null; if (!transactionId) return; const timer = window.setInterval(() => request<any>(`/billing/transactions/${transactionId}`).then(result => { if (result.transaction.status !== 'PENDING') { setMessage(result.transaction.status === 'COMPLETED' ? 'Subscription payment confirmed.' : `Payment status: ${result.transaction.status}`); load() } }).catch(() => undefined), 5000); return () => window.clearInterval(timer) }, [billing])
-  const startPayment = async (event: FormEvent) => { event.preventDefault(); setWorking(true); setError(''); setMessage(''); try { const result = await request<any>('/billing/mpesa/initiate', { method: 'POST', body: JSON.stringify({ phoneNumber: phone }) }); setMessage(result.message); await load() } catch (requestError) { setError(errorMessage(requestError)) } finally { setWorking(false) } }
-  if (user.role === 'ADMIN') return <AdminPricing />
-  if (user.role !== 'PROVIDER') return <section className="panel profile-panel"><h2>Billing</h2><p>Subscription billing is available to providers.</p></section>
-  return <><div className="page-heading"><div><p className="eyebrow green">BILLING</p><h1>Subscription</h1><p>Unlock quotations, invoices, exports, and other Pro tools.</p></div></div><section className="panel profile-panel"><div className="panel-title"><h2>{loading ? 'Loading plan…' : billing?.subscription?.status === 'ACTIVE' ? 'Pro subscription active' : 'Pro monthly plan'}</h2><p>KES {billing?.subscription?.price ?? 299} · One calendar month</p></div>{billing?.subscription?.expiresAt && <p>Renews or expires on {new Date(billing.subscription.expiresAt).toLocaleDateString()}</p>}{error && <div className="message error">{error}</div>}{message && <div className="message success-message">{message}</div>}<form onSubmit={startPayment}><Field label="M-Pesa phone number" value={phone} onChange={event => setPhone(event.target.value)} required placeholder="0712 345 678" /><Button disabled={working || billing?.subscription?.status === 'ACTIVE'}>{working ? 'Starting payment…' : billing?.subscription?.status === 'ACTIVE' ? 'Subscription active' : 'Pay with M-Pesa'} <span>→</span></Button></form></section><section className="panel"><div className="panel-title"><h2>Payment history</h2><p>Only transactions belonging to your business are shown.</p></div>{!billing?.transactions?.length ? <div className="empty"><b>No subscription payments yet</b><p>Start a secure M-Pesa checkout above.</p></div> : <div className="quote-list">{billing.transactions.map((transaction: any) => <div className="quote-row" key={transaction.id}><div><b>{new Date(transaction.requestedAt).toLocaleDateString()} · KES {transaction.amount}</b><small>{transaction.status}{transaction.mpesaReceipt ? ` · ${transaction.mpesaReceipt}` : ''}</small></div>{transaction.status === 'COMPLETED' && <a className="text-button" href={`${API}/billing/transactions/${transaction.id}`} target="_blank" rel="noreferrer">View</a>}</div>)}</div>}</section></>
-}
-
-function ConnectedProfile({ user, business = false }: { user: User; business?: boolean }) {
-  const [form, setForm] = useState<any>({ fullName: user.fullName, phone: user.phone, email: user.email ?? '', name: '', address: '', tradeCategory: categories[0], slogan: '', paymentInstructions: '', mpesaNumber: '' })
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  useEffect(() => { request<any>(business ? '/business-profile' : '/profile').then(result => { const profile = result.profile?.business ?? result.profile; setForm((current: any) => ({ ...current, ...result.user, ...(business ? { ...profile, name: profile?.name ?? '' } : {}) })) }).catch(requestError => setError(errorMessage(requestError))).finally(() => setLoading(false)) }, [business])
-  const update = (key: string, value: string) => setForm((current: any) => ({ ...current, [key]: value }))
-  const submit = async (event: FormEvent) => { event.preventDefault(); setSaving(true); setError(''); setMessage(''); try { const payload = business ? { name: form.name, phone: form.phone, email: form.email, address: form.address, tradeCategory: form.tradeCategory, slogan: form.slogan, paymentInstructions: form.paymentInstructions, mpesaNumber: form.mpesaNumber } : { fullName: form.fullName, phone: form.phone, email: form.email }; const result = await request<any>(business ? '/business-profile' : '/profile', { method: 'PATCH', body: JSON.stringify(payload) }); if (!business && result.user) setForm((current: any) => ({ ...current, ...result.user })); setMessage('Changes saved successfully.') } catch (requestError) { setError(errorMessage(requestError)) } finally { setSaving(false) } }
-  return <section className="panel profile-panel"><div className="panel-title"><p className="eyebrow green">{business ? 'BUSINESS DETAILS' : 'ACCOUNT DETAILS'}</p><h2>{business ? 'Your business profile' : 'Personal profile'}</h2><p>{loading ? 'Loading saved details…' : 'Changes are saved to your account.'}</p></div><form onSubmit={submit}>{error && <div className="message error">{error}</div>}{message && <div className="message success-message">{message}</div>}{business ? <><Field label="Business name" value={form.name} onChange={event => update('name', event.target.value)} required /><Field label="Business phone" value={form.phone} onChange={event => update('phone', event.target.value)} required /><Field label="Business email" value={form.email} onChange={event => update('email', event.target.value)} /><Field label="Business address" value={form.address} onChange={event => update('address', event.target.value)} /><label className="field"><span>Trade category</span><select value={form.tradeCategory} onChange={event => update('tradeCategory', event.target.value)}>{categories.map(category => <option key={category}>{category}</option>)}</select></label><Field label="M-Pesa number" value={form.mpesaNumber} onChange={event => update('mpesaNumber', event.target.value)} /></> : <><Field label="Full name" value={form.fullName} onChange={event => update('fullName', event.target.value)} required /><Field label="Phone number" value={form.phone} onChange={event => update('phone', event.target.value)} required /><Field label="Email address" value={form.email} onChange={event => update('email', event.target.value)} /></>}<Button disabled={loading || saving}>{saving ? 'Saving…' : 'Save changes'}</Button></form></section>
+  useEffect(() => { request<any>('/admin/subscription-plan').then(result => { setPlan(result.plan); setPrice(String(result.plan.price)); setLimits({ customers: result.plan.limits?.customers == null ? '' : String(result.plan.limits.customers), quotationsPerMonth: result.plan.limits?.quotationsPerMonth == null ? '' : String(result.plan.limits.quotationsPerMonth), teamMembers: result.plan.limits?.teamMembers == null ? '' : String(result.plan.limits.teamMembers) }) }).catch(requestError => setError(errorMessage(requestError))) }, [])
+  const save = async (event: FormEvent) => { event.preventDefault(); setSaving(true); setError(''); setMessage(''); try { const result = await request<any>('/admin/subscription-plan', { method: 'PATCH', body: JSON.stringify({ price: Number(price), currency: 'KES', limits: { customers: limits.customers === '' ? null : Number(limits.customers), quotationsPerMonth: limits.quotationsPerMonth === '' ? null : Number(limits.quotationsPerMonth), teamMembers: limits.teamMembers === '' ? null : Number(limits.teamMembers) } }) }); setPlan(result.plan); setMessage('Plan pricing and usage limits saved. Existing records are preserved.') } catch (requestError) { setError(errorMessage(requestError)) } finally { setSaving(false) } }
+  return <><div className="page-heading"><div><p className="eyebrow green">ADMINISTRATION</p><h1>Subscription plan settings</h1><p>Configure the existing plan. Blank limits mean unlimited.</p></div></div><section className="panel profile-panel"><form onSubmit={save}>{error && <div className="message error">{error}</div>}{message && <div className="message success-message">{message}</div>}<Field label="Monthly price (KES)" type="number" min="1" step="1" value={price} onChange={event => setPrice(event.target.value)} required /><h3>Usage limits</h3><p className="hint">Limits apply to new records. Setting an empty value leaves that feature unlimited; existing data is never removed.</p><div className="two-col"><Field label="Customers per business" type="number" min="0" value={limits.customers} onChange={event => setLimits({ ...limits, customers: event.target.value })} placeholder="Unlimited" /><Field label="Quotations per month" type="number" min="0" value={limits.quotationsPerMonth} onChange={event => setLimits({ ...limits, quotationsPerMonth: event.target.value })} placeholder="Unlimited" /></div><Field label="Active team members" type="number" min="1" value={limits.teamMembers} onChange={event => setLimits({ ...limits, teamMembers: event.target.value })} placeholder="Unlimited" /><p className="hint">Current configured plan: {plan?.name ?? 'Loading…'}</p><Button disabled={saving}>{saving ? 'Saving…' : 'Save plan settings'}</Button></form></section></>
 }
 
 function Quotations({ user }: { user: User }) {

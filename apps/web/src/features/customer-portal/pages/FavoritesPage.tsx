@@ -1,0 +1,5 @@
+import { Link } from 'react-router-dom'
+import { customerPortalApi } from '../services/customerPortalApi'
+import { usePortalData } from '../hooks'
+import { PortalPage, PortalPanel, PortalState } from '../components/PortalPage'
+export default function FavoritesPage(){const{data,loading,error,refresh}=usePortalData(()=>customerPortalApi.favorites());return <PortalPage title="Saved providers" subtitle="Keep a shortlist of providers you may want to contact."><PortalPanel><PortalState loading={loading} error={error} empty={!data?.favorites?.length?'Providers you save will appear here.':undefined}><div className="customer-record-list">{data?.favorites?.map((f:any)=><div className="customer-record" key={f.id}><span><b>{f.business.name}</b><small>{f.business.providerProfiles?.[0]?.tradeCategory} · {f.business.slogan}</small></span><Link to={`/customer/providers/${f.business.id}`}>View</Link><button className="secondary" onClick={async()=>{await customerPortalApi.removeFavorite(f.business.id);refresh()}}>Remove</button></div>)}</div></PortalState></PortalPanel></PortalPage>}

@@ -665,3 +665,10 @@
     min-width: 900px;
   }
 }
+.jobs-page { padding: 30px 32px 48px; }
+.jobs-page__header { margin-bottom: 24px; }
+.jobs-page__metrics { margin-bottom: 20px; }
+.jobs-page__workspace { margin-top: 20px; }
+
+/* Shared workspace spacing aligned with Invoices. */
+.jobs-page{padding:30px 32px 48px}.jobs-page__header{margin-bottom:24px}.jobs-page__metrics{margin-bottom:20px}.jobs-page__workspace{margin-top:20px}

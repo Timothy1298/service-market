@@ -25,6 +25,8 @@ The seed creates Mwangaza Electrical & Maintenance with 24 customers, 18 quotati
 
 The API stores sessions in PostgreSQL through the `Session` model, so sessions survive API restarts. Logout and password reset invalidate server-side sessions. The application requires `SESSION_SECRET` to be at least 32 characters in production. `FRONTEND_ORIGIN` must match the browser origin when credentialed cookies are used.
 
+Notification events, in-app notifications, delivery attempts, and personal preferences are stored in PostgreSQL. The API process runs the durable outbox and reminder worker when started as the main process. Email (Resend) and SMS (Africa's Talking) are optional and remain disabled until provider credentials, business settings, and user preferences are configured. See [docs/notifications.md](docs/notifications.md) for environment variables, worker behavior, and delivery status semantics.
+
 Password recovery currently creates and hashes expiring, one-time reset tokens but does not deliver email or SMS. Configure a delivery adapter and the `MAIL_*` variables in `apps/api/.env` before enabling recovery in production. Recovery responses remain deliberately non-enumerating.
 
 Run the focused automated checks with `npm test`. They cover the real registration validation schema without touching the development database. Full database-backed integration tests require a separate disposable test database.
@@ -46,4 +48,4 @@ The repository includes authentication, marketplace discovery, customer records,
 - Run database tests only with `RUN_DB_TESTS=true`, `TEST_DATABASE_URL` set to a disposable database URL, and `DATABASE_URL` set to the exact same test URL. The test guard refuses the normal `marketplace_db` database.
 - Use `npm run typecheck`, `npm test`, and `npm --workspace apps/web run build` before release.
 
-Automatic recurring billing, live payment reconciliation, email/SMS delivery, and advanced admin operations require additional production configuration or future work.
+Automatic recurring billing, live payment reconciliation, notification email/SMS delivery and advanced admin operations require production provider configuration or follow-up integrations.

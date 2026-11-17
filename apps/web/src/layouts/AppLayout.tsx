@@ -1,12 +1,13 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
-  BarChart3, Building2, ChevronDown, CreditCard, Crown, FileText,
+  BarChart3, Bell, Building2, ChevronDown, CreditCard, Crown, FileText, MessageCircle,
   LayoutDashboard, LogOut, Menu, Package, Receipt, Users, Wallet,
   Wrench, User, Plus, X,
 } from 'lucide-react'
 import { ROUTES } from '../app/routes'
 import { apiRequest } from '../services/apiClient'
+import NotificationBell from '../features/notifications/components/NotificationBell'
 
 type UserInfo = { id?: string; fullName: string; role: 'PROVIDER' | 'CUSTOMER' | 'ADMIN' }
 type Props = { children: ReactNode; user: UserInfo; onLogout: () => void }
@@ -17,6 +18,7 @@ const providerGroups: Array<{ label: string; items: NavItem[] }> = [
   { label: 'Sales', items: [
     { label: 'Customers', to: ROUTES.customers, icon: Users },
     { label: 'Quotations', to: ROUTES.quotations, icon: FileText },
+    { label: 'Customer messages', to: ROUTES.messages, icon: MessageCircle },
     { label: 'Jobs', to: ROUTES.jobs, icon: Wrench },
   ] },
   { label: 'Money & stock', items: [
@@ -25,10 +27,11 @@ const providerGroups: Array<{ label: string; items: NavItem[] }> = [
     { label: 'Expenses', to: ROUTES.expenses, icon: CreditCard },
     { label: 'Inventory', to: ROUTES.inventory, icon: Package },
     { label: 'Reports', to: ROUTES.reports, icon: BarChart3 },
+      { label: 'Notifications', to: ROUTES.notifications, icon: Bell },
   ] },
   { label: 'Account', items: [
     { label: 'My profile', to: ROUTES.profile, icon: User },
-    { label: 'Business profile', to: ROUTES.businessProfile, icon: Building2 },
+    { label: 'Business settings', to: ROUTES.settings, icon: Building2 },
     { label: 'Subscription', to: ROUTES.billing, icon: Crown },
   ] },
 ]
@@ -41,15 +44,15 @@ export function AppLayout({ children, user, onLogout }: Props) {
   const [mobileSheet, setMobileSheet] = useState<'money' | 'more' | null>(null)
   const [planLabel, setPlanLabel] = useState('')
   const [planExpiry, setPlanExpiry] = useState<string | null>(null)
-  const pageTitle = providerGroups.flatMap(group => group.items).find(item => location.pathname.startsWith(item.to))?.label ?? 'Dashboard'
+  const pageTitle = location.pathname.startsWith('/app/settings') ? 'Settings' : location.pathname.startsWith(ROUTES.notificationPreferences) ? 'Notification preferences' : providerGroups.flatMap(group => group.items).find(item => location.pathname.startsWith(item.to))?.label ?? 'Dashboard'
   const groups = user.role === 'PROVIDER' ? providerGroups : user.role === 'ADMIN'
     ? [
         { label: 'Workspace', items: [{ label: 'Dashboard', to: ROUTES.dashboard, icon: LayoutDashboard }] },
-        { label: 'Account', items: [{ label: 'Subscription pricing', to: ROUTES.billing, icon: Crown }, { label: 'My profile', to: ROUTES.profile, icon: User }] },
+        { label: 'Account', items: [{ label: 'Subscription pricing', to: ROUTES.billing, icon: Crown }, { label: 'My profile', to: ROUTES.profile, icon: User }, { label: 'Notifications', to: ROUTES.notifications, icon: Bell }] },
       ]
     : [
         { label: 'Workspace', items: [{ label: 'Dashboard', to: ROUTES.dashboard, icon: LayoutDashboard }] },
-        { label: 'Account', items: [{ label: 'My profile', to: ROUTES.profile, icon: User }] },
+        { label: 'Account', items: [{ label: 'My profile', to: ROUTES.profile, icon: User }, { label: 'Notifications', to: ROUTES.notifications, icon: Bell }] },
       ]
   const closeMenus = () => { setDrawerOpen(false); setQuickOpen(false); setAccountOpen(false) }
   useEffect(() => {
@@ -91,6 +94,7 @@ export function AppLayout({ children, user, onLogout }: Props) {
         <button className="fq-icon-button fq-menu-trigger" type="button" onClick={() => setDrawerOpen(true)} aria-label="Open navigation"><Menu size={20} /></button>
         <div className="fq-mobile-title">{pageTitle}</div>
         <div className="fq-topbar-actions">
+          <NotificationBell />
           {user.role === 'PROVIDER' && <div className="fq-menu-wrap">
             <button className="fq-new-button" type="button" aria-expanded={quickOpen} onClick={() => setQuickOpen(open => !open)}><Plus size={17} />New<ChevronDown size={15} /></button>
             {quickOpen && <div className="fq-popover" role="menu">
@@ -107,7 +111,7 @@ export function AppLayout({ children, user, onLogout }: Props) {
             </button>
             {accountOpen && <div className="fq-popover fq-account-menu" role="menu">
               <Link to={ROUTES.profile} role="menuitem" onClick={closeMenus}><User />My profile</Link>
-              {user.role === 'PROVIDER' && <><Link to={ROUTES.businessProfile} role="menuitem" onClick={closeMenus}><Building2 />Business profile</Link><Link to={ROUTES.billing} role="menuitem" onClick={closeMenus}><Crown />Subscription</Link></>}
+              {user.role === 'PROVIDER' && <><Link to={ROUTES.settings} role="menuitem" onClick={closeMenus}><Building2 />Business settings</Link><Link to={ROUTES.billing} role="menuitem" onClick={closeMenus}><Crown />Subscription</Link></>}
               <button role="menuitem" type="button" onClick={() => { closeMenus(); onLogout() }}><LogOut />Sign out</button>
             </div>}
           </div>
@@ -130,7 +134,7 @@ export function AppLayout({ children, user, onLogout }: Props) {
             { label: 'Expenses', to: ROUTES.expenses, Icon: CreditCard }, { label: 'Reports', to: ROUTES.reports, Icon: BarChart3 },
           ] : [
             { label: 'Customers', to: ROUTES.customers, Icon: Users }, { label: 'Inventory', to: ROUTES.inventory, Icon: Package },
-            { label: 'My profile', to: ROUTES.profile, Icon: User }, { label: 'Business profile', to: ROUTES.businessProfile, Icon: Building2 },
+            { label: 'Notifications', to: ROUTES.notifications, Icon: Bell }, { label: 'My profile', to: ROUTES.profile, Icon: User }, { label: 'Business settings', to: ROUTES.settings, Icon: Building2 },
             { label: 'Subscription', to: ROUTES.billing, Icon: Crown },
           ]).map(({ label: itemLabel, to, Icon }) => <Link className="fq-sheet-link" to={to} key={to} onClick={() => setMobileSheet(null)}><Icon size={19} />{itemLabel}</Link>)}
           {mobileSheet === 'more' && <button type="button" className="fq-sheet-link" onClick={() => { setMobileSheet(null); onLogout() }}><LogOut size={19} />Sign out</button>}

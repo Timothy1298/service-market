@@ -163,3 +163,80 @@ export const PaymentTransactionStatus = {
 } as const
 
 export type PaymentTransactionStatus = (typeof PaymentTransactionStatus)[keyof typeof PaymentTransactionStatus]
+
+
+export const ReportFrequency = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY'
+} as const
+
+export type ReportFrequency = (typeof ReportFrequency)[keyof typeof ReportFrequency]
+
+
+export const NotificationCategory = {
+  GENERAL: 'GENERAL',
+  QUOTATIONS: 'QUOTATIONS',
+  JOBS: 'JOBS',
+  INVOICES: 'INVOICES',
+  PAYMENTS: 'PAYMENTS',
+  CUSTOMERS: 'CUSTOMERS',
+  INVENTORY: 'INVENTORY',
+  EXPENSES: 'EXPENSES',
+  SUBSCRIPTIONS: 'SUBSCRIPTIONS',
+  TEAM: 'TEAM',
+  SECURITY: 'SECURITY',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type NotificationCategory = (typeof NotificationCategory)[keyof typeof NotificationCategory]
+
+
+export const NotificationPriority = {
+  NORMAL: 'NORMAL',
+  IMPORTANT: 'IMPORTANT',
+  URGENT: 'URGENT'
+} as const
+
+export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
+
+
+export const NotificationChannel = {
+  IN_APP: 'IN_APP',
+  EMAIL: 'EMAIL',
+  SMS: 'SMS'
+} as const
+
+export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel]
+
+
+export const NotificationDeliveryStatus = {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  SENT: 'SENT',
+  DELIVERED: 'DELIVERED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type NotificationDeliveryStatus = (typeof NotificationDeliveryStatus)[keyof typeof NotificationDeliveryStatus]
+
+
+export const NotificationEventStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED'
+} as const
+
+export type NotificationEventStatus = (typeof NotificationEventStatus)[keyof typeof NotificationEventStatus]
+
+
+export const CustomerPaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCESSFUL: 'SUCCESSFUL',
+  FAILED: 'FAILED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type CustomerPaymentStatus = (typeof CustomerPaymentStatus)[keyof typeof CustomerPaymentStatus]

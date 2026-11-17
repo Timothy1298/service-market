@@ -69,6 +69,7 @@ export type SubscriptionPlanCountAggregateOutputType = {
   price: number
   currency: number
   durationMonths: number
+  limits: number
   isActive: number
   updatedById: number
   createdAt: number
@@ -120,6 +121,7 @@ export type SubscriptionPlanCountAggregateInputType = {
   price?: true
   currency?: true
   durationMonths?: true
+  limits?: true
   isActive?: true
   updatedById?: true
   createdAt?: true
@@ -220,6 +222,7 @@ export type SubscriptionPlanGroupByOutputType = {
   price: runtime.Decimal
   currency: string
   durationMonths: number
+  limits: runtime.JsonValue
   isActive: boolean
   updatedById: string | null
   createdAt: Date
@@ -256,6 +259,7 @@ export type SubscriptionPlanWhereInput = {
   price?: Prisma.DecimalFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"SubscriptionPlan"> | string
   durationMonths?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  limits?: Prisma.JsonFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolFilter<"SubscriptionPlan"> | boolean
   updatedById?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
@@ -270,6 +274,7 @@ export type SubscriptionPlanOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMonths?: Prisma.SortOrder
+  limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -287,6 +292,7 @@ export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.DecimalFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"SubscriptionPlan"> | string
   durationMonths?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  limits?: Prisma.JsonFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolFilter<"SubscriptionPlan"> | boolean
   updatedById?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
@@ -301,6 +307,7 @@ export type SubscriptionPlanOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMonths?: Prisma.SortOrder
+  limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -322,6 +329,7 @@ export type SubscriptionPlanScalarWhereWithAggregatesInput = {
   price?: Prisma.DecimalWithAggregatesFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"SubscriptionPlan"> | string
   durationMonths?: Prisma.IntWithAggregatesFilter<"SubscriptionPlan"> | number
+  limits?: Prisma.JsonWithAggregatesFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolWithAggregatesFilter<"SubscriptionPlan"> | boolean
   updatedById?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPlan"> | Date | string
@@ -335,6 +343,7 @@ export type SubscriptionPlanCreateInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMonths?: number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   updatedById?: string | null
   createdAt?: Date | string
@@ -349,6 +358,7 @@ export type SubscriptionPlanUncheckedCreateInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMonths?: number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   updatedById?: string | null
   createdAt?: Date | string
@@ -363,6 +373,7 @@ export type SubscriptionPlanUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,6 +388,7 @@ export type SubscriptionPlanUncheckedUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,6 +403,7 @@ export type SubscriptionPlanCreateManyInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMonths?: number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   updatedById?: string | null
   createdAt?: Date | string
@@ -404,6 +417,7 @@ export type SubscriptionPlanUpdateManyMutationInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +431,7 @@ export type SubscriptionPlanUncheckedUpdateManyInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +445,7 @@ export type SubscriptionPlanCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMonths?: Prisma.SortOrder
+  limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -498,6 +514,7 @@ export type SubscriptionPlanCreateWithoutAuditsInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMonths?: number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   updatedById?: string | null
   createdAt?: Date | string
@@ -511,6 +528,7 @@ export type SubscriptionPlanUncheckedCreateWithoutAuditsInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMonths?: number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   updatedById?: string | null
   createdAt?: Date | string
@@ -540,6 +558,7 @@ export type SubscriptionPlanUpdateWithoutAuditsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -553,6 +572,7 @@ export type SubscriptionPlanUncheckedUpdateWithoutAuditsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,6 +617,7 @@ export type SubscriptionPlanSelect<ExtArgs extends runtime.Types.Extensions.Inte
   price?: boolean
   currency?: boolean
   durationMonths?: boolean
+  limits?: boolean
   isActive?: boolean
   updatedById?: boolean
   createdAt?: boolean
@@ -612,6 +633,7 @@ export type SubscriptionPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   price?: boolean
   currency?: boolean
   durationMonths?: boolean
+  limits?: boolean
   isActive?: boolean
   updatedById?: boolean
   createdAt?: boolean
@@ -625,6 +647,7 @@ export type SubscriptionPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   price?: boolean
   currency?: boolean
   durationMonths?: boolean
+  limits?: boolean
   isActive?: boolean
   updatedById?: boolean
   createdAt?: boolean
@@ -638,13 +661,14 @@ export type SubscriptionPlanSelectScalar = {
   price?: boolean
   currency?: boolean
   durationMonths?: boolean
+  limits?: boolean
   isActive?: boolean
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "price" | "currency" | "durationMonths" | "isActive" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
+export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "price" | "currency" | "durationMonths" | "limits" | "isActive" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
 export type SubscriptionPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   audits?: boolean | Prisma.SubscriptionPlan$auditsArgs<ExtArgs>
   _count?: boolean | Prisma.SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -664,6 +688,7 @@ export type $SubscriptionPlanPayload<ExtArgs extends runtime.Types.Extensions.In
     price: runtime.Decimal
     currency: string
     durationMonths: number
+    limits: runtime.JsonValue
     isActive: boolean
     updatedById: string | null
     createdAt: Date
@@ -1098,6 +1123,7 @@ export interface SubscriptionPlanFieldRefs {
   readonly price: Prisma.FieldRef<"SubscriptionPlan", 'Decimal'>
   readonly currency: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly durationMonths: Prisma.FieldRef<"SubscriptionPlan", 'Int'>
+  readonly limits: Prisma.FieldRef<"SubscriptionPlan", 'Json'>
   readonly isActive: Prisma.FieldRef<"SubscriptionPlan", 'Boolean'>
   readonly updatedById: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly createdAt: Prisma.FieldRef<"SubscriptionPlan", 'DateTime'>

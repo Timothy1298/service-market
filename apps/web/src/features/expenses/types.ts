@@ -1,0 +1,3 @@
+export type Expense = { id:string; jobId?:string|null; category:string; description:string; amount:number|string; currency:string; expenseDate:string; method?:'CASH'|'BANK_TRANSFER'|'MPESA'|'OTHER'|null; supplier?:string|null; reference?:string|null; notes?:string|null; createdAt:string; updatedAt:string; job?:{id:string;jobNumber:string;title:string}|null; recordedBy?:{fullName:string} }
+export type ExpenseDraft = { jobId?:string; category:string; description:string; amount:number; expenseDate:string; method?:'CASH'|'BANK_TRANSFER'|'MPESA'|'OTHER'; supplier?:string; reference?:string; notes?:string }
+export const expenseCategories = ['MATERIALS','TRANSPORT','LABOUR','TOOLS','UTILITIES','RENT','MAINTENANCE','OTHER'] as const

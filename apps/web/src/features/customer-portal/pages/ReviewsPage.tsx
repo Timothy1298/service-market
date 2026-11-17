@@ -1,0 +1,4 @@
+import { customerPortalApi } from '../services/customerPortalApi'
+import { usePortalData } from '../hooks'
+import { PortalPage, PortalPanel, PortalState } from '../components/PortalPage'
+export default function ReviewsPage(){const{data,loading,error}=usePortalData(()=>customerPortalApi.reviews());return <PortalPage title="My reviews" subtitle="Feedback you have shared about completed services."><PortalPanel><PortalState loading={loading} error={error} empty={!data?.reviews?.length?'You have not reviewed a completed service yet.':undefined}><div className="customer-record-list">{data?.reviews?.map((r:any)=><article className="customer-record" key={r.id}><span><b>{r.business.name} · {'★'.repeat(r.rating)}</b><small>{r.job.title} · {new Date(r.createdAt).toLocaleDateString()}</small><small>{r.comment}</small></span></article>)}</div></PortalState></PortalPanel></PortalPage>}

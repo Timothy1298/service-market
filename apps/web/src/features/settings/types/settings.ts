@@ -1,0 +1,12 @@
+export type BusinessSettings = {
+  branding: { primaryColor:string; secondaryColor:string; displayName:string; footer:string; authorizedRepresentative:string }
+  financial: { currencyDisplay:'CODE'|'SYMBOL'; decimalPlaces:number; dateFormat:'DD/MM/YYYY'|'MM/DD/YYYY'|'YYYY-MM-DD'; timeFormat:'12H'|'24H'; timeZone:string; financialYearStartMonth:number }
+  tax: { enabled:boolean; rate:number; label:string; inclusive:boolean; registrationNumber:string }
+  documents: { invoicePrefix:string; quotationPrefix:string; receiptPrefix:string; jobPrefix:string; padding:number; includeYear:boolean; invoicePaymentTerms:string; invoiceNotes:string; quotationValidityDays:number; quotationNotes:string; quotationPaymentTerms:string; footer:string }
+  payments: { enabledMethods:Array<'MPESA'|'CASH'|'BANK_TRANSFER'|'OTHER'>; instructionsEnabled:boolean; bankName:string; bankAccountName:string; bankAccountNumber:string; bankBranch:string; accountReference:string }
+  notifications: { inApp:Record<string,boolean>; emailEnabled:boolean; smsEnabled:boolean }
+}
+export type BusinessProfile = { id:string; name:string; tradingName:string|null; description:string|null; businessType:string|null; tradeCategory:string; email:string|null; phone:string; alternativePhone:string|null; website:string|null; address:string|null; town:string|null; county:string|null; country:string|null; postalAddress:string|null; postalCode:string|null; registrationNumber:string|null; kraPin:string|null; slogan:string|null; paymentInstructions:string|null; mpesaNumber:string|null; currency:'KES'|'USD'|'EUR'|'GBP'; settings:BusinessSettings }
+export type TeamMember = { id:string; role:string; status:string; createdAt:string; user:{id:string;fullName:string;email:string|null;phone:string} }
+export type BusinessSettingsResponse = { business:BusinessProfile; settings:BusinessSettings; team:TeamMember[]; capabilities:{canEdit:boolean;mpesaConfigured:boolean;notificationChannels:string[];communicationChannels?:{inApp:{configured:boolean;enabled:boolean};email:{configured:boolean;enabled:boolean};sms:{configured:boolean;enabled:boolean};whatsapp:{configured:boolean;enabled:boolean}};logoUpload:boolean} }
+export type UserPreferences = { dateFormat:'DD/MM/YYYY'|'MM/DD/YYYY'|'YYYY-MM-DD'; timeFormat:'12H'|'24H'; defaultLandingPage:'dashboard'|'invoices'|'jobs'|'reports'; tablePageSize:number; defaultReportPeriod:'7d'|'30d'|'90d'|'financial-year'; notifications:Record<string,boolean> }

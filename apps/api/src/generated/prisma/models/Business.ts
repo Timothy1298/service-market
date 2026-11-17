@@ -37,6 +37,16 @@ export type BusinessMinAggregateOutputType = {
   logoReference: string | null
   paymentInstructions: string | null
   mpesaNumber: string | null
+  tradingName: string | null
+  description: string | null
+  businessType: string | null
+  website: string | null
+  alternativePhone: string | null
+  town: string | null
+  county: string | null
+  country: string | null
+  postalAddress: string | null
+  postalCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +64,16 @@ export type BusinessMaxAggregateOutputType = {
   logoReference: string | null
   paymentInstructions: string | null
   mpesaNumber: string | null
+  tradingName: string | null
+  description: string | null
+  businessType: string | null
+  website: string | null
+  alternativePhone: string | null
+  town: string | null
+  county: string | null
+  country: string | null
+  postalAddress: string | null
+  postalCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,6 +91,17 @@ export type BusinessCountAggregateOutputType = {
   logoReference: number
   paymentInstructions: number
   mpesaNumber: number
+  tradingName: number
+  description: number
+  businessType: number
+  website: number
+  alternativePhone: number
+  town: number
+  county: number
+  country: number
+  postalAddress: number
+  postalCode: number
+  settings: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -90,6 +121,16 @@ export type BusinessMinAggregateInputType = {
   logoReference?: true
   paymentInstructions?: true
   mpesaNumber?: true
+  tradingName?: true
+  description?: true
+  businessType?: true
+  website?: true
+  alternativePhone?: true
+  town?: true
+  county?: true
+  country?: true
+  postalAddress?: true
+  postalCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -107,6 +148,16 @@ export type BusinessMaxAggregateInputType = {
   logoReference?: true
   paymentInstructions?: true
   mpesaNumber?: true
+  tradingName?: true
+  description?: true
+  businessType?: true
+  website?: true
+  alternativePhone?: true
+  town?: true
+  county?: true
+  country?: true
+  postalAddress?: true
+  postalCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -124,6 +175,17 @@ export type BusinessCountAggregateInputType = {
   logoReference?: true
   paymentInstructions?: true
   mpesaNumber?: true
+  tradingName?: true
+  description?: true
+  businessType?: true
+  website?: true
+  alternativePhone?: true
+  town?: true
+  county?: true
+  country?: true
+  postalAddress?: true
+  postalCode?: true
+  settings?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -214,6 +276,17 @@ export type BusinessGroupByOutputType = {
   logoReference: string | null
   paymentInstructions: string | null
   mpesaNumber: string | null
+  tradingName: string | null
+  description: string | null
+  businessType: string | null
+  website: string | null
+  alternativePhone: string | null
+  town: string | null
+  county: string | null
+  country: string | null
+  postalAddress: string | null
+  postalCode: string | null
+  settings: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: BusinessCountAggregateOutputType | null
@@ -252,6 +325,17 @@ export type BusinessWhereInput = {
   logoReference?: Prisma.StringNullableFilter<"Business"> | string | null
   paymentInstructions?: Prisma.StringNullableFilter<"Business"> | string | null
   mpesaNumber?: Prisma.StringNullableFilter<"Business"> | string | null
+  tradingName?: Prisma.StringNullableFilter<"Business"> | string | null
+  description?: Prisma.StringNullableFilter<"Business"> | string | null
+  businessType?: Prisma.StringNullableFilter<"Business"> | string | null
+  website?: Prisma.StringNullableFilter<"Business"> | string | null
+  alternativePhone?: Prisma.StringNullableFilter<"Business"> | string | null
+  town?: Prisma.StringNullableFilter<"Business"> | string | null
+  county?: Prisma.StringNullableFilter<"Business"> | string | null
+  country?: Prisma.StringNullableFilter<"Business"> | string | null
+  postalAddress?: Prisma.StringNullableFilter<"Business"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"Business"> | string | null
+  settings?: Prisma.JsonFilter<"Business">
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   members?: Prisma.BusinessMemberListRelationFilter
@@ -264,9 +348,17 @@ export type BusinessWhereInput = {
   stockMovements?: Prisma.StockMovementListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
   paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
+  savedReports?: Prisma.SavedReportListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  notificationEvents?: Prisma.NotificationEventListRelationFilter
+  customerRequests?: Prisma.ServiceRequestListRelationFilter
+  customerConversations?: Prisma.CustomerConversationListRelationFilter
+  favoriteProviders?: Prisma.FavoriteProviderListRelationFilter
+  customerReviews?: Prisma.CustomerReviewListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -282,6 +374,17 @@ export type BusinessOrderByWithRelationInput = {
   logoReference?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentInstructions?: Prisma.SortOrderInput | Prisma.SortOrder
   mpesaNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  tradingName?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  alternativePhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  town?: Prisma.SortOrderInput | Prisma.SortOrder
+  county?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  settings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   members?: Prisma.BusinessMemberOrderByRelationAggregateInput
@@ -294,9 +397,17 @@ export type BusinessOrderByWithRelationInput = {
   stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptOrderByRelationAggregateInput
   expenses?: Prisma.ExpenseOrderByRelationAggregateInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   paymentTransactions?: Prisma.PaymentTransactionOrderByRelationAggregateInput
+  savedReports?: Prisma.SavedReportOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  notificationEvents?: Prisma.NotificationEventOrderByRelationAggregateInput
+  customerRequests?: Prisma.ServiceRequestOrderByRelationAggregateInput
+  customerConversations?: Prisma.CustomerConversationOrderByRelationAggregateInput
+  favoriteProviders?: Prisma.FavoriteProviderOrderByRelationAggregateInput
+  customerReviews?: Prisma.CustomerReviewOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -315,6 +426,17 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   logoReference?: Prisma.StringNullableFilter<"Business"> | string | null
   paymentInstructions?: Prisma.StringNullableFilter<"Business"> | string | null
   mpesaNumber?: Prisma.StringNullableFilter<"Business"> | string | null
+  tradingName?: Prisma.StringNullableFilter<"Business"> | string | null
+  description?: Prisma.StringNullableFilter<"Business"> | string | null
+  businessType?: Prisma.StringNullableFilter<"Business"> | string | null
+  website?: Prisma.StringNullableFilter<"Business"> | string | null
+  alternativePhone?: Prisma.StringNullableFilter<"Business"> | string | null
+  town?: Prisma.StringNullableFilter<"Business"> | string | null
+  county?: Prisma.StringNullableFilter<"Business"> | string | null
+  country?: Prisma.StringNullableFilter<"Business"> | string | null
+  postalAddress?: Prisma.StringNullableFilter<"Business"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"Business"> | string | null
+  settings?: Prisma.JsonFilter<"Business">
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   members?: Prisma.BusinessMemberListRelationFilter
@@ -327,9 +449,17 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   stockMovements?: Prisma.StockMovementListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
   paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
+  savedReports?: Prisma.SavedReportListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  notificationEvents?: Prisma.NotificationEventListRelationFilter
+  customerRequests?: Prisma.ServiceRequestListRelationFilter
+  customerConversations?: Prisma.CustomerConversationListRelationFilter
+  favoriteProviders?: Prisma.FavoriteProviderListRelationFilter
+  customerReviews?: Prisma.CustomerReviewListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -345,6 +475,17 @@ export type BusinessOrderByWithAggregationInput = {
   logoReference?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentInstructions?: Prisma.SortOrderInput | Prisma.SortOrder
   mpesaNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  tradingName?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  alternativePhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  town?: Prisma.SortOrderInput | Prisma.SortOrder
+  county?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  settings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BusinessCountOrderByAggregateInput
@@ -368,6 +509,17 @@ export type BusinessScalarWhereWithAggregatesInput = {
   logoReference?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   paymentInstructions?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   mpesaNumber?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  tradingName?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  description?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  businessType?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  website?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  alternativePhone?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  town?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  county?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  country?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  postalAddress?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  postalCode?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  settings?: Prisma.JsonWithAggregatesFilter<"Business">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
 }
@@ -385,6 +537,17 @@ export type BusinessCreateInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -397,9 +560,17 @@ export type BusinessCreateInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -415,6 +586,17 @@ export type BusinessUncheckedCreateInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -427,9 +609,17 @@ export type BusinessUncheckedCreateInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -445,6 +635,17 @@ export type BusinessUpdateInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -457,9 +658,17 @@ export type BusinessUpdateInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -475,6 +684,17 @@ export type BusinessUncheckedUpdateInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -487,9 +707,17 @@ export type BusinessUncheckedUpdateInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -505,6 +733,17 @@ export type BusinessCreateManyInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -522,6 +761,17 @@ export type BusinessUpdateManyMutationInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -539,6 +789,17 @@ export type BusinessUncheckedUpdateManyInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -556,6 +817,17 @@ export type BusinessCountOrderByAggregateInput = {
   logoReference?: Prisma.SortOrder
   paymentInstructions?: Prisma.SortOrder
   mpesaNumber?: Prisma.SortOrder
+  tradingName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  alternativePhone?: Prisma.SortOrder
+  town?: Prisma.SortOrder
+  county?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  postalAddress?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
+  settings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -573,6 +845,16 @@ export type BusinessMaxOrderByAggregateInput = {
   logoReference?: Prisma.SortOrder
   paymentInstructions?: Prisma.SortOrder
   mpesaNumber?: Prisma.SortOrder
+  tradingName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  alternativePhone?: Prisma.SortOrder
+  town?: Prisma.SortOrder
+  county?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  postalAddress?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -590,13 +872,74 @@ export type BusinessMinOrderByAggregateInput = {
   logoReference?: Prisma.SortOrder
   paymentInstructions?: Prisma.SortOrder
   mpesaNumber?: Prisma.SortOrder
+  tradingName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  alternativePhone?: Prisma.SortOrder
+  town?: Prisma.SortOrder
+  county?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  postalAddress?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type BusinessNullableScalarRelationFilter = {
+  is?: Prisma.BusinessWhereInput | null
+  isNot?: Prisma.BusinessWhereInput | null
 }
 
 export type BusinessScalarRelationFilter = {
   is?: Prisma.BusinessWhereInput
   isNot?: Prisma.BusinessWhereInput
+}
+
+export type BusinessCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationsInput, Prisma.BusinessUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationsInput, Prisma.BusinessUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.BusinessUpsertWithoutNotificationsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutNotificationsInput, Prisma.BusinessUpdateWithoutNotificationsInput>, Prisma.BusinessUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type BusinessCreateNestedOneWithoutNotificationEventsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationEventsInput, Prisma.BusinessUncheckedCreateWithoutNotificationEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutNotificationEventsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutNotificationEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationEventsInput, Prisma.BusinessUncheckedCreateWithoutNotificationEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutNotificationEventsInput
+  upsert?: Prisma.BusinessUpsertWithoutNotificationEventsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutNotificationEventsInput, Prisma.BusinessUpdateWithoutNotificationEventsInput>, Prisma.BusinessUncheckedUpdateWithoutNotificationEventsInput>
+}
+
+export type BusinessCreateNestedOneWithoutSavedReportsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSavedReportsInput, Prisma.BusinessUncheckedCreateWithoutSavedReportsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSavedReportsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSavedReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSavedReportsInput, Prisma.BusinessUncheckedCreateWithoutSavedReportsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSavedReportsInput
+  upsert?: Prisma.BusinessUpsertWithoutSavedReportsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSavedReportsInput, Prisma.BusinessUpdateWithoutSavedReportsInput>, Prisma.BusinessUncheckedUpdateWithoutSavedReportsInput>
 }
 
 export type BusinessCreateNestedOneWithoutMembersInput = {
@@ -641,6 +984,22 @@ export type BusinessUpdateOneRequiredWithoutServiceListingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutServiceListingsInput, Prisma.BusinessUpdateWithoutServiceListingsInput>, Prisma.BusinessUncheckedUpdateWithoutServiceListingsInput>
 }
 
+export type BusinessCreateNestedOneWithoutCustomerRequestsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedCreateWithoutCustomerRequestsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerRequestsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutCustomerRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedCreateWithoutCustomerRequestsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerRequestsInput
+  upsert?: Prisma.BusinessUpsertWithoutCustomerRequestsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCustomerRequestsInput, Prisma.BusinessUpdateWithoutCustomerRequestsInput>, Prisma.BusinessUncheckedUpdateWithoutCustomerRequestsInput>
+}
+
 export type BusinessCreateNestedOneWithoutCustomersInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomersInput, Prisma.BusinessUncheckedCreateWithoutCustomersInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomersInput
@@ -653,6 +1012,48 @@ export type BusinessUpdateOneRequiredWithoutCustomersNestedInput = {
   upsert?: Prisma.BusinessUpsertWithoutCustomersInput
   connect?: Prisma.BusinessWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCustomersInput, Prisma.BusinessUpdateWithoutCustomersInput>, Prisma.BusinessUncheckedUpdateWithoutCustomersInput>
+}
+
+export type BusinessCreateNestedOneWithoutCustomerConversationsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedCreateWithoutCustomerConversationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerConversationsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutCustomerConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedCreateWithoutCustomerConversationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerConversationsInput
+  upsert?: Prisma.BusinessUpsertWithoutCustomerConversationsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCustomerConversationsInput, Prisma.BusinessUpdateWithoutCustomerConversationsInput>, Prisma.BusinessUncheckedUpdateWithoutCustomerConversationsInput>
+}
+
+export type BusinessCreateNestedOneWithoutFavoriteProvidersInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedCreateWithoutFavoriteProvidersInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutFavoriteProvidersInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutFavoriteProvidersNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedCreateWithoutFavoriteProvidersInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutFavoriteProvidersInput
+  upsert?: Prisma.BusinessUpsertWithoutFavoriteProvidersInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutFavoriteProvidersInput, Prisma.BusinessUpdateWithoutFavoriteProvidersInput>, Prisma.BusinessUncheckedUpdateWithoutFavoriteProvidersInput>
+}
+
+export type BusinessCreateNestedOneWithoutCustomerReviewsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedCreateWithoutCustomerReviewsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerReviewsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutCustomerReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedCreateWithoutCustomerReviewsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCustomerReviewsInput
+  upsert?: Prisma.BusinessUpsertWithoutCustomerReviewsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCustomerReviewsInput, Prisma.BusinessUpdateWithoutCustomerReviewsInput>, Prisma.BusinessUncheckedUpdateWithoutCustomerReviewsInput>
 }
 
 export type BusinessCreateNestedOneWithoutQuotationsInput = {
@@ -739,6 +1140,20 @@ export type BusinessUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutPaymentsInput, Prisma.BusinessUpdateWithoutPaymentsInput>, Prisma.BusinessUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type BusinessCreateNestedOneWithoutInvoiceMpesaAttemptsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInvoiceMpesaAttemptsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutInvoiceMpesaAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInvoiceMpesaAttemptsInput
+  upsert?: Prisma.BusinessUpsertWithoutInvoiceMpesaAttemptsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUpdateWithoutInvoiceMpesaAttemptsInput>, Prisma.BusinessUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+}
+
 export type BusinessCreateNestedOneWithoutExpensesInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutExpensesInput, Prisma.BusinessUncheckedCreateWithoutExpensesInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutExpensesInput
@@ -781,6 +1196,630 @@ export type BusinessUpdateOneRequiredWithoutPaymentTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutPaymentTransactionsInput, Prisma.BusinessUpdateWithoutPaymentTransactionsInput>, Prisma.BusinessUncheckedUpdateWithoutPaymentTransactionsInput>
 }
 
+export type BusinessCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationsInput, Prisma.BusinessUncheckedCreateWithoutNotificationsInput>
+}
+
+export type BusinessUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutNotificationsInput, Prisma.BusinessUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationsInput, Prisma.BusinessUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutNotificationsInput, Prisma.BusinessUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type BusinessUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutNotificationEventsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutNotificationEventsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutNotificationEventsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationEventsInput, Prisma.BusinessUncheckedCreateWithoutNotificationEventsInput>
+}
+
+export type BusinessUpsertWithoutNotificationEventsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutNotificationEventsInput, Prisma.BusinessUncheckedUpdateWithoutNotificationEventsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutNotificationEventsInput, Prisma.BusinessUncheckedCreateWithoutNotificationEventsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutNotificationEventsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutNotificationEventsInput, Prisma.BusinessUncheckedUpdateWithoutNotificationEventsInput>
+}
+
+export type BusinessUpdateWithoutNotificationEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutNotificationEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSavedReportsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSavedReportsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSavedReportsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSavedReportsInput, Prisma.BusinessUncheckedCreateWithoutSavedReportsInput>
+}
+
+export type BusinessUpsertWithoutSavedReportsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSavedReportsInput, Prisma.BusinessUncheckedUpdateWithoutSavedReportsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSavedReportsInput, Prisma.BusinessUncheckedCreateWithoutSavedReportsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSavedReportsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSavedReportsInput, Prisma.BusinessUncheckedUpdateWithoutSavedReportsInput>
+}
+
+export type BusinessUpdateWithoutSavedReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSavedReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
 export type BusinessCreateWithoutMembersInput = {
   id?: string
   name: string
@@ -794,6 +1833,17 @@ export type BusinessCreateWithoutMembersInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
@@ -805,9 +1855,17 @@ export type BusinessCreateWithoutMembersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutMembersInput = {
@@ -823,6 +1881,17 @@ export type BusinessUncheckedCreateWithoutMembersInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
@@ -834,9 +1903,17 @@ export type BusinessUncheckedCreateWithoutMembersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutMembersInput = {
@@ -868,6 +1945,17 @@ export type BusinessUpdateWithoutMembersInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
@@ -879,9 +1967,17 @@ export type BusinessUpdateWithoutMembersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutMembersInput = {
@@ -897,6 +1993,17 @@ export type BusinessUncheckedUpdateWithoutMembersInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
@@ -908,9 +2015,17 @@ export type BusinessUncheckedUpdateWithoutMembersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProviderProfilesInput = {
@@ -926,6 +2041,17 @@ export type BusinessCreateWithoutProviderProfilesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -937,9 +2063,17 @@ export type BusinessCreateWithoutProviderProfilesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProviderProfilesInput = {
@@ -955,6 +2089,17 @@ export type BusinessUncheckedCreateWithoutProviderProfilesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -966,9 +2111,17 @@ export type BusinessUncheckedCreateWithoutProviderProfilesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProviderProfilesInput = {
@@ -1000,6 +2153,17 @@ export type BusinessUpdateWithoutProviderProfilesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1011,9 +2175,17 @@ export type BusinessUpdateWithoutProviderProfilesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProviderProfilesInput = {
@@ -1029,6 +2201,17 @@ export type BusinessUncheckedUpdateWithoutProviderProfilesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1040,9 +2223,17 @@ export type BusinessUncheckedUpdateWithoutProviderProfilesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutServiceListingsInput = {
@@ -1058,6 +2249,17 @@ export type BusinessCreateWithoutServiceListingsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1069,9 +2271,17 @@ export type BusinessCreateWithoutServiceListingsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutServiceListingsInput = {
@@ -1087,6 +2297,17 @@ export type BusinessUncheckedCreateWithoutServiceListingsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1098,9 +2319,17 @@ export type BusinessUncheckedCreateWithoutServiceListingsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutServiceListingsInput = {
@@ -1132,6 +2361,17 @@ export type BusinessUpdateWithoutServiceListingsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1143,9 +2383,17 @@ export type BusinessUpdateWithoutServiceListingsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutServiceListingsInput = {
@@ -1161,6 +2409,17 @@ export type BusinessUncheckedUpdateWithoutServiceListingsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1172,9 +2431,225 @@ export type BusinessUncheckedUpdateWithoutServiceListingsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutCustomerRequestsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutCustomerRequestsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutCustomerRequestsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedCreateWithoutCustomerRequestsInput>
+}
+
+export type BusinessUpsertWithoutCustomerRequestsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerRequestsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedCreateWithoutCustomerRequestsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutCustomerRequestsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerRequestsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerRequestsInput>
+}
+
+export type BusinessUpdateWithoutCustomerRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutCustomerRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutCustomersInput = {
@@ -1190,6 +2665,17 @@ export type BusinessCreateWithoutCustomersInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1201,9 +2687,17 @@ export type BusinessCreateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutCustomersInput = {
@@ -1219,6 +2713,17 @@ export type BusinessUncheckedCreateWithoutCustomersInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1230,9 +2735,17 @@ export type BusinessUncheckedCreateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutCustomersInput = {
@@ -1264,6 +2777,17 @@ export type BusinessUpdateWithoutCustomersInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1275,9 +2799,17 @@ export type BusinessUpdateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutCustomersInput = {
@@ -1293,6 +2825,17 @@ export type BusinessUncheckedUpdateWithoutCustomersInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1304,9 +2847,641 @@ export type BusinessUncheckedUpdateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutCustomerConversationsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutCustomerConversationsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutCustomerConversationsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedCreateWithoutCustomerConversationsInput>
+}
+
+export type BusinessUpsertWithoutCustomerConversationsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerConversationsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedCreateWithoutCustomerConversationsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutCustomerConversationsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerConversationsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerConversationsInput>
+}
+
+export type BusinessUpdateWithoutCustomerConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutCustomerConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutFavoriteProvidersInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutFavoriteProvidersInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutFavoriteProvidersInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedCreateWithoutFavoriteProvidersInput>
+}
+
+export type BusinessUpsertWithoutFavoriteProvidersInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedUpdateWithoutFavoriteProvidersInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedCreateWithoutFavoriteProvidersInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutFavoriteProvidersInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutFavoriteProvidersInput, Prisma.BusinessUncheckedUpdateWithoutFavoriteProvidersInput>
+}
+
+export type BusinessUpdateWithoutFavoriteProvidersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutFavoriteProvidersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutCustomerReviewsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutCustomerReviewsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutCustomerReviewsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedCreateWithoutCustomerReviewsInput>
+}
+
+export type BusinessUpsertWithoutCustomerReviewsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerReviewsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedCreateWithoutCustomerReviewsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutCustomerReviewsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutCustomerReviewsInput, Prisma.BusinessUncheckedUpdateWithoutCustomerReviewsInput>
+}
+
+export type BusinessUpdateWithoutCustomerReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutCustomerReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutQuotationsInput = {
@@ -1322,6 +3497,17 @@ export type BusinessCreateWithoutQuotationsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1333,9 +3519,17 @@ export type BusinessCreateWithoutQuotationsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutQuotationsInput = {
@@ -1351,6 +3545,17 @@ export type BusinessUncheckedCreateWithoutQuotationsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1362,9 +3567,17 @@ export type BusinessUncheckedCreateWithoutQuotationsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutQuotationsInput = {
@@ -1396,6 +3609,17 @@ export type BusinessUpdateWithoutQuotationsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1407,9 +3631,17 @@ export type BusinessUpdateWithoutQuotationsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutQuotationsInput = {
@@ -1425,6 +3657,17 @@ export type BusinessUncheckedUpdateWithoutQuotationsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1436,9 +3679,17 @@ export type BusinessUncheckedUpdateWithoutQuotationsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutJobsInput = {
@@ -1454,6 +3705,17 @@ export type BusinessCreateWithoutJobsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1465,9 +3727,17 @@ export type BusinessCreateWithoutJobsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutJobsInput = {
@@ -1483,6 +3753,17 @@ export type BusinessUncheckedCreateWithoutJobsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1494,9 +3775,17 @@ export type BusinessUncheckedCreateWithoutJobsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutJobsInput = {
@@ -1528,6 +3817,17 @@ export type BusinessUpdateWithoutJobsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1539,9 +3839,17 @@ export type BusinessUpdateWithoutJobsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutJobsInput = {
@@ -1557,6 +3865,17 @@ export type BusinessUncheckedUpdateWithoutJobsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1568,9 +3887,17 @@ export type BusinessUncheckedUpdateWithoutJobsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutMaterialsInput = {
@@ -1586,6 +3913,17 @@ export type BusinessCreateWithoutMaterialsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1597,9 +3935,17 @@ export type BusinessCreateWithoutMaterialsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutMaterialsInput = {
@@ -1615,6 +3961,17 @@ export type BusinessUncheckedCreateWithoutMaterialsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1626,9 +3983,17 @@ export type BusinessUncheckedCreateWithoutMaterialsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutMaterialsInput = {
@@ -1660,6 +4025,17 @@ export type BusinessUpdateWithoutMaterialsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1671,9 +4047,17 @@ export type BusinessUpdateWithoutMaterialsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutMaterialsInput = {
@@ -1689,6 +4073,17 @@ export type BusinessUncheckedUpdateWithoutMaterialsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1700,9 +4095,17 @@ export type BusinessUncheckedUpdateWithoutMaterialsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutStockMovementsInput = {
@@ -1718,6 +4121,17 @@ export type BusinessCreateWithoutStockMovementsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1729,9 +4143,17 @@ export type BusinessCreateWithoutStockMovementsInput = {
   materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutStockMovementsInput = {
@@ -1747,6 +4169,17 @@ export type BusinessUncheckedCreateWithoutStockMovementsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1758,9 +4191,17 @@ export type BusinessUncheckedCreateWithoutStockMovementsInput = {
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutStockMovementsInput = {
@@ -1792,6 +4233,17 @@ export type BusinessUpdateWithoutStockMovementsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1803,9 +4255,17 @@ export type BusinessUpdateWithoutStockMovementsInput = {
   materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutStockMovementsInput = {
@@ -1821,6 +4281,17 @@ export type BusinessUncheckedUpdateWithoutStockMovementsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1832,9 +4303,17 @@ export type BusinessUncheckedUpdateWithoutStockMovementsInput = {
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutInvoicesInput = {
@@ -1850,6 +4329,17 @@ export type BusinessCreateWithoutInvoicesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1861,9 +4351,17 @@ export type BusinessCreateWithoutInvoicesInput = {
   materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutInvoicesInput = {
@@ -1879,6 +4377,17 @@ export type BusinessUncheckedCreateWithoutInvoicesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -1890,9 +4399,17 @@ export type BusinessUncheckedCreateWithoutInvoicesInput = {
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutInvoicesInput = {
@@ -1924,6 +4441,17 @@ export type BusinessUpdateWithoutInvoicesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -1935,9 +4463,17 @@ export type BusinessUpdateWithoutInvoicesInput = {
   materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutInvoicesInput = {
@@ -1953,6 +4489,17 @@ export type BusinessUncheckedUpdateWithoutInvoicesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1964,9 +4511,17 @@ export type BusinessUncheckedUpdateWithoutInvoicesInput = {
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPaymentsInput = {
@@ -1982,6 +4537,17 @@ export type BusinessCreateWithoutPaymentsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -1993,9 +4559,17 @@ export type BusinessCreateWithoutPaymentsInput = {
   materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPaymentsInput = {
@@ -2011,6 +4585,17 @@ export type BusinessUncheckedCreateWithoutPaymentsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -2022,9 +4607,17 @@ export type BusinessUncheckedCreateWithoutPaymentsInput = {
   materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPaymentsInput = {
@@ -2056,6 +4649,17 @@ export type BusinessUpdateWithoutPaymentsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -2067,9 +4671,17 @@ export type BusinessUpdateWithoutPaymentsInput = {
   materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPaymentsInput = {
@@ -2085,6 +4697,17 @@ export type BusinessUncheckedUpdateWithoutPaymentsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2096,9 +4719,225 @@ export type BusinessUncheckedUpdateWithoutPaymentsInput = {
   materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutInvoiceMpesaAttemptsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutInvoiceMpesaAttemptsInput = {
+  id?: string
+  name: string
+  phone: string
+  email?: string | null
+  address?: string | null
+  registrationNumber?: string | null
+  kraPin?: string | null
+  currency?: string
+  slogan?: string | null
+  logoReference?: string | null
+  paymentInstructions?: string | null
+  mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedCreateNestedManyWithoutBusinessInput
+  serviceListings?: Prisma.ServiceListingUncheckedCreateNestedManyWithoutBusinessInput
+  customers?: Prisma.CustomerRecordUncheckedCreateNestedManyWithoutBusinessInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutBusinessInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBusinessInput
+  materials?: Prisma.MaterialUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutInvoiceMpesaAttemptsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+}
+
+export type BusinessUpsertWithoutInvoiceMpesaAttemptsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedCreateWithoutInvoiceMpesaAttemptsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutInvoiceMpesaAttemptsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutInvoiceMpesaAttemptsInput, Prisma.BusinessUncheckedUpdateWithoutInvoiceMpesaAttemptsInput>
+}
+
+export type BusinessUpdateWithoutInvoiceMpesaAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutInvoiceMpesaAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kraPin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  slogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
+  providerProfiles?: Prisma.ProviderProfileUncheckedUpdateManyWithoutBusinessNestedInput
+  serviceListings?: Prisma.ServiceListingUncheckedUpdateManyWithoutBusinessNestedInput
+  customers?: Prisma.CustomerRecordUncheckedUpdateManyWithoutBusinessNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutBusinessNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBusinessNestedInput
+  materials?: Prisma.MaterialUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpensesInput = {
@@ -2114,6 +4953,17 @@ export type BusinessCreateWithoutExpensesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -2126,8 +4976,16 @@ export type BusinessCreateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpensesInput = {
@@ -2143,6 +5001,17 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -2155,8 +5024,16 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpensesInput = {
@@ -2188,6 +5065,17 @@ export type BusinessUpdateWithoutExpensesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -2200,8 +5088,16 @@ export type BusinessUpdateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpensesInput = {
@@ -2217,6 +5113,17 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2229,8 +5136,16 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSubscriptionsInput = {
@@ -2246,6 +5161,17 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -2258,8 +5184,16 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
@@ -2275,6 +5209,17 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -2287,8 +5232,16 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSubscriptionsInput = {
@@ -2320,6 +5273,17 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -2332,8 +5296,16 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
@@ -2349,6 +5321,17 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2361,8 +5344,16 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPaymentTransactionsInput = {
@@ -2378,6 +5369,17 @@ export type BusinessCreateWithoutPaymentTransactionsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberCreateNestedManyWithoutBusinessInput
@@ -2390,8 +5392,16 @@ export type BusinessCreateWithoutPaymentTransactionsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -2407,6 +5417,17 @@ export type BusinessUncheckedCreateWithoutPaymentTransactionsInput = {
   logoReference?: string | null
   paymentInstructions?: string | null
   mpesaNumber?: string | null
+  tradingName?: string | null
+  description?: string | null
+  businessType?: string | null
+  website?: string | null
+  alternativePhone?: string | null
+  town?: string | null
+  county?: string | null
+  country?: string | null
+  postalAddress?: string | null
+  postalCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.BusinessMemberUncheckedCreateNestedManyWithoutBusinessInput
@@ -2419,8 +5440,16 @@ export type BusinessUncheckedCreateWithoutPaymentTransactionsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBusinessInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBusinessInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  savedReports?: Prisma.SavedReportUncheckedCreateNestedManyWithoutBusinessInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBusinessInput
+  notificationEvents?: Prisma.NotificationEventUncheckedCreateNestedManyWithoutBusinessInput
+  customerRequests?: Prisma.ServiceRequestUncheckedCreateNestedManyWithoutProviderBusinessInput
+  customerConversations?: Prisma.CustomerConversationUncheckedCreateNestedManyWithoutBusinessInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedCreateNestedManyWithoutBusinessInput
+  customerReviews?: Prisma.CustomerReviewUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -2452,6 +5481,17 @@ export type BusinessUpdateWithoutPaymentTransactionsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUpdateManyWithoutBusinessNestedInput
@@ -2464,8 +5504,16 @@ export type BusinessUpdateWithoutPaymentTransactionsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -2481,6 +5529,17 @@ export type BusinessUncheckedUpdateWithoutPaymentTransactionsInput = {
   logoReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentInstructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mpesaNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tradingName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativePhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.BusinessMemberUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2493,8 +5552,16 @@ export type BusinessUncheckedUpdateWithoutPaymentTransactionsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  invoiceMpesaAttempts?: Prisma.InvoiceMpesaAttemptUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  savedReports?: Prisma.SavedReportUncheckedUpdateManyWithoutBusinessNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  notificationEvents?: Prisma.NotificationEventUncheckedUpdateManyWithoutBusinessNestedInput
+  customerRequests?: Prisma.ServiceRequestUncheckedUpdateManyWithoutProviderBusinessNestedInput
+  customerConversations?: Prisma.CustomerConversationUncheckedUpdateManyWithoutBusinessNestedInput
+  favoriteProviders?: Prisma.FavoriteProviderUncheckedUpdateManyWithoutBusinessNestedInput
+  customerReviews?: Prisma.CustomerReviewUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 
@@ -2513,9 +5580,17 @@ export type BusinessCountOutputType = {
   stockMovements: number
   invoices: number
   payments: number
+  invoiceMpesaAttempts: number
   expenses: number
   subscriptions: number
   paymentTransactions: number
+  savedReports: number
+  notifications: number
+  notificationEvents: number
+  customerRequests: number
+  customerConversations: number
+  favoriteProviders: number
+  customerReviews: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2529,9 +5604,17 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   stockMovements?: boolean | BusinessCountOutputTypeCountStockMovementsArgs
   invoices?: boolean | BusinessCountOutputTypeCountInvoicesArgs
   payments?: boolean | BusinessCountOutputTypeCountPaymentsArgs
+  invoiceMpesaAttempts?: boolean | BusinessCountOutputTypeCountInvoiceMpesaAttemptsArgs
   expenses?: boolean | BusinessCountOutputTypeCountExpensesArgs
   subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
   paymentTransactions?: boolean | BusinessCountOutputTypeCountPaymentTransactionsArgs
+  savedReports?: boolean | BusinessCountOutputTypeCountSavedReportsArgs
+  notifications?: boolean | BusinessCountOutputTypeCountNotificationsArgs
+  notificationEvents?: boolean | BusinessCountOutputTypeCountNotificationEventsArgs
+  customerRequests?: boolean | BusinessCountOutputTypeCountCustomerRequestsArgs
+  customerConversations?: boolean | BusinessCountOutputTypeCountCustomerConversationsArgs
+  favoriteProviders?: boolean | BusinessCountOutputTypeCountFavoriteProvidersArgs
+  customerReviews?: boolean | BusinessCountOutputTypeCountCustomerReviewsArgs
 }
 
 /**
@@ -2617,6 +5700,13 @@ export type BusinessCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Typ
 /**
  * BusinessCountOutputType without action
  */
+export type BusinessCountOutputTypeCountInvoiceMpesaAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceMpesaAttemptWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
 export type BusinessCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ExpenseWhereInput
 }
@@ -2635,6 +5725,55 @@ export type BusinessCountOutputTypeCountPaymentTransactionsArgs<ExtArgs extends 
   where?: Prisma.PaymentTransactionWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSavedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedReportWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountNotificationEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationEventWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountCustomerRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ServiceRequestWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountCustomerConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerConversationWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountFavoriteProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FavoriteProviderWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountCustomerReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerReviewWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2649,6 +5788,17 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   logoReference?: boolean
   paymentInstructions?: boolean
   mpesaNumber?: boolean
+  tradingName?: boolean
+  description?: boolean
+  businessType?: boolean
+  website?: boolean
+  alternativePhone?: boolean
+  town?: boolean
+  county?: boolean
+  country?: boolean
+  postalAddress?: boolean
+  postalCode?: boolean
+  settings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   members?: boolean | Prisma.Business$membersArgs<ExtArgs>
@@ -2661,9 +5811,17 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   stockMovements?: boolean | Prisma.Business$stockMovementsArgs<ExtArgs>
   invoices?: boolean | Prisma.Business$invoicesArgs<ExtArgs>
   payments?: boolean | Prisma.Business$paymentsArgs<ExtArgs>
+  invoiceMpesaAttempts?: boolean | Prisma.Business$invoiceMpesaAttemptsArgs<ExtArgs>
   expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   paymentTransactions?: boolean | Prisma.Business$paymentTransactionsArgs<ExtArgs>
+  savedReports?: boolean | Prisma.Business$savedReportsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Business$notificationsArgs<ExtArgs>
+  notificationEvents?: boolean | Prisma.Business$notificationEventsArgs<ExtArgs>
+  customerRequests?: boolean | Prisma.Business$customerRequestsArgs<ExtArgs>
+  customerConversations?: boolean | Prisma.Business$customerConversationsArgs<ExtArgs>
+  favoriteProviders?: boolean | Prisma.Business$favoriteProvidersArgs<ExtArgs>
+  customerReviews?: boolean | Prisma.Business$customerReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -2680,6 +5838,17 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   logoReference?: boolean
   paymentInstructions?: boolean
   mpesaNumber?: boolean
+  tradingName?: boolean
+  description?: boolean
+  businessType?: boolean
+  website?: boolean
+  alternativePhone?: boolean
+  town?: boolean
+  county?: boolean
+  country?: boolean
+  postalAddress?: boolean
+  postalCode?: boolean
+  settings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["business"]>
@@ -2697,6 +5866,17 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   logoReference?: boolean
   paymentInstructions?: boolean
   mpesaNumber?: boolean
+  tradingName?: boolean
+  description?: boolean
+  businessType?: boolean
+  website?: boolean
+  alternativePhone?: boolean
+  town?: boolean
+  county?: boolean
+  country?: boolean
+  postalAddress?: boolean
+  postalCode?: boolean
+  settings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["business"]>
@@ -2714,11 +5894,22 @@ export type BusinessSelectScalar = {
   logoReference?: boolean
   paymentInstructions?: boolean
   mpesaNumber?: boolean
+  tradingName?: boolean
+  description?: boolean
+  businessType?: boolean
+  website?: boolean
+  alternativePhone?: boolean
+  town?: boolean
+  county?: boolean
+  country?: boolean
+  postalAddress?: boolean
+  postalCode?: boolean
+  settings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "phone" | "email" | "address" | "registrationNumber" | "kraPin" | "currency" | "slogan" | "logoReference" | "paymentInstructions" | "mpesaNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "phone" | "email" | "address" | "registrationNumber" | "kraPin" | "currency" | "slogan" | "logoReference" | "paymentInstructions" | "mpesaNumber" | "tradingName" | "description" | "businessType" | "website" | "alternativePhone" | "town" | "county" | "country" | "postalAddress" | "postalCode" | "settings" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Business$membersArgs<ExtArgs>
   providerProfiles?: boolean | Prisma.Business$providerProfilesArgs<ExtArgs>
@@ -2730,9 +5921,17 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   stockMovements?: boolean | Prisma.Business$stockMovementsArgs<ExtArgs>
   invoices?: boolean | Prisma.Business$invoicesArgs<ExtArgs>
   payments?: boolean | Prisma.Business$paymentsArgs<ExtArgs>
+  invoiceMpesaAttempts?: boolean | Prisma.Business$invoiceMpesaAttemptsArgs<ExtArgs>
   expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   paymentTransactions?: boolean | Prisma.Business$paymentTransactionsArgs<ExtArgs>
+  savedReports?: boolean | Prisma.Business$savedReportsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Business$notificationsArgs<ExtArgs>
+  notificationEvents?: boolean | Prisma.Business$notificationEventsArgs<ExtArgs>
+  customerRequests?: boolean | Prisma.Business$customerRequestsArgs<ExtArgs>
+  customerConversations?: boolean | Prisma.Business$customerConversationsArgs<ExtArgs>
+  favoriteProviders?: boolean | Prisma.Business$favoriteProvidersArgs<ExtArgs>
+  customerReviews?: boolean | Prisma.Business$customerReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2751,9 +5950,17 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
+    invoiceMpesaAttempts: Prisma.$InvoiceMpesaAttemptPayload<ExtArgs>[]
     expenses: Prisma.$ExpensePayload<ExtArgs>[]
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
+    savedReports: Prisma.$SavedReportPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    notificationEvents: Prisma.$NotificationEventPayload<ExtArgs>[]
+    customerRequests: Prisma.$ServiceRequestPayload<ExtArgs>[]
+    customerConversations: Prisma.$CustomerConversationPayload<ExtArgs>[]
+    favoriteProviders: Prisma.$FavoriteProviderPayload<ExtArgs>[]
+    customerReviews: Prisma.$CustomerReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2768,6 +5975,17 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     logoReference: string | null
     paymentInstructions: string | null
     mpesaNumber: string | null
+    tradingName: string | null
+    description: string | null
+    businessType: string | null
+    website: string | null
+    alternativePhone: string | null
+    town: string | null
+    county: string | null
+    country: string | null
+    postalAddress: string | null
+    postalCode: string | null
+    settings: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["business"]>
@@ -3174,9 +6392,17 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   stockMovements<T extends Prisma.Business$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoices<T extends Prisma.Business$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Business$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoiceMpesaAttempts<T extends Prisma.Business$invoiceMpesaAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$invoiceMpesaAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceMpesaAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.Business$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paymentTransactions<T extends Prisma.Business$paymentTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedReports<T extends Prisma.Business$savedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$savedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Business$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationEvents<T extends Prisma.Business$notificationEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$notificationEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerRequests<T extends Prisma.Business$customerRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$customerRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerConversations<T extends Prisma.Business$customerConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$customerConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  favoriteProviders<T extends Prisma.Business$favoriteProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$favoriteProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoriteProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerReviews<T extends Prisma.Business$customerReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$customerReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3218,6 +6444,17 @@ export interface BusinessFieldRefs {
   readonly logoReference: Prisma.FieldRef<"Business", 'String'>
   readonly paymentInstructions: Prisma.FieldRef<"Business", 'String'>
   readonly mpesaNumber: Prisma.FieldRef<"Business", 'String'>
+  readonly tradingName: Prisma.FieldRef<"Business", 'String'>
+  readonly description: Prisma.FieldRef<"Business", 'String'>
+  readonly businessType: Prisma.FieldRef<"Business", 'String'>
+  readonly website: Prisma.FieldRef<"Business", 'String'>
+  readonly alternativePhone: Prisma.FieldRef<"Business", 'String'>
+  readonly town: Prisma.FieldRef<"Business", 'String'>
+  readonly county: Prisma.FieldRef<"Business", 'String'>
+  readonly country: Prisma.FieldRef<"Business", 'String'>
+  readonly postalAddress: Prisma.FieldRef<"Business", 'String'>
+  readonly postalCode: Prisma.FieldRef<"Business", 'String'>
+  readonly settings: Prisma.FieldRef<"Business", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Business", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Business", 'DateTime'>
 }
@@ -3853,6 +7090,30 @@ export type Business$paymentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Business.invoiceMpesaAttempts
+ */
+export type Business$invoiceMpesaAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceMpesaAttempt
+   */
+  select?: Prisma.InvoiceMpesaAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceMpesaAttempt
+   */
+  omit?: Prisma.InvoiceMpesaAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceMpesaAttemptInclude<ExtArgs> | null
+  where?: Prisma.InvoiceMpesaAttemptWhereInput
+  orderBy?: Prisma.InvoiceMpesaAttemptOrderByWithRelationInput | Prisma.InvoiceMpesaAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceMpesaAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceMpesaAttemptScalarFieldEnum | Prisma.InvoiceMpesaAttemptScalarFieldEnum[]
+}
+
+/**
  * Business.expenses
  */
 export type Business$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3922,6 +7183,174 @@ export type Business$paymentTransactionsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.PaymentTransactionScalarFieldEnum | Prisma.PaymentTransactionScalarFieldEnum[]
+}
+
+/**
+ * Business.savedReports
+ */
+export type Business$savedReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedReport
+   */
+  select?: Prisma.SavedReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedReport
+   */
+  omit?: Prisma.SavedReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedReportInclude<ExtArgs> | null
+  where?: Prisma.SavedReportWhereInput
+  orderBy?: Prisma.SavedReportOrderByWithRelationInput | Prisma.SavedReportOrderByWithRelationInput[]
+  cursor?: Prisma.SavedReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedReportScalarFieldEnum | Prisma.SavedReportScalarFieldEnum[]
+}
+
+/**
+ * Business.notifications
+ */
+export type Business$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Business.notificationEvents
+ */
+export type Business$notificationEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationEvent
+   */
+  select?: Prisma.NotificationEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationEvent
+   */
+  omit?: Prisma.NotificationEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationEventInclude<ExtArgs> | null
+  where?: Prisma.NotificationEventWhereInput
+  orderBy?: Prisma.NotificationEventOrderByWithRelationInput | Prisma.NotificationEventOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationEventScalarFieldEnum | Prisma.NotificationEventScalarFieldEnum[]
+}
+
+/**
+ * Business.customerRequests
+ */
+export type Business$customerRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ServiceRequest
+   */
+  select?: Prisma.ServiceRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ServiceRequest
+   */
+  omit?: Prisma.ServiceRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServiceRequestInclude<ExtArgs> | null
+  where?: Prisma.ServiceRequestWhereInput
+  orderBy?: Prisma.ServiceRequestOrderByWithRelationInput | Prisma.ServiceRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ServiceRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ServiceRequestScalarFieldEnum | Prisma.ServiceRequestScalarFieldEnum[]
+}
+
+/**
+ * Business.customerConversations
+ */
+export type Business$customerConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerConversation
+   */
+  select?: Prisma.CustomerConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerConversation
+   */
+  omit?: Prisma.CustomerConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerConversationInclude<ExtArgs> | null
+  where?: Prisma.CustomerConversationWhereInput
+  orderBy?: Prisma.CustomerConversationOrderByWithRelationInput | Prisma.CustomerConversationOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerConversationScalarFieldEnum | Prisma.CustomerConversationScalarFieldEnum[]
+}
+
+/**
+ * Business.favoriteProviders
+ */
+export type Business$favoriteProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FavoriteProvider
+   */
+  select?: Prisma.FavoriteProviderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FavoriteProvider
+   */
+  omit?: Prisma.FavoriteProviderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FavoriteProviderInclude<ExtArgs> | null
+  where?: Prisma.FavoriteProviderWhereInput
+  orderBy?: Prisma.FavoriteProviderOrderByWithRelationInput | Prisma.FavoriteProviderOrderByWithRelationInput[]
+  cursor?: Prisma.FavoriteProviderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FavoriteProviderScalarFieldEnum | Prisma.FavoriteProviderScalarFieldEnum[]
+}
+
+/**
+ * Business.customerReviews
+ */
+export type Business$customerReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerReview
+   */
+  select?: Prisma.CustomerReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerReview
+   */
+  omit?: Prisma.CustomerReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerReviewInclude<ExtArgs> | null
+  where?: Prisma.CustomerReviewWhereInput
+  orderBy?: Prisma.CustomerReviewOrderByWithRelationInput | Prisma.CustomerReviewOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerReviewScalarFieldEnum | Prisma.CustomerReviewScalarFieldEnum[]
 }
 
 /**

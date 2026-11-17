@@ -7,6 +7,7 @@ export const ROUTES = {
   dashboard: '/app/dashboard',
   customers: '/app/customers',
   quotations: '/app/quotations',
+  messages: '/app/messages',
   jobs: '/app/jobs',
   inventory: '/app/materials',
   inventoryAlias: '/app/inventory',
@@ -15,8 +16,11 @@ export const ROUTES = {
   expenses: '/app/expenses',
   reports: '/app/reports',
   billing: '/app/billing',
+  notifications: '/app/notifications',
+  notificationPreferences: '/app/notifications/preferences',
   profile: '/app/profile',
   businessProfile: '/app/business-profile',
+  settings: '/app/settings/business',
   resetPassword: '/reset-password',
 } as const
 

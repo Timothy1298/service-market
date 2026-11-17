@@ -63,3 +63,10 @@
 @media (max-width: 700px) { .customers-page__table-wrap { display: none; }.customers-page__mobile-list { display: block; border-top: 1px solid var(--line); }.customers-page__header-actions { align-items: stretch; }.customers-page__header-actions > button { flex: 1; }.customers-page__header-actions > .customers-page__primary { width: auto; } }
 @media (max-width: 520px) { .customers-page__header-actions { width: 100%; }.customers-page__header-actions > button { padding: 0 9px; font-size: 12px; } }
 @media (max-width: 600px) { .fq-content .customers-page .customers-page__directory > header.customers-page__directory-head { align-items: stretch; flex-direction: column; gap: 14px; } }
+.customers-page { padding: 30px 32px 48px; }
+.customers-page__header { margin-bottom: 24px; }
+.customers-page__metrics { margin-bottom: 20px; }
+.customers-page__directory { margin-top: 20px; }
+
+/* Shared workspace spacing aligned with Invoices. */
+.customers-page{padding:30px 32px 48px}.customers-page__header{margin-bottom:24px}.customers-page__metrics{margin-bottom:20px}.customers-page__directory{margin-top:20px}

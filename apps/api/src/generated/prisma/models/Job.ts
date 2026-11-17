@@ -290,6 +290,7 @@ export type JobWhereInput = {
   customer?: Prisma.XOR<Prisma.CustomerRecordScalarRelationFilter, Prisma.CustomerRecordWhereInput>
   quotation?: Prisma.XOR<Prisma.QuotationScalarRelationFilter, Prisma.QuotationWhereInput>
   assignedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  customerReview?: Prisma.XOR<Prisma.CustomerReviewNullableScalarRelationFilter, Prisma.CustomerReviewWhereInput> | null
   activities?: Prisma.JobActivityListRelationFilter
   materialsUsed?: Prisma.JobMaterialUsageListRelationFilter
   stockMovements?: Prisma.StockMovementListRelationFilter
@@ -320,6 +321,7 @@ export type JobOrderByWithRelationInput = {
   customer?: Prisma.CustomerRecordOrderByWithRelationInput
   quotation?: Prisma.QuotationOrderByWithRelationInput
   assignedUser?: Prisma.UserOrderByWithRelationInput
+  customerReview?: Prisma.CustomerReviewOrderByWithRelationInput
   activities?: Prisma.JobActivityOrderByRelationAggregateInput
   materialsUsed?: Prisma.JobMaterialUsageOrderByRelationAggregateInput
   stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
@@ -354,6 +356,7 @@ export type JobWhereUniqueInput = Prisma.AtLeast<{
   customer?: Prisma.XOR<Prisma.CustomerRecordScalarRelationFilter, Prisma.CustomerRecordWhereInput>
   quotation?: Prisma.XOR<Prisma.QuotationScalarRelationFilter, Prisma.QuotationWhereInput>
   assignedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  customerReview?: Prisma.XOR<Prisma.CustomerReviewNullableScalarRelationFilter, Prisma.CustomerReviewWhereInput> | null
   activities?: Prisma.JobActivityListRelationFilter
   materialsUsed?: Prisma.JobMaterialUsageListRelationFilter
   stockMovements?: Prisma.StockMovementListRelationFilter
@@ -428,6 +431,7 @@ export type JobCreateInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -454,6 +458,7 @@ export type JobUncheckedCreateInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -480,6 +485,7 @@ export type JobUpdateInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -506,6 +512,7 @@ export type JobUncheckedUpdateInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -582,6 +589,11 @@ export type JobOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type JobScalarRelationFilter = {
+  is?: Prisma.JobWhereInput
+  isNot?: Prisma.JobWhereInput
+}
+
 export type JobBusinessIdJobNumberCompoundUniqueInput = {
   businessId: string
   jobNumber: string
@@ -648,11 +660,6 @@ export type JobMinOrderByAggregateInput = {
   internalNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type JobScalarRelationFilter = {
-  is?: Prisma.JobWhereInput
-  isNot?: Prisma.JobWhereInput
 }
 
 export type JobNullableScalarRelationFilter = {
@@ -784,6 +791,20 @@ export type JobUncheckedUpdateManyWithoutCustomerNestedInput = {
   update?: Prisma.JobUpdateWithWhereUniqueWithoutCustomerInput | Prisma.JobUpdateWithWhereUniqueWithoutCustomerInput[]
   updateMany?: Prisma.JobUpdateManyWithWhereWithoutCustomerInput | Prisma.JobUpdateManyWithWhereWithoutCustomerInput[]
   deleteMany?: Prisma.JobScalarWhereInput | Prisma.JobScalarWhereInput[]
+}
+
+export type JobCreateNestedOneWithoutCustomerReviewInput = {
+  create?: Prisma.XOR<Prisma.JobCreateWithoutCustomerReviewInput, Prisma.JobUncheckedCreateWithoutCustomerReviewInput>
+  connectOrCreate?: Prisma.JobCreateOrConnectWithoutCustomerReviewInput
+  connect?: Prisma.JobWhereUniqueInput
+}
+
+export type JobUpdateOneRequiredWithoutCustomerReviewNestedInput = {
+  create?: Prisma.XOR<Prisma.JobCreateWithoutCustomerReviewInput, Prisma.JobUncheckedCreateWithoutCustomerReviewInput>
+  connectOrCreate?: Prisma.JobCreateOrConnectWithoutCustomerReviewInput
+  upsert?: Prisma.JobUpsertWithoutCustomerReviewInput
+  connect?: Prisma.JobWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobUpdateToOneWithWhereWithoutCustomerReviewInput, Prisma.JobUpdateWithoutCustomerReviewInput>, Prisma.JobUncheckedUpdateWithoutCustomerReviewInput>
 }
 
 export type JobCreateNestedManyWithoutQuotationInput = {
@@ -930,6 +951,7 @@ export type JobCreateWithoutAssignedUserInput = {
   business: Prisma.BusinessCreateNestedOneWithoutJobsInput
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -955,6 +977,7 @@ export type JobUncheckedCreateWithoutAssignedUserInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1030,6 +1053,7 @@ export type JobCreateWithoutBusinessInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -1055,6 +1079,7 @@ export type JobUncheckedCreateWithoutBusinessInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1106,6 +1131,7 @@ export type JobCreateWithoutCustomerInput = {
   business: Prisma.BusinessCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -1131,6 +1157,7 @@ export type JobUncheckedCreateWithoutCustomerInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1164,6 +1191,126 @@ export type JobUpdateManyWithWhereWithoutCustomerInput = {
   data: Prisma.XOR<Prisma.JobUpdateManyMutationInput, Prisma.JobUncheckedUpdateManyWithoutCustomerInput>
 }
 
+export type JobCreateWithoutCustomerReviewInput = {
+  id?: string
+  jobNumber: string
+  title: string
+  description?: string | null
+  location?: string | null
+  scheduledStart?: Date | string | null
+  expectedCompletion?: Date | string | null
+  actualStart?: Date | string | null
+  completedAt?: Date | string | null
+  priority?: $Enums.JobPriority
+  status?: $Enums.JobStatus
+  internalNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutJobsInput
+  customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
+  quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
+  assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
+  materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutJobInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutJobInput
+}
+
+export type JobUncheckedCreateWithoutCustomerReviewInput = {
+  id?: string
+  businessId: string
+  customerId: string
+  quotationId: string
+  jobNumber: string
+  title: string
+  description?: string | null
+  location?: string | null
+  scheduledStart?: Date | string | null
+  expectedCompletion?: Date | string | null
+  actualStart?: Date | string | null
+  completedAt?: Date | string | null
+  assignedUserId?: string | null
+  priority?: $Enums.JobPriority
+  status?: $Enums.JobStatus
+  internalNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
+  materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutJobInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutJobInput
+}
+
+export type JobCreateOrConnectWithoutCustomerReviewInput = {
+  where: Prisma.JobWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobCreateWithoutCustomerReviewInput, Prisma.JobUncheckedCreateWithoutCustomerReviewInput>
+}
+
+export type JobUpsertWithoutCustomerReviewInput = {
+  update: Prisma.XOR<Prisma.JobUpdateWithoutCustomerReviewInput, Prisma.JobUncheckedUpdateWithoutCustomerReviewInput>
+  create: Prisma.XOR<Prisma.JobCreateWithoutCustomerReviewInput, Prisma.JobUncheckedCreateWithoutCustomerReviewInput>
+  where?: Prisma.JobWhereInput
+}
+
+export type JobUpdateToOneWithWhereWithoutCustomerReviewInput = {
+  where?: Prisma.JobWhereInput
+  data: Prisma.XOR<Prisma.JobUpdateWithoutCustomerReviewInput, Prisma.JobUncheckedUpdateWithoutCustomerReviewInput>
+}
+
+export type JobUpdateWithoutCustomerReviewInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  jobNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expectedCompletion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priority?: Prisma.EnumJobPriorityFieldUpdateOperationsInput | $Enums.JobPriority
+  status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutJobsNestedInput
+  customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
+  quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
+  assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
+  materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutJobNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutJobNestedInput
+}
+
+export type JobUncheckedUpdateWithoutCustomerReviewInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  quotationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expectedCompletion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.EnumJobPriorityFieldUpdateOperationsInput | $Enums.JobPriority
+  status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
+  materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutJobNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutJobNestedInput
+}
+
 export type JobCreateWithoutQuotationInput = {
   id?: string
   jobNumber: string
@@ -1182,6 +1329,7 @@ export type JobCreateWithoutQuotationInput = {
   business: Prisma.BusinessCreateNestedOneWithoutJobsInput
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -1207,6 +1355,7 @@ export type JobUncheckedCreateWithoutQuotationInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1259,6 +1408,7 @@ export type JobCreateWithoutActivitiesInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutJobInput
@@ -1284,6 +1434,7 @@ export type JobUncheckedCreateWithoutActivitiesInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutJobInput
@@ -1325,6 +1476,7 @@ export type JobUpdateWithoutActivitiesInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutJobNestedInput
@@ -1350,6 +1502,7 @@ export type JobUncheckedUpdateWithoutActivitiesInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutJobNestedInput
@@ -1375,6 +1528,7 @@ export type JobCreateWithoutStockMovementsInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutJobInput
@@ -1400,6 +1554,7 @@ export type JobUncheckedCreateWithoutStockMovementsInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutJobInput
@@ -1441,6 +1596,7 @@ export type JobUpdateWithoutStockMovementsInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutJobNestedInput
@@ -1466,6 +1622,7 @@ export type JobUncheckedUpdateWithoutStockMovementsInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutJobNestedInput
@@ -1491,6 +1648,7 @@ export type JobCreateWithoutMaterialsUsedInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutJobInput
@@ -1516,6 +1674,7 @@ export type JobUncheckedCreateWithoutMaterialsUsedInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutJobInput
@@ -1557,6 +1716,7 @@ export type JobUpdateWithoutMaterialsUsedInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutJobNestedInput
@@ -1582,6 +1742,7 @@ export type JobUncheckedUpdateWithoutMaterialsUsedInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutJobNestedInput
@@ -1607,6 +1768,7 @@ export type JobCreateWithoutInvoicesInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -1632,6 +1794,7 @@ export type JobUncheckedCreateWithoutInvoicesInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1673,6 +1836,7 @@ export type JobUpdateWithoutInvoicesInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -1698,6 +1862,7 @@ export type JobUncheckedUpdateWithoutInvoicesInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -1723,6 +1888,7 @@ export type JobCreateWithoutExpensesInput = {
   customer: Prisma.CustomerRecordCreateNestedOneWithoutJobsInput
   quotation: Prisma.QuotationCreateNestedOneWithoutJobsInput
   assignedUser?: Prisma.UserCreateNestedOneWithoutAssignedJobsInput
+  customerReview?: Prisma.CustomerReviewCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutJobInput
@@ -1748,6 +1914,7 @@ export type JobUncheckedCreateWithoutExpensesInput = {
   internalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedCreateNestedOneWithoutJobInput
   activities?: Prisma.JobActivityUncheckedCreateNestedManyWithoutJobInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedCreateNestedManyWithoutJobInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutJobInput
@@ -1789,6 +1956,7 @@ export type JobUpdateWithoutExpensesInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -1814,6 +1982,7 @@ export type JobUncheckedUpdateWithoutExpensesInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -1858,6 +2027,7 @@ export type JobUpdateWithoutAssignedUserInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutJobsNestedInput
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -1883,6 +2053,7 @@ export type JobUncheckedUpdateWithoutAssignedUserInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -1948,6 +2119,7 @@ export type JobUpdateWithoutBusinessInput = {
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -1973,6 +2145,7 @@ export type JobUncheckedUpdateWithoutBusinessInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -2038,6 +2211,7 @@ export type JobUpdateWithoutCustomerInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutJobsNestedInput
   quotation?: Prisma.QuotationUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -2063,6 +2237,7 @@ export type JobUncheckedUpdateWithoutCustomerInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -2128,6 +2303,7 @@ export type JobUpdateWithoutQuotationInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutJobsNestedInput
   customer?: Prisma.CustomerRecordUpdateOneRequiredWithoutJobsNestedInput
   assignedUser?: Prisma.UserUpdateOneWithoutAssignedJobsNestedInput
+  customerReview?: Prisma.CustomerReviewUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutJobNestedInput
@@ -2153,6 +2329,7 @@ export type JobUncheckedUpdateWithoutQuotationInput = {
   internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerReview?: Prisma.CustomerReviewUncheckedUpdateOneWithoutJobNestedInput
   activities?: Prisma.JobActivityUncheckedUpdateManyWithoutJobNestedInput
   materialsUsed?: Prisma.JobMaterialUsageUncheckedUpdateManyWithoutJobNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutJobNestedInput
@@ -2270,6 +2447,7 @@ export type JobSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   customer?: boolean | Prisma.CustomerRecordDefaultArgs<ExtArgs>
   quotation?: boolean | Prisma.QuotationDefaultArgs<ExtArgs>
   assignedUser?: boolean | Prisma.Job$assignedUserArgs<ExtArgs>
+  customerReview?: boolean | Prisma.Job$customerReviewArgs<ExtArgs>
   activities?: boolean | Prisma.Job$activitiesArgs<ExtArgs>
   materialsUsed?: boolean | Prisma.Job$materialsUsedArgs<ExtArgs>
   stockMovements?: boolean | Prisma.Job$stockMovementsArgs<ExtArgs>
@@ -2355,6 +2533,7 @@ export type JobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   customer?: boolean | Prisma.CustomerRecordDefaultArgs<ExtArgs>
   quotation?: boolean | Prisma.QuotationDefaultArgs<ExtArgs>
   assignedUser?: boolean | Prisma.Job$assignedUserArgs<ExtArgs>
+  customerReview?: boolean | Prisma.Job$customerReviewArgs<ExtArgs>
   activities?: boolean | Prisma.Job$activitiesArgs<ExtArgs>
   materialsUsed?: boolean | Prisma.Job$materialsUsedArgs<ExtArgs>
   stockMovements?: boolean | Prisma.Job$stockMovementsArgs<ExtArgs>
@@ -2382,6 +2561,7 @@ export type $JobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     customer: Prisma.$CustomerRecordPayload<ExtArgs>
     quotation: Prisma.$QuotationPayload<ExtArgs>
     assignedUser: Prisma.$UserPayload<ExtArgs> | null
+    customerReview: Prisma.$CustomerReviewPayload<ExtArgs> | null
     activities: Prisma.$JobActivityPayload<ExtArgs>[]
     materialsUsed: Prisma.$JobMaterialUsagePayload<ExtArgs>[]
     stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
@@ -2805,6 +2985,7 @@ export interface Prisma__JobClient<T, Null = never, ExtArgs extends runtime.Type
   customer<T extends Prisma.CustomerRecordDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerRecordDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerRecordClient<runtime.Types.Result.GetResult<Prisma.$CustomerRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   quotation<T extends Prisma.QuotationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QuotationDefaultArgs<ExtArgs>>): Prisma.Prisma__QuotationClient<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignedUser<T extends Prisma.Job$assignedUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$assignedUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  customerReview<T extends Prisma.Job$customerReviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$customerReviewArgs<ExtArgs>>): Prisma.Prisma__CustomerReviewClient<runtime.Types.Result.GetResult<Prisma.$CustomerReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   activities<T extends Prisma.Job$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   materialsUsed<T extends Prisma.Job$materialsUsedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$materialsUsedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockMovements<T extends Prisma.Job$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3274,6 +3455,25 @@ export type Job$assignedUserArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Job.customerReview
+ */
+export type Job$customerReviewArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerReview
+   */
+  select?: Prisma.CustomerReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerReview
+   */
+  omit?: Prisma.CustomerReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerReviewInclude<ExtArgs> | null
+  where?: Prisma.CustomerReviewWhereInput
 }
 
 /**

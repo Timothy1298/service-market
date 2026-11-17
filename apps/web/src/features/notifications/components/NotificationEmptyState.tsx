@@ -1,0 +1,2 @@
+import {Bell,Inbox,Search} from 'lucide-react'
+export default function NotificationEmptyState({filtered}:{filtered:boolean}){const Icon=filtered?Search:Inbox;return <div className="notification-empty"><span><Icon size={25}/></span><h2>{filtered?'No matching notifications':'You’re all caught up'}</h2><p>{filtered?'Try changing the filters or search terms.':'New business updates and reminders will appear here.'}</p>{!filtered&&<small><Bell size={14}/> Notifications are saved to your account and sync across devices.</small>}</div>}

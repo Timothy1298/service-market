@@ -26,6 +26,8 @@ export default function InvoiceFormPage({ editId }: { editId?: string }) {
   const [notes, setNotes] = useState('')
   const [discount, setDiscount] = useState('0')
   const [tax, setTax] = useState('0')
+  const [taxManual, setTaxManual] = useState(false)
+  const [taxDefault, setTaxDefault] = useState({ enabled:false, rate:0, inclusive:false })
   const [items, setItems] = useState<Line[]>([initialLine()])
   const [currency, setCurrency] = useState('KES')
   const [loading, setLoading] = useState(true)
@@ -42,20 +44,21 @@ export default function InvoiceFormPage({ editId }: { editId?: string }) {
     Promise.all([
       apiRequest<{ customers: Customer[] }>('/customers?pageSize=50'),
       apiRequest<{ quotations: Quotation[] }>('/quotations'),
-      apiRequest<{ profile: { business: { currency: string } } }>('/business-profile'),
+      apiRequest<any>('/business-profile'),
       editId ? apiRequest<{ invoice: Invoice }>(`/invoices/${editId}`) : Promise.resolve(null),
       jobId ? apiRequest<{ job: { customer: { id: string } } }>(`/jobs/${jobId}`) : Promise.resolve(null),
     ]).then(([customersResult, quotationsResult, profileResult, current, jobResult]) => {
       if (!active) return
       setCustomers(customersResult.customers); setQuotations(quotationsResult.quotations.filter(item => item.status === 'ACCEPTED')); setCurrency(profileResult.profile.business.currency || 'KES')
+      const defaults=profileResult.profile.business.settings;setTaxDefault({enabled:defaults?.tax?.enabled??false,rate:defaults?.tax?.rate??0,inclusive:defaults?.tax?.inclusive??false});setPaymentTerms(defaults?.documents?.invoicePaymentTerms??'Payment due within 14 days.');setNotes(defaults?.documents?.invoiceNotes??'');setTaxManual(false)
       if (current) {
         const invoice = current.invoice
         setCustomerId(invoice.customer.id); setQuotationId(invoice.quotation?.id ?? ''); setIssueDate(invoice.issueDate?.slice(0, 10) ?? today()); setDueDate(invoice.dueDate?.slice(0, 10) ?? '')
-        setPaymentTerms(invoice.paymentTerms ?? ''); setNotes(invoice.notes ?? ''); setDiscount(String(invoice.discount)); setTax(String(invoice.tax))
+        setPaymentTerms(invoice.paymentTerms ?? ''); setNotes(invoice.notes ?? ''); setDiscount(String(invoice.discount)); setTax(String(invoice.tax));setTaxManual(true)
         setItems(invoice.items.map(item => ({ description: item.description, quantity: String(item.quantity), unit: item.unit, unitPrice: String(item.unitPrice) })))
       } else if (fromQuoteId) {
         const quote = quotationsResult.quotations.find(item => item.id === fromQuoteId)
-        if (quote) { setCustomerId(quote.customerId); setDiscount(String(quote.discount)); setTax(String(quote.tax)); setPaymentTerms(quote.paymentTerms ?? ''); setNotes(quote.terms ?? quote.description ?? ''); setItems(quote.items.map(item => ({ description: item.description, quantity: String(item.quantity), unit: item.unit, unitPrice: String(item.unitPrice) }))) }
+        if (quote) { setCustomerId(quote.customerId); setDiscount(String(quote.discount)); setTax(String(quote.tax));setTaxManual(true); setPaymentTerms(quote.paymentTerms ?? ''); setNotes(quote.terms ?? quote.description ?? ''); setItems(quote.items.map(item => ({ description: item.description, quantity: String(item.quantity), unit: item.unit, unitPrice: String(item.unitPrice) }))) }
       } else if (jobResult) setCustomerId(jobResult.job.customer.id)
     }).catch(cause => { if (active) setError(errorMessage(cause)) }).finally(() => { if (active) setLoading(false) })
     return () => { active = false }
@@ -65,14 +68,16 @@ export default function InvoiceFormPage({ editId }: { editId?: string }) {
   const selectedQuote = quotations.find(quote => quote.id === quotationId)
   const subtotalCents = items.reduce((sum, item) => sum + cents((Number(item.quantity) || 0) * (Number(item.unitPrice) || 0)), 0)
   const discountCents = cents(Number(discount) || 0)
-  const taxCents = cents(Number(tax) || 0)
-  const totalCents = Math.max(0, subtotalCents - discountCents + taxCents)
+  const taxableCents = Math.max(0,subtotalCents-discountCents)
+  const defaultTaxCents = taxDefault.inclusive ? Math.round(taxableCents-taxableCents/(1+taxDefault.rate/100)) : Math.round(taxableCents*taxDefault.rate/100)
+  const taxCents = taxManual ? cents(Number(tax)||0) : taxDefault.enabled ? defaultTaxCents : cents(Number(tax)||0)
+  const totalCents = Math.max(0, taxDefault.enabled&&!taxManual&&taxDefault.inclusive ? taxableCents : taxableCents+taxCents)
   const totals = useMemo(() => ({ subtotal: (subtotalCents / 100).toFixed(2), discount: (discountCents / 100).toFixed(2), tax: (taxCents / 100).toFixed(2), total: (totalCents / 100).toFixed(2) }), [subtotalCents, discountCents, taxCents, totalCents])
   const changeQuote = (id: string) => {
     setQuotationId(id)
     const quote = quotations.find(item => item.id === id)
-    if (quote) { setCustomerId(quote.customerId); setDiscount(String(quote.discount)); setTax(String(quote.tax)); setPaymentTerms(quote.paymentTerms ?? ''); setNotes(quote.terms ?? quote.description ?? ''); setItems(quote.items.map(item => ({ description: item.description, quantity: String(item.quantity), unit: item.unit, unitPrice: String(item.unitPrice) }))) }
-    else { setDiscount('0'); setTax('0'); setItems([initialLine()]) }
+    if (quote) { setCustomerId(quote.customerId); setDiscount(String(quote.discount)); setTax(String(quote.tax));setTaxManual(true); setPaymentTerms(quote.paymentTerms ?? ''); setNotes(quote.terms ?? quote.description ?? ''); setItems(quote.items.map(item => ({ description: item.description, quantity: String(item.quantity), unit: item.unit, unitPrice: String(item.unitPrice) }))) }
+    else { setDiscount('0'); setTax('0');setTaxManual(false); setItems([initialLine()]) }
   }
   const createClient = async () => {
     setClientSaving(true); setClientMessage('')
@@ -90,7 +95,7 @@ export default function InvoiceFormPage({ editId }: { editId?: string }) {
     setSaving(true); setError('')
     try {
       if (!customerId) throw new Error('Choose a client before saving this invoice.')
-      const payload = { customerId, ...(quotationId ? { quotationId } : {}), ...(jobId ? { jobId } : {}), issueDate: issueDate || undefined, dueDate: dueDate || undefined, discount: Number(discount) || 0, tax: Number(tax) || 0, paymentTerms, notes, items: items.map(item => ({ ...item, quantity: Number(item.quantity), unitPrice: Number(item.unitPrice) })) }
+      const payload = { customerId, ...(quotationId ? { quotationId } : {}), ...(jobId ? { jobId } : {}), issueDate: issueDate || undefined, dueDate: dueDate || undefined, discount: Number(discount) || 0, tax: Number(totals.tax) || 0, paymentTerms, notes, items: items.map(item => ({ ...item, quantity: Number(item.quantity), unitPrice: Number(item.unitPrice) })) }
       const result = editId
         ? await apiRequest<{ invoice: Invoice }>(`/invoices/${editId}`, { method: 'PATCH', body: JSON.stringify(payload) })
         : await apiRequest<{ invoice: Invoice }>('/invoices', { method: 'POST', body: JSON.stringify(payload) })
@@ -114,7 +119,7 @@ export default function InvoiceFormPage({ editId }: { editId?: string }) {
         {selectedQuote && <section className="invoice-page__message">From quotation <b>{selectedQuote.quotationNumber}</b> · {selectedQuote.title}</section>}
         <section className="invoice-page__form-card"><h2>Line items</h2><div className="invoice-page__item-head"><span>Description</span><span>Quantity</span><span>Unit</span><span>Unit price</span><span>Line total</span><span /></div>{items.map((item, index) => <div className="invoice-page__item" key={index}><input aria-label={`Item ${index + 1} description`} placeholder="Service or goods description" required value={item.description} disabled={isQuote} onChange={event => setItems(rows => rows.map((row, position) => position === index ? { ...row, description: event.target.value } : row))} /><input aria-label={`Item ${index + 1} quantity`} type="number" min="0.001" step="0.001" required value={item.quantity} disabled={isQuote} onChange={event => setItems(rows => rows.map((row, position) => position === index ? { ...row, quantity: event.target.value } : row))} /><input aria-label={`Item ${index + 1} unit`} placeholder="unit" required value={item.unit} disabled={isQuote} onChange={event => setItems(rows => rows.map((row, position) => position === index ? { ...row, unit: event.target.value } : row))} /><input aria-label={`Item ${index + 1} unit price`} type="number" min="0" step="0.01" required value={item.unitPrice} disabled={isQuote} onChange={event => setItems(rows => rows.map((row, position) => position === index ? { ...row, unitPrice: event.target.value } : row))} /><strong>{formatKESPrecise((Number(item.quantity) || 0) * (Number(item.unitPrice) || 0), currency)}</strong><button type="button" disabled={isQuote || items.length === 1} onClick={() => setItems(rows => rows.filter((_, position) => position !== index))} aria-label={`Remove item ${index + 1}`}><Trash2 size={15} /></button></div>)}{!isQuote && <button type="button" className="invoice-page__add" onClick={() => setItems(rows => [...rows, initialLine()])}><Plus size={15} /> Add item</button>}</section>
         <section className="invoice-page__form-card"><h2>Notes and payment instructions</h2><label className="invoice-page__field">Customer-facing notes<textarea value={notes} onChange={event => setNotes(event.target.value)} maxLength={3000} placeholder="Add a note for the client" /></label></section>
-      </div><aside className="invoice-page__form-card"><h2>Invoice summary</h2><div className="invoice-page__form-grid"><label className="invoice-page__field">Discount ({currency})<input type="number" min="0" step="0.01" value={discount} disabled={isQuote} onChange={event => setDiscount(event.target.value)} /></label><label className="invoice-page__field">Tax ({currency})<input type="number" min="0" step="0.01" value={tax} disabled={isQuote} onChange={event => setTax(event.target.value)} /></label></div><div className="invoice-page__totals"><span>Subtotal<strong>{formatKESPrecise(totals.subtotal, currency)}</strong></span><span>Discount<strong>− {formatKESPrecise(totals.discount, currency)}</strong></span><span>Tax<strong>{formatKESPrecise(totals.tax, currency)}</strong></span><b>Total<strong>{formatKESPrecise(totals.total, currency)}</strong></b><span>Amount paid<strong>{formatKESPrecise(0, currency)}</strong></span><span>Balance due<strong>{formatKESPrecise(totals.total, currency)}</strong></span></div><p className="invoice-page__hint">Payments are recorded separately after the invoice is issued.</p></aside></div>
+      </div><aside className="invoice-page__form-card"><h2>Invoice summary</h2><div className="invoice-page__form-grid"><label className="invoice-page__field">Discount ({currency})<input type="number" min="0" step="0.01" value={discount} disabled={isQuote} onChange={event => setDiscount(event.target.value)} /></label><label className="invoice-page__field">Tax amount ({currency}){!taxManual&&taxDefault.enabled&&<small>Default {taxDefault.rate}%{taxDefault.inclusive?' tax-inclusive':''}</small>}<input type="number" min="0" step="0.01" value={taxManual?tax:totals.tax} disabled={isQuote} onChange={event => {setTaxManual(true);setTax(event.target.value)}} /></label></div><div className="invoice-page__totals"><span>Subtotal<strong>{formatKESPrecise(totals.subtotal, currency)}</strong></span><span>Discount<strong>− {formatKESPrecise(totals.discount, currency)}</strong></span><span>Tax<strong>{formatKESPrecise(totals.tax, currency)}</strong></span><b>Total<strong>{formatKESPrecise(totals.total, currency)}</strong></b><span>Amount paid<strong>{formatKESPrecise(0, currency)}</strong></span><span>Balance due<strong>{formatKESPrecise(totals.total, currency)}</strong></span></div><p className="invoice-page__hint">Payments are recorded separately after the invoice is issued.</p></aside></div>
       <div className="invoice-page__form-actions"><a className="invoice-page__secondary" href="#/app/invoices">Cancel</a><button type="button" className="invoice-page__secondary" disabled={saving || !items.length} onClick={event => { const form = event.currentTarget.form; if (form?.reportValidity()) void submit(false) }}>{saving ? 'Saving…' : 'Save as draft'}</button><button type="button" className="invoice-page__primary" disabled={saving || !customers.length} onClick={event => { const form = event.currentTarget.form; if (form?.reportValidity()) void submit(!editId) }}>{saving ? 'Saving…' : editId ? 'Save changes' : 'Create and issue'}</button></div>
     </form>
   </main>

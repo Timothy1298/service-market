@@ -33,6 +33,31 @@ export type CustomerProfile = Prisma.CustomerProfileModel
  */
 export type Business = Prisma.BusinessModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationDelivery
+ * 
+ */
+export type NotificationDelivery = Prisma.NotificationDeliveryModel
+/**
+ * Model NotificationPreference
+ * 
+ */
+export type NotificationPreference = Prisma.NotificationPreferenceModel
+/**
+ * Model NotificationEvent
+ * 
+ */
+export type NotificationEvent = Prisma.NotificationEventModel
+/**
+ * Model SavedReport
+ * 
+ */
+export type SavedReport = Prisma.SavedReportModel
+/**
  * Model BusinessMember
  * 
  */
@@ -72,6 +97,26 @@ export type ServiceRequest = Prisma.ServiceRequestModel
  * 
  */
 export type CustomerRecord = Prisma.CustomerRecordModel
+/**
+ * Model CustomerConversation
+ * 
+ */
+export type CustomerConversation = Prisma.CustomerConversationModel
+/**
+ * Model CustomerMessage
+ * 
+ */
+export type CustomerMessage = Prisma.CustomerMessageModel
+/**
+ * Model FavoriteProvider
+ * 
+ */
+export type FavoriteProvider = Prisma.FavoriteProviderModel
+/**
+ * Model CustomerReview
+ * 
+ */
+export type CustomerReview = Prisma.CustomerReviewModel
 /**
  * Model Quotation
  * 
@@ -127,6 +172,11 @@ export type InvoiceItem = Prisma.InvoiceItemModel
  * 
  */
 export type Payment = Prisma.PaymentModel
+/**
+ * Model InvoiceMpesaAttempt
+ * 
+ */
+export type InvoiceMpesaAttempt = Prisma.InvoiceMpesaAttemptModel
 /**
  * Model Expense
  * 
